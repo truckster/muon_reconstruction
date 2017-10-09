@@ -1,4 +1,4 @@
-import recoPreparation, PMTAnalysis, reconstructionAlg, statusAlert, TreeReadFunc
+import recoPreparation, PMTAnalysis, reconstructionAlg, statusAlert, TreeReadFunc, fitting_reco
 from os import chdir
 from glob import glob
 
@@ -44,8 +44,9 @@ for file in glob("*.root"):
     cut_radius = 0.15
     sector_threshold = 0.0
     cut_threshold = 0.4
-    reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path, cut_radius,
-                                       sector_threshold, cut_threshold)
+    # reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path, cut_radius,
+    #                                    sector_threshold, cut_threshold)
+    fitting_reco.reco_by_fittig_gauss(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
 statusAlert.processStatus("Process finished")

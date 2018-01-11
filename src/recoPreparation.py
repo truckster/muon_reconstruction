@@ -139,6 +139,8 @@ class PMTPositions:
         self.sector_list_theta = []
         self.x_sectors = 0
         self.y_sectors = 0
+        self.is_x_sector = []
+        self.is_y_sector = []
 
     def add_id(self, value):
         self.id.append(value)
@@ -163,6 +165,12 @@ class PMTPositions:
 
     def add_theta_hammer_aitov(self, value):
         self.theta_hammer_aitov.append((value))
+
+    def add_x_sector(self, value):
+        self.is_x_sector.append(value)
+
+    def add_y_sector(self, value):
+        self.is_y_sector.append(value)
 
 
 def calc_pmt_positions(inpath, x_sector_num, y_sector_num):
@@ -207,6 +215,9 @@ def calc_pmt_positions(inpath, x_sector_num, y_sector_num):
         theta_h_a = (math.sqrt(2) * math.sin(theta_position)) / \
                     (math.sqrt(1 + math.cos(theta_position) * math.cos(phi_position / 2)))
         return_class.add_theta_hammer_aitov(theta_h_a)
+
+        return_class.add_x_sector(x_sector)
+        return_class.add_y_sector(y_sector)
 
     return_class.sector_list_id = sector_array_id
     return_class.sector_list_phi = sector_array_phi

@@ -254,3 +254,23 @@ def readPhotonRecoData(source, pmt_resolution):
             array.append(subarray)
     statusAlert.processStatus("     Done")
     return array
+
+
+bin_centers = bins[:-1] + 0.5 * (bins[1:] - bins[:-1])
+
+        try:
+            popt, pcov = curve_fit(gauss, bin_centers, n, p0=[1.0, 1.0, 1.0])
+
+            plt.plot(bin_centers, gauss(bin_centers, *popt), 'r--')
+
+            print popt
+        #
+        # fit_line = plt.plot(unsorted_fit_data.x_value, gauss(unsorted_fit_data.x_value, *popt))
+        #
+        # plt.plot(100, fit_line, 'r--', linewidth=2)
+        except:
+            print("Sector: " + str(vertical_sector) + ": Fit did not work!")
+        plt.plot()
+
+        plt.savefig(out_path + "test/vertical/" + str(vertical_sector) + ".png")
+        plt.close()

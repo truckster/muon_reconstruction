@@ -31,7 +31,6 @@ def reco_by_fittig_gauss(pmt_position_class, snippet_class, muon_points, out_pat
         # mkdir(out_path + "test/horizontal2/" + str(snippet))
         fit_results.append(horizontal_gauss_fit(gauss_fit_data_horizontal, snippet, out_path + "test/horizontal/" + str(snippet) + "/"))
 
-    print len(fit_results)
 
 
 def vertical_gauss_fit(fit_data, snippet, out_path):
@@ -53,7 +52,7 @@ def horizontal_gauss_fit(fit_data, snippet, out_path):
     '''get data into numpy arrays'''
     horizontal_fit_results_per_snippet = []
     for horizontal_sector in range(len(fit_data)):
-        # print "Fit horizontal vector: " + str(horizontal_sector)
+        print "Fit horizontal sector: " + str(horizontal_sector)
         pmts_per_sector = fit_data[horizontal_sector]
 
         horizontal_fit_results_per_snippet.append(fit_gauss_in_sector_horizontal(pmts_per_sector, snippet, horizontal_sector, out_path))
@@ -80,9 +79,9 @@ def find_all_gauss_in_data(grouped_sector_pmt_data, snippet, sector):
     peak = 0
     while not all_gauss_found:
         gauss_parameters = fitgaussian(n)
+        print(gauss_parameters)
 
         if gauss_parameters[0] > 10 and gauss_parameters[1] > 0:
-            print n
             single_gauss_fit_parameters = GaussFitResults()
             single_gauss_fit_parameters.height = gauss_parameters[0]
             single_gauss_fit_parameters.location = gauss_parameters[1]/n.size*math.pi
@@ -161,7 +160,13 @@ def moments(data):
     x = np.sum(X * data) / np.sum(data)
     width = np.sqrt(np.abs(np.sum((X - x) ** 2 * data) / np.sum(data)))
     height = data.max()
+
+    # print(x/data.size * math.pi)
+    # print(width/data.size * math.pi)
+    # print(height)
+
     return height, x, width
+
 
 
 def fitgaussian(data):

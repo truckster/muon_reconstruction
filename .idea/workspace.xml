@@ -14,8 +14,8 @@
       <file leaf-file-name="reconstruction.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/reconstruction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
-              <caret line="47" column="4" lean-forward="false" selection-start-line="46" selection-start-column="6" selection-end-line="47" selection-end-column="4" />
+            <state relative-caret-position="360">
+              <caret line="24" column="108" lean-forward="false" selection-start-line="24" selection-start-column="108" selection-end-line="24" selection-end-column="108" />
               <folding>
                 <element signature="e#0#95#0" expanded="true" />
               </folding>
@@ -26,33 +26,25 @@
       <file leaf-file-name="recoPreparation.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/recoPreparation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1262">
-              <caret line="213" column="41" lean-forward="false" selection-start-line="213" selection-start-column="29" selection-end-line="213" selection-end-column="41" />
+            <state relative-caret-position="720">
+              <caret line="70" column="4" lean-forward="false" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="4" />
               <folding>
-                <element signature="e#249#299#0" expanded="false" />
-                <element signature="e#337#511#0" expanded="false" />
-                <element signature="e#406#429#0" expanded="false" />
                 <element signature="e#479#511#0" expanded="false" />
-                <element signature="e#563#1750#0" expanded="false" />
                 <element signature="e#563#850#1" expanded="false" />
-                <element signature="e#1348#1689#0" expanded="false" />
                 <element signature="e#1446#1593#0" expanded="false" />
                 <element signature="e#1781#1928#0" expanded="false" />
                 <element signature="e#1850#1864#0" expanded="false" />
                 <element signature="e#1905#1928#0" expanded="false" />
                 <element signature="e#1964#2017#0" expanded="false" />
                 <element signature="e#2056#2267#0" expanded="false" />
-                <element signature="e#2310#3660#0" expanded="false" />
-                <element signature="e#2625#3599#0" expanded="false" />
                 <element signature="e#2741#2895#0" expanded="false" />
                 <element signature="e#3726#4257#0" expanded="false" />
                 <element signature="e#3948#4211#0" expanded="false" />
                 <element signature="e#4069#4116#0" expanded="false" />
-                <element signature="e#4784#4805#0" expanded="false" />
-                <element signature="e#4852#4881#0" expanded="false" />
-                <element signature="e#4928#4957#0" expanded="false" />
-                <element signature="e#5004#5033#0" expanded="false" />
-                <element signature="e#5082#5113#0" expanded="false" />
+                <element signature="e#4844#4865#0" expanded="false" />
+                <element signature="e#4988#5017#0" expanded="false" />
+                <element signature="e#5064#5093#0" expanded="false" />
+                <element signature="e#5142#5173#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -61,8 +53,8 @@
       <file leaf-file-name="TreeReadFunc.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../libs/TreeReadFunc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="872">
-              <caret line="118" column="4" lean-forward="false" selection-start-line="118" selection-start-column="4" selection-end-line="118" selection-end-column="4" />
+            <state relative-caret-position="1920">
+              <caret line="132" column="4" lean-forward="false" selection-start-line="132" selection-start-column="4" selection-end-line="132" selection-end-column="4" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -73,17 +65,15 @@
       <file leaf-file-name="reconstructionAlg.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/reconstructionAlg.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="47" column="46" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="47" selection-end-column="46" />
+            <state relative-caret-position="1395">
+              <caret line="156" column="60" lean-forward="false" selection-start-line="156" selection-start-column="60" selection-end-line="156" selection-end-column="60" />
               <folding>
                 <element signature="e#0#50#0" expanded="true" />
                 <element signature="e#4155#7000#0" expanded="false" />
-                <element signature="e#7186#8977#0" expanded="false" />
-                <element signature="e#9018#9923#0" expanded="false" />
-                <element signature="e#9973#10407#0" expanded="false" />
-                <element signature="e#10489#10792#0" expanded="false" />
-                <element signature="e#10842#11096#0" expanded="false" />
-                <element signature="e#11156#11643#0" expanded="false" />
+                <element signature="e#9020#9925#0" expanded="false" />
+                <element signature="e#11331#11634#0" expanded="false" />
+                <element signature="e#11683#11937#0" expanded="false" />
+                <element signature="e#11997#12484#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -92,10 +82,12 @@
       <file leaf-file-name="fitting_reco.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/fitting_reco.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="50" lean-forward="false" selection-start-line="22" selection-start-column="50" selection-end-line="22" selection-end-column="50" />
+            <state relative-caret-position="872">
+              <caret line="93" column="12" lean-forward="false" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="12" />
               <folding>
                 <element signature="e#0#50#0" expanded="true" />
+                <element signature="e#7215#7812#0" expanded="false" />
+                <element signature="e#7892#8489#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -109,6 +101,9 @@
         <option value="Python Script" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -125,16 +120,16 @@
         <option value="$PROJECT_DIR$/../libs/statusAlert.py" />
         <option value="$PROJECT_DIR$/src/PMTAnalysis.py" />
         <option value="$PROJECT_DIR$/../libs/color_schemes.py" />
-        <option value="$PROJECT_DIR$/../libs/TreeReadFunc.py" />
         <option value="$PROJECT_DIR$/src/archive.py" />
         <option value="$PROJECT_DIR$/src/recoPreparation.py" />
         <option value="$PROJECT_DIR$/src/reconstructionAlg.py" />
+        <option value="$PROJECT_DIR$/../libs/TreeReadFunc.py" />
         <option value="$PROJECT_DIR$/src/reconstruction.py" />
         <option value="$PROJECT_DIR$/src/fitting_reco.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="1920" />
     <option name="height" value="1052" />
   </component>
@@ -169,12 +164,6 @@
               <item name="muReconstruction" type="b2602c69:ProjectViewProjectNode" />
               <item name="muReconstruction" type="47feb1d3:ProjectViewModuleNode" />
               <item name="muReconstruction" type="462c0819:PsiDirectoryNode" />
-              <item name="Output" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="muReconstruction" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muReconstruction" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="muReconstruction" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -186,13 +175,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="Python" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
@@ -224,6 +213,7 @@
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
     </configuration>
     <configuration name="TreeReadFunc" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -241,6 +231,79 @@
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="fitting_reco" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="muReconstruction" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/fitting_reco.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="reconstruction (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="muReconstruction" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/reconstruction.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="reconstructionAlg" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="muReconstruction" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/reconstructionAlg.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="muReconstruction" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
     </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -304,96 +367,30 @@
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;.&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method />
-    </configuration>
-    <configuration name="reconstruction (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="muReconstruction" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/reconstruction.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
-    <configuration name="reconstruction" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="muReconstruction" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/reconstruction.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
-    <configuration name="reconstructionAlg" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="muReconstruction" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/reconstructionAlg.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-    </configuration>
-    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="muReconstruction" />
-      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python.scratch" />
-      <item index="1" class="java.lang.String" itemvalue="Python.reconstruction" />
-      <item index="2" class="java.lang.String" itemvalue="Python.reconstruction (1)" />
-      <item index="3" class="java.lang.String" itemvalue="Python.PMTAnalysis" />
-      <item index="4" class="java.lang.String" itemvalue="Python.TreeReadFunc" />
-      <item index="5" class="java.lang.String" itemvalue="Python.reconstructionAlg" />
+      <item index="1" class="java.lang.String" itemvalue="Python.reconstruction (1)" />
+      <item index="2" class="java.lang.String" itemvalue="Python.PMTAnalysis" />
+      <item index="3" class="java.lang.String" itemvalue="Python.TreeReadFunc" />
+      <item index="4" class="java.lang.String" itemvalue="Python.reconstructionAlg" />
+      <item index="5" class="java.lang.String" itemvalue="Python.fitting_reco" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.reconstruction (1)" />
-        <item index="1" class="java.lang.String" itemvalue="Python.reconstructionAlg" />
-        <item index="2" class="java.lang.String" itemvalue="Python.TreeReadFunc" />
-        <item index="3" class="java.lang.String" itemvalue="Python.PMTAnalysis" />
-        <item index="4" class="java.lang.String" itemvalue="Python.reconstruction" />
+        <item index="1" class="java.lang.String" itemvalue="Python.fitting_reco" />
+        <item index="2" class="java.lang.String" itemvalue="Python.reconstructionAlg" />
+        <item index="3" class="java.lang.String" itemvalue="Python.TreeReadFunc" />
+        <item index="4" class="java.lang.String" itemvalue="Python.PMTAnalysis" />
       </list>
     </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -406,27 +403,26 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1052" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1922" height="1053" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1438999" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.114583336" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2876569" sideWeight="0.5025" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28706625" sideWeight="0.5025" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="true" show_stripe_button="true" weight="0.17364016" sideWeight="0.4975" order="2" side_tool="false" content_ui="tabs" x="1921" y="25" width="1598" height="1174" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39958158" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3277311" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32563025" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -434,18 +430,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="16" />
+      <option name="time" value="19" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/43.png" />
-    <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/37.png" />
-    <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/28.png" />
-    <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/32.png" />
-    <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/31.png" />
-    <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/29.png" />
-    <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/6.png" />
     <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/13.png" />
     <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/12.png" />
     <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/11.png" />
@@ -453,125 +442,32 @@
     <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/9.png" />
     <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/8.png" />
     <entry file="file://$PROJECT_DIR$/Output/4_test.png" />
-    <entry file="file://$PROJECT_DIR$/Output/test.png" />
-    <entry file="file://$PROJECT_DIR$/Output/test/14.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/20.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/23.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/29.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/35.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/34.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/17.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/16.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/5.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/12.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/13.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/11.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/9.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Output/test/14.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/20.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/23.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/29.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/35.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/34.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/17.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/16.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/5.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/12.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/13.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/11.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/9.png" />
     <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/3.png" />
-    <entry file="file://$PROJECT_DIR$/Output/test/6.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/8.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Output/test/6.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/8.png" />
     <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/5.png" />
-    <entry file="file://$PROJECT_DIR$/Output/test/7.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/0.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/1.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/2.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/3.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/4.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Output/test/7.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/0.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/1.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/2.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/3.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/4.png" />
     <entry file="file://$PROJECT_DIR$/Output/user-mu-0.root/totalEventHist/2.png" />
-    <entry file="file://$PROJECT_DIR$/Output/test/10.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Output/test/15.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Output/test/10.png" />
+    <entry file="file://$PROJECT_DIR$/Output/test/15.png" />
     <entry file="file://$PROJECT_DIR$/src/PMTAnalysis.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -579,21 +475,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/lib/python2.7/dist-packages/matplotlib/colors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="675" column="8" lean-forward="false" selection-start-line="675" selection-start-column="8" selection-end-line="675" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/matplotlib/colors.py" />
     <entry file="file://$PROJECT_DIR$/Output/LALA.png" />
-    <entry file="file://$PROJECT_DIR$/src/archive.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="873">
-          <caret line="256" column="0" lean-forward="false" selection-start-line="256" selection-start-column="0" selection-end-line="256" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../libs/color_schemes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -601,10 +484,74 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Output/sectors/1.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Output/presentation/x/user-mu-16.root/totalEventHist/0.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Output/sectors/11.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Output/presentation/x/user-mu-16.root/totalEventHist/2.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Output/presentation/x/user-mu-16.root/totalEventHist/7.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Output/test.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.local/lib/python2.7/site-packages/scipy/optimize/minpack.py" />
+    <entry file="file://$PROJECT_DIR$/src/archive.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3945">
+          <caret line="263" column="67" lean-forward="false" selection-start-line="263" selection-start-column="12" selection-end-line="263" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python2.7/dist-packages/matplotlib/figure.py" />
+    <entry file="file://$PROJECT_DIR$/src/recoPreparation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="70" column="4" lean-forward="false" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="4" />
+          <folding>
+            <element signature="e#479#511#0" expanded="false" />
+            <element signature="e#563#850#1" expanded="false" />
+            <element signature="e#1446#1593#0" expanded="false" />
+            <element signature="e#1781#1928#0" expanded="false" />
+            <element signature="e#1850#1864#0" expanded="false" />
+            <element signature="e#1905#1928#0" expanded="false" />
+            <element signature="e#1964#2017#0" expanded="false" />
+            <element signature="e#2056#2267#0" expanded="false" />
+            <element signature="e#2741#2895#0" expanded="false" />
+            <element signature="e#3726#4257#0" expanded="false" />
+            <element signature="e#3948#4211#0" expanded="false" />
+            <element signature="e#4069#4116#0" expanded="false" />
+            <element signature="e#4844#4865#0" expanded="false" />
+            <element signature="e#4988#5017#0" expanded="false" />
+            <element signature="e#5064#5093#0" expanded="false" />
+            <element signature="e#5142#5173#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../libs/TreeReadFunc.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="872">
-          <caret line="118" column="4" lean-forward="false" selection-start-line="118" selection-start-column="4" selection-end-line="118" selection-end-column="4" />
+        <state relative-caret-position="1920">
+          <caret line="132" column="4" lean-forward="false" selection-start-line="132" selection-start-column="4" selection-end-line="132" selection-end-column="4" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
@@ -613,68 +560,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/reconstructionAlg.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="47" column="46" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="47" selection-end-column="46" />
+        <state relative-caret-position="1395">
+          <caret line="156" column="60" lean-forward="false" selection-start-line="156" selection-start-column="60" selection-end-line="156" selection-end-column="60" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
             <element signature="e#4155#7000#0" expanded="false" />
-            <element signature="e#7186#8977#0" expanded="false" />
-            <element signature="e#9018#9923#0" expanded="false" />
-            <element signature="e#9973#10407#0" expanded="false" />
-            <element signature="e#10489#10792#0" expanded="false" />
-            <element signature="e#10842#11096#0" expanded="false" />
-            <element signature="e#11156#11643#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/recoPreparation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1262">
-          <caret line="213" column="41" lean-forward="false" selection-start-line="213" selection-start-column="29" selection-end-line="213" selection-end-column="41" />
-          <folding>
-            <element signature="e#249#299#0" expanded="false" />
-            <element signature="e#337#511#0" expanded="false" />
-            <element signature="e#406#429#0" expanded="false" />
-            <element signature="e#479#511#0" expanded="false" />
-            <element signature="e#563#1750#0" expanded="false" />
-            <element signature="e#563#850#1" expanded="false" />
-            <element signature="e#1348#1689#0" expanded="false" />
-            <element signature="e#1446#1593#0" expanded="false" />
-            <element signature="e#1781#1928#0" expanded="false" />
-            <element signature="e#1850#1864#0" expanded="false" />
-            <element signature="e#1905#1928#0" expanded="false" />
-            <element signature="e#1964#2017#0" expanded="false" />
-            <element signature="e#2056#2267#0" expanded="false" />
-            <element signature="e#2310#3660#0" expanded="false" />
-            <element signature="e#2625#3599#0" expanded="false" />
-            <element signature="e#2741#2895#0" expanded="false" />
-            <element signature="e#3726#4257#0" expanded="false" />
-            <element signature="e#3948#4211#0" expanded="false" />
-            <element signature="e#4069#4116#0" expanded="false" />
-            <element signature="e#4784#4805#0" expanded="false" />
-            <element signature="e#4852#4881#0" expanded="false" />
-            <element signature="e#4928#4957#0" expanded="false" />
-            <element signature="e#5004#5033#0" expanded="false" />
-            <element signature="e#5082#5113#0" expanded="false" />
+            <element signature="e#9020#9925#0" expanded="false" />
+            <element signature="e#11331#11634#0" expanded="false" />
+            <element signature="e#11683#11937#0" expanded="false" />
+            <element signature="e#11997#12484#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/fitting_reco.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="50" lean-forward="false" selection-start-line="22" selection-start-column="50" selection-end-line="22" selection-end-column="50" />
+        <state relative-caret-position="872">
+          <caret line="93" column="12" lean-forward="false" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="12" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
+            <element signature="e#7215#7812#0" expanded="false" />
+            <element signature="e#7892#8489#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/reconstruction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="47" column="4" lean-forward="false" selection-start-line="46" selection-start-column="6" selection-end-line="47" selection-end-column="4" />
+        <state relative-caret-position="360">
+          <caret line="24" column="108" lean-forward="false" selection-start-line="24" selection-start-column="108" selection-end-line="24" selection-end-column="108" />
           <folding>
             <element signature="e#0#95#0" expanded="true" />
           </folding>

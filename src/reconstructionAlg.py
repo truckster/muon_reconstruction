@@ -185,7 +185,7 @@ def draw_snippet_picture(pmt_position_class, snippet_class, muon_points, snippet
     draw_sector_lines(pmt_position_class)
     draw_muon_points(muon_points)
     # draw_pattern_results(sector_pattern_array, template_radius, ax1)
-    draw_reco_muons(muon_finder_psnippet)
+    # draw_reco_muons(muon_finder_psnippet)
 
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")
@@ -221,11 +221,32 @@ def draw_muon_points(muonPoints):
 def draw_sector_lines(pmt_position_class):
     for i in range(pmt_position_class.x_sectors + 1):
         plt.plot([-math.pi + i * (2 * math.pi) / pmt_position_class.x_sectors,
-                  -math.pi + i * (2 * math.pi) / pmt_position_class.x_sectors], [0, math.pi], 'k-')
+                 -math.pi + i * (2 * math.pi) / pmt_position_class.x_sectors],
+                 [0, math.pi],
+                 'k--')
+        if i % 5 is 0:
+            plt.text(-math.pi + i * (2 * math.pi) / pmt_position_class.x_sectors,
+                     -0.1,
+                     i)
+            plt.plot([-math.pi + i * (2 * math.pi) / pmt_position_class.x_sectors,
+                      -math.pi + i * (2 * math.pi) / pmt_position_class.x_sectors],
+                     [0, math.pi],
+                     'k-',
+                     linewidth=1.5)
 
     for i in range(pmt_position_class.y_sectors + 1):
         plt.plot([-math.pi, math.pi],
-                 [i * math.pi / pmt_position_class.y_sectors, i * math.pi / pmt_position_class.y_sectors], 'k-')
+                 [i * math.pi / pmt_position_class.y_sectors, i * math.pi / pmt_position_class.y_sectors],
+                 'k--')
+
+        if i % 5 is 0:
+            plt.text(-math.pi - 0.15,
+                     i * math.pi / pmt_position_class.y_sectors,
+                     i)
+            plt.plot([-math.pi, math.pi],
+                     [i * math.pi / pmt_position_class.y_sectors, i * math.pi / pmt_position_class.y_sectors],
+                     'k-',
+                     linewidth=1.5)
 
 
 def draw_pattern_results(sector_pattern_array, template_radius, sub_plot):
@@ -237,7 +258,6 @@ def draw_pattern_results(sector_pattern_array, template_radius, sub_plot):
         theta.append(sector_pattern_array[i].theta)
         scatter_circle = plt.Circle((phi[i], theta[i]), 0.1, color='white', fill=False)
         sub_plot.add_artist(scatter_circle)
-
 
 
 def draw_reco_muons(pattern_class_array):

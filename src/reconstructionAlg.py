@@ -172,8 +172,9 @@ def draw_snippet_picture(pmt_position_class, snippet_class, muon_points, snippet
 
     '''Analysis design'''
     ax1 = fig.add_subplot(111, axisbg='gainsboro')
+    # scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position, marker='o', c='k')
     scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position,
-                               c=snippet_class.time_snippets[snippet], cmap=color_analysis, label='hit')
+                               c=snippet_class.time_snippets[snippet], cmap=color_analysis, edgecolor='none', label='hit')
     cb = fig.colorbar(scatterHits)
 
     '''Nice design'''

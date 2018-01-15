@@ -4,7 +4,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-from scipy import optimize
+from scipy.optimize import leastsq
 
 
 def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path):
@@ -19,32 +19,37 @@ def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path
     for snippet in range(10):
         statusAlert.processStatus("processing snippet: " + str(snippet))
         gauss_fit_data_horizontal = combine_pmts_horizontal(pmt_position_class, snippet_class, snippet)
-        horizontal_gauss_fit(gauss_fit_data_horizontal, snippet, out_path + "test/horizontal/" + str(snippet) + "/")
+        gauss_fit(gauss_fit_data_horizontal, snippet, out_path + "test/horizontal/" + str(snippet) + "/")
 
 
-def horizontal_gauss_fit(fit_data, snippet, out_path):
+def gauss_fit(fit_data, snippet, out_path):
     '''get data into numpy arrays'''
     horizontal_fit_results_per_snippet = []
     for horizontal_sector in range(len(fit_data)):
         print "Fit horizontal sector: " + str(horizontal_sector)
         pmts_per_sector = fit_data[horizontal_sector]
 
-        horizontal_fit_results_per_snippet.append(fit_gauss_in_sector_horizontal(pmts_per_sector,
-                                                                                 snippet,
-                                                                                 horizontal_sector,
-                                                                                 out_path))
+        # horizontal_fit_results_per_snippet.append(fit_gauss_in_sector(pmts_per_sector,
+        #                                                               snippet,
+        #                                                               horizontal_sector,
+        #                                                               out_path))
+
+        horizontal_fit_results_per_snippet.append(fit_double_gauss_in_sector(pmts_per_sector,
+                                                                             snippet,
+                                                                             horizontal_sector,
+                                                                             out_path))
 
     return horizontal_fit_results_per_snippet
 
 
 
-def fit_gauss_in_sector_horizontal(sector_pmts, snipp, sector, out_path):
+def fit_gauss_in_sector(sector_pmts, snipp, sector, out_path):
 
     # draw actual data
     hist_list = []
     for pmt in sector_pmts:
         for hits in range(pmt.hits):
-            hist_list.append(pmt.theta)
+            hist_list.append(pmt.phi)
     n, bins, patches = plt.hist(hist_list, bins=60, range=(0., math.pi))
 
     # get estimate gauss values for data: NO FIT!!
@@ -53,16 +58,58 @@ def fit_gauss_in_sector_horizontal(sector_pmts, snipp, sector, out_path):
     # draw gauss from moments
     bin_centers = bins[:-1] + 0.5 * (bins[1:] - bins[:-1])
     plt.xlim([-4, 4])
-    # plt.plot(bin_centers, gauss(bin_centers, moms[0], moms[1] / n.size * math.pi, moms[2] / n.size * math.pi), 'r--')
+    plt.plot(bin_centers, gauss(bin_centers, moms[0], moms[1] / n.size * math.pi, moms[2] / n.size * math.pi), 'r--')
 
     # print gauss parameters to image
-    # plt.figtext(0.65, 0.7, ("Height: " + str(moms[0])
-    #                         + "\nCenter: " + str(moms[1] / n.size * math.pi)
-    #                         + "\nWidth: " + str(moms[2] / n.size * math.pi)
-    #                         + "\n\nHeight/Width: " + str(moms[0] / (moms[2] / n.size * math.pi))))
+    plt.figtext(0.65, 0.7, ("Height: " + str(moms[0])
+                            + "\nCenter: " + str(moms[1] / n.size * math.pi)
+                            + "\nWidth: " + str(moms[2] / n.size * math.pi)
+                            + "\n\nHeight/Width: " + str(moms[0] / (moms[2] / n.size * math.pi))))
 
     plt.savefig(out_path + str(sector) + ".png")
     plt.close()
+
+
+def fit_double_gauss_in_sector(sector_pmts, snipp, sector, out_path):
+    # draw actual data
+    hist_list = []
+    for pmt in sector_pmts:
+        for hits in range(pmt.hits):
+            hist_list.append(pmt.phi)
+    n, bins, patches = plt.hist(hist_list, bins=60, range=(0., math.pi))
+
+    bin_centers = bins[:-1] + 0.5 * (bins[1:] - bins[:-1])
+    plt.xlim([-4, 4])
+
+    c1, mu1, sigma1, c2, mu2, sigma2 = [0, 1, 1, 2, 1, 1]
+    p = [c1, mu1, sigma1, c2, mu2, sigma2]  # Initial guesses for leastsq
+
+    def res(p, y, x):
+        (c1, mu1, sigma1, c2, mu2, sigma2) = p
+        y_fit = double_gaussian(x, p)
+        err = y - y_fit
+        return err
+
+    plsq = leastsq(res, p, args=(n, bin_centers))
+    print plsq
+
+    y_est = double_gaussian(bin_centers, plsq[0])
+
+    plt.plot(bin_centers, y_est, c='r')
+
+    plt.savefig(out_path + str(sector) + ".png")
+    plt.close()
+
+
+def double_gaussian(x, params):
+    (c1, mu1, sigma1, c2, mu2, sigma2) = params
+    res = c1 * np.exp(-(x - mu1)**2.0 / (2.0 * sigma1**2.0)) + c2 * np.exp(-(x - mu2)**2.0 / (2.0 * sigma2**2.0))
+    return res
+
+
+def double_gaussian_fit(params, y, x):
+    fit = double_gaussian(x, params)
+    return fit-n
 
 
 # Function to be fitted
@@ -84,9 +131,9 @@ def moments(data):
     width = np.sqrt(np.abs(np.sum((X - x) ** 2 * data) / np.sum(data)))
     height = data.max()
 
-    # print(x/data.size * math.pi)
-    # print(width/data.size * math.pi)
-    # print(height)
+    print(x/data.size * math.pi)
+    print(width/data.size * math.pi)
+    print(height)
 
     return height, x, width
 

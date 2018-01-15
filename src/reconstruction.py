@@ -37,9 +37,9 @@ for file in glob("*.root"):
     photons_in_time_window = recoPreparation.hitPMTinTimeSnippetHist2(file, snippet_time_cut)
 
     '''draw pictures of all snippets'''
-    PMTAnalysis.drawPMTHitMapHisto(
-    photons_in_time_window.time_snippets, muon_points, PmtPositions, new_output_path, 50
-    )
+    # PMTAnalysis.drawPMTHitMapHisto(
+    # photons_in_time_window.time_snippets, muon_points, PmtPositions, new_output_path, 50
+    # )
 
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
     cut_radius = 0.15

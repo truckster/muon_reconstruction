@@ -71,7 +71,7 @@ def fit_gauss_in_sector(sector_pmts, snipp, sector, out_path):
 
 
 def fit_double_gauss_in_sector(sector_pmts, snipp, sector, out_path):
-    # draw actual data
+    # draw 1 actual data
     hist_list = []
     for pmt in sector_pmts:
         for hits in range(pmt.hits):

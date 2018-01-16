@@ -274,3 +274,121 @@ bin_centers = bins[:-1] + 0.5 * (bins[1:] - bins[:-1])
 
         plt.savefig(out_path + "test/vertical/" + str(vertical_sector) + ".png")
         plt.close()
+
+
+
+def pattern_scan(pmt_position_class, snippet_array, snippet, template_radius, sector_threshold, cut_threshold):
+    '''this array saves all patterns within one snippet'''
+    sector_pattern_array = []
+    '''iterate sectors'''
+    for sector in range(len(pmt_position_class.sector_list_id)):
+
+        '''get data into numpy arrays'''
+        id_np = np.asarray(pmt_position_class.sector_list_id[sector])
+        phi_np = np.asarray(pmt_position_class.sector_list_phi[sector])
+        theta_np = np.asarray(pmt_position_class.sector_list_theta[sector])
+
+        total_hit_sum = sum(snippet_array[snippet])
+
+        '''initialize class, which savespattern position. This class is given to the sector_pattern_array'''
+        pattern_position = PatternPosition()
+
+        '''get sum of photon hits in each sector'''
+        sector_hit_sum = 0
+        for i in range(len(id_np)):
+            sector_hit_sum += snippet_array[snippet][id_np[i]]
+
+        if float(sector_hit_sum) > sector_threshold * total_hit_sum:
+            '''scan the template over the sector'''
+            cut_phi_position = min(phi_np)
+            while cut_phi_position < max(phi_np) + template_radius:
+                cut_theta_position = min(theta_np)
+                while cut_theta_position < max(theta_np) + template_radius:
+                    '''sum of photons within the template'''
+                    hit_sum = 0
+                    '''scan over all pmts in the sector and check if they are inside the template cut'''
+                    # faster to get pmts directly instead of iterating all in sector
+                    for i in range(len(id_np)):
+                        if (pow(template_radius, 2) > (pow(phi_np[i] - cut_phi_position, 2)
+                                                           + pow(theta_np[i] - cut_theta_position, 2))):
+                            hit_sum += snippet_array[snippet][id_np[i]]
+                    '''check if photon sum is over threshold and if its the "biggest" pattern in the sector.
+                     Then overwrite previous data'''
+
+                    if hit_sum > cut_threshold * sector_hit_sum and hit_sum > pattern_position.hits:
+                        pattern_position.hits = hit_sum
+                        pattern_position.phi = cut_phi_position
+                        pattern_position.theta = cut_theta_position
+
+                    cut_theta_position += template_radius
+                cut_phi_position += template_radius
+
+        sector_pattern_array.append(pattern_position)
+    return sector_pattern_array
+
+
+def muon_entry_exit_reconstructor(pmt_position_class, snippet_class, out_path):
+    statusAlert.processStatus("Searching for entry and exit points")
+
+    '''photon data pre-processed and ordered into time snippets'''
+    snippet_array = np.asarray(snippet_class.time_snippets)
+
+    '''sector count data is saved here for each snippet'''
+    snippet_sector_array = [[] for _ in range(len(snippet_array))]
+    for snippet in range(len(snippet_array)):
+        sector_array = [[] for _ in range(len(pmt_position_class.sector_list_id))]
+        for sector in range(len(pmt_position_class.sector_list_id)):
+            id_np = np.asarray(pmt_position_class.sector_list_id[sector])
+            sector_hit_sum = 0
+            for i in range(len(id_np)):
+                sector_hit_sum += snippet_array[snippet][id_np[i]]
+            sector_array[sector] = (sector_hit_sum)
+        snippet_sector_array[snippet] = (sector_array)
+
+    '''iterate over snippet, sector and the pmts of the sector to get its hit_sum'''
+    snippet_sector_pattern_array = []
+    for snippet in range(len(snippet_array)):
+
+        sector_pattern_array = []
+        for sector in range(len(pmt_position_class.sector_list_id)):
+            pattern_position = PatternPosition()
+
+            id_np = np.asarray(pmt_position_class.sector_list_id[sector])
+            phi_np = np.asarray(pmt_position_class.sector_list_phi[sector])
+            theta_np = np.asarray(pmt_position_class.sector_list_theta[sector])
+
+            dist_sum = 0.0
+            phi_sum = 0.0
+            theta_sum = 0.0
+            counter = 0.0
+            sector_hit_sum = 0
+
+            for i in range(len(id_np)):
+                sector_hit_sum += snippet_array[snippet][id_np[i]]
+                if snippet_array[snippet][id_np[i]] > 10:
+                    dist_sum += math.sqrt(pow(phi_np[i]-phi_np[0], 2) + pow(theta_np[i]-theta_np[0], 2))
+                    phi_sum += phi_np[i]
+                    theta_sum += theta_np[i]
+                    counter += 1.0
+            if snippet > 0:
+                if 4 > counter > 0 and dist_sum/counter < 0.1 and \
+                                snippet_sector_array[snippet][sector] > 50 * snippet_sector_array[snippet-1][sector]:
+                    pattern_position.phi = phi_sum / counter
+                    pattern_position.theta = theta_sum / counter
+
+            sector_pattern_array.append(pattern_position)
+
+        snippet_sector_pattern_array.append(sector_pattern_array)
+
+    return snippet_sector_pattern_array
+
+
+    # for i in range(len(snippet_sector_array)):
+    #     if i > 0:
+    #         for j in range(len(snippet_sector_array[i])):
+    #             if snippet_sector_array[i][j] > 150 * snippet_sector_array[i-1][j]:
+    #                 print("Snippet: " + str(i))
+    #                 print ("Sector: " + str(j))
+    #                 print("_____________________")
+    #         print(":::::::::::::::::::::::")
+

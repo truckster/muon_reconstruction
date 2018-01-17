@@ -16,32 +16,36 @@ def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path
     '''iterate snippets'''
     fit_results = []
     # for snippet in range(len(snippet_array)):
-    for snippet in range(30):
+    for snippet in range(12):
         statusAlert.processStatus("processing snippet: " + str(snippet))
+
+        statusAlert.processStatus("     combining pmt data to sectors")
         gauss_fit_data_horizontal = combine_pmts_horizontal(pmt_position_class, snippet_class, snippet)
+        gauss_fit_data_vertical = combine_pmts_vertical(pmt_position_class, snippet_class, snippet)
+
         if not path.isdir(out_path + "test/horizontal/" + str(snippet)):
             mkdir(out_path + "test/horizontal/" + str(snippet))
+        if not path.isdir(out_path + "test/vertical/" + str(snippet)):
+            mkdir(out_path + "test/vertical/" + str(snippet))
+
+        statusAlert.processStatus("     performing fit")
         gauss_fit(gauss_fit_data_horizontal, snippet, out_path + "test/horizontal/" + str(snippet) + "/")
+        gauss_fit(gauss_fit_data_vertical, snippet, out_path + "test/vertical/" + str(snippet) + "/")
 
 
 def gauss_fit(fit_data, snippet, out_path):
     '''get data into numpy arrays'''
-    horizontal_fit_results_per_snippet = []
-    for horizontal_sector in range(len(fit_data)):
-        print "Fit horizontal sector: " + str(horizontal_sector)
-        pmts_per_sector = fit_data[horizontal_sector]
+    for sector in range(len(fit_data)):
+        print "Fit sector: " + str(sector)
+        pmts_per_sector = fit_data[sector]
 
-        horizontal_fit_results_per_snippet.append(fit_double_gauss_in_sector(pmts_per_sector,
-                                                                             snippet,
-                                                                             horizontal_sector,
-                                                                             out_path))
+        single_fit = fit_single_gauss_in_sector(pmts_per_sector)
+        double_fit = fit_double_gauss_in_sector(pmts_per_sector)
 
-    return horizontal_fit_results_per_snippet
+        picture_drawer(pmts_per_sector, sector, single_fit, double_fit, out_path)
 
 
-
-def fit_double_gauss_in_sector(sector_pmts, snipp, sector, out_path):
-    # draw 1 actual data
+def fit_single_gauss_in_sector(sector_pmts):
     hist_list = []
     for pmt in sector_pmts:
         for hits in range(pmt.hits):
@@ -51,16 +55,55 @@ def fit_double_gauss_in_sector(sector_pmts, snipp, sector, out_path):
     bin_centers = bins[:-1] + 0.5 * (bins[1:] - bins[:-1])
     plt.xlim([-4, 4])
 
-    single_gauss_params = [c, mu, sigma] = [0, 1, 1]
-    double_gauss_params = [c1, mu1, sigma1, c2, mu2, sigma2] = [0, 1, 1, 1, 1, 1] # Initial guesses for leastsq
+    single_gauss_params = [c, mu, sigma] = [1, 0, 1]
+    plsq = leastsq(res_single_gauss, single_gauss_params, args=(n, bin_centers))
+
+    print("Fit parameters: " + str(plsq[0]))
+    # print("Fit quality parameter: " + str(plsq[1]))
+
+    plt.clf()
+
+    return plsq
+
+
+def fit_double_gauss_in_sector(sector_pmts):
+    hist_list = []
+    for pmt in sector_pmts:
+        for hits in range(pmt.hits):
+            hist_list.append(pmt.phi)
+    n, bins, patches = plt.hist(hist_list, bins=60, range=(0., math.pi))
+
+    bin_centers = bins[:-1] + 0.5 * (bins[1:] - bins[:-1])
+    plt.xlim([-4, 4])
+
+    double_gauss_params = [c1, mu1, sigma1, c2, dmu, sigma2] = [1, -3, 1, 1, 0, 1] # Initial guesses for leastsq
 
     plsq = leastsq(res_double_gauss_dist, double_gauss_params, args=(n, bin_centers))
-    # print plsq[0]
-    print plsq[1]
 
-    y_est = double_gaussian_dist(bin_centers, plsq[0])
+    print("Fit parameters: " + str(plsq[0]))
+    # print("Fit quality parameter: " + str(plsq[1])
 
-    plt.plot(bin_centers, y_est, c='r')
+    plt.clf()
+
+    return plsq
+
+
+def picture_drawer(sector_pmts, sector, single_fit, double_fit, out_path):
+    # draw 1 actual data
+    hist_list = []
+    for pmt in sector_pmts:
+        for hits in range(pmt.hits):
+            hist_list.append(pmt.phi)
+    n, bins, patches = plt.hist(hist_list, bins=60, range=(0., math.pi))
+
+    bin_centers = bins[:-1] + 0.5 * (bins[1:] - bins[:-1])
+    # plt.xlim([-4, 4])
+
+    single_gauss_fit_graph = single_gaussian(bin_centers, single_fit[0])
+    double_gauss_fit_graph = double_gaussian_dist(bin_centers, double_fit[0])
+
+    plt.plot(bin_centers, single_gauss_fit_graph, c='k')
+    plt.plot(bin_centers, double_gauss_fit_graph, c='r')
 
     plt.savefig(out_path + str(sector) + ".png")
     plt.close()
@@ -82,14 +125,14 @@ def res_single_gauss(p, x, y):
 
 def single_gaussian(x, params):
     (c, mu, sigma) = params
-    res = c * np.exp(-(x - mu) ** 2.0 / (2.0 * sigma ** 2.0))
+    res = (c/(math.sqrt(2.0 * math.pi * sigma **2.0))) * np.exp(-(x - mu) ** 2.0 / (2.0 * sigma ** 2.0))
     return res
 
 
 def double_gaussian_dist(x, params):
     (c1, mu1, sigma1, c2, dmu, sigma2) = params
-    res = c1 * np.exp(-(x - mu1) ** 2.0 / (2.0 * sigma1 ** 2.0)) + c2 * np.exp(
-        -(x - mu1+dmu) ** 2.0 / (2.0 * sigma2 ** 2.0))
+    res = (c1/(math.sqrt(2.0 * math.pi * sigma1 **2.0))) * np.exp(-(x - mu1) ** 2.0 / (2.0 * sigma1 ** 2.0))\
+          + (c2/(math.sqrt(2.0 * math.pi * sigma2 **2.0))) * np.exp(-(x - mu1+dmu) ** 2.0 / (2.0 * sigma2 ** 2.0))
     return res
 
 

@@ -42,7 +42,7 @@ for file in glob("*.root"):
     # )
 
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
-    reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    # reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     # fitting_reco.reco_by_fittig_gauss(PmtPositions, photons_in_time_window, muon_points, output_path)
     gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, output_path)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)

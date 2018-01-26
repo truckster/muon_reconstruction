@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from scipy.optimize import leastsq
+from scipy.signal import argrelmax
 
 
 def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path):
@@ -39,10 +40,11 @@ def gauss_fit(fit_data, snippet, out_path):
         print "Fit sector: " + str(sector)
         pmts_per_sector = fit_data[sector]
 
-        single_fit = fit_single_gauss_in_sector(pmts_per_sector)
+        # single_fit = fit_single_gauss_in_sector(pmts_per_sector)
         double_fit = fit_double_gauss_in_sector(pmts_per_sector)
 
-        picture_drawer(pmts_per_sector, sector, single_fit, double_fit, out_path)
+        # picture_drawer(pmts_per_sector, sector, single_fit, double_fit, out_path)
+
 
 
 def fit_single_gauss_in_sector(sector_pmts):
@@ -58,7 +60,7 @@ def fit_single_gauss_in_sector(sector_pmts):
     single_gauss_params = [c, mu, sigma] = [1, 0, 1]
     plsq = leastsq(res_single_gauss, single_gauss_params, args=(n, bin_centers))
 
-    print("Fit parameters: " + str(plsq[0]))
+    # print("Fit parameters: " + str(plsq[0]))
     # print("Fit quality parameter: " + str(plsq[1]))
 
     plt.clf()
@@ -76,16 +78,24 @@ def fit_double_gauss_in_sector(sector_pmts):
     bin_centers = bins[:-1] + 0.5 * (bins[1:] - bins[:-1])
     plt.xlim([-4, 4])
 
+    get_fit_estimates(n, bins)
+
     double_gauss_params = [c1, mu1, sigma1, c2, dmu, sigma2] = [1, -3, 1, 1, 0, 1] # Initial guesses for leastsq
 
     plsq = leastsq(res_double_gauss_dist, double_gauss_params, args=(n, bin_centers))
 
-    print("Fit parameters: " + str(plsq[0]))
+    # print("Fit parameters: " + str(plsq[0]))
     # print("Fit quality parameter: " + str(plsq[1])
 
     plt.clf()
 
     return plsq
+
+
+def get_fit_estimates(hist_entries, bins):
+    max_array = argrelmax(hist_entries)
+    if len(max_array[0]) >= 1:
+        print(max_array[0])
 
 
 def picture_drawer(sector_pmts, sector, single_fit, double_fit, out_path):

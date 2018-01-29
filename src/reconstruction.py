@@ -25,8 +25,8 @@ for file in glob("*.root"):
     new_output_path = recoPreparation.create_output_path(output_path, file, "/totalEventHist/",  input_path)
 
     '''calculate PMT positions for this file'''
-    x_sectors = 20
-    y_sectors = 10
+    x_sectors = 6
+    y_sectors = 3
     PmtPositions = recoPreparation.calc_pmt_positions(input_path, x_sectors, y_sectors)
 
     '''collect entry and exit points of all muons in event'''

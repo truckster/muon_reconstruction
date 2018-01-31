@@ -17,7 +17,7 @@ def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path
     '''iterate snippets'''
     fit_results = []
     # for snippet in range(len(snippet_array)):
-    for snippet in range(9, 10):
+    for snippet in range(30):
         statusAlert.processStatus("processing snippet: " + str(snippet))
 
         statusAlert.processStatus("     combining pmt data to sectors")
@@ -53,7 +53,7 @@ def get_sector_histo(sector_pmts):
     for pmt in sector_pmts:
         for hits in range(pmt.hits):
             hist_list.append(pmt.phi)
-    n, bins, patches = plt.hist(hist_list, bins=60, range=(0., math.pi))
+    n, bins, patches = plt.hist(hist_list, bins=60, range=(0, math.pi))
 
     return_data.entries = n
     return_data.bins = bins
@@ -84,10 +84,15 @@ def multifit(fit_data, snippet, out_path):
         pmts_per_sector = fit_data[sector]
         sector_pmts = get_sector_histo(pmts_per_sector)
 
-        bin_centers = sector_pmts.bins[:-1] + 0.5 * (sector_pmts.bins[1:] - sector_pmts.bins[:-1])
-        plt.xlim([-4, 4])
+        bin_centers = 0.5 * (sector_pmts.bins[1:] - sector_pmts.bins[:-1])
+        plt.xlim([0, math.pi])
 
         possible_gauss_positions = get_fit_estimates(sector_pmts.entries, sector_pmts.bins)
+
+        plt.errorbar(sector_pmts.bins[:-1], sector_pmts.entries, yerr=np.sqrt(sector_pmts.entries))
+        plt.clf()
+
+        fit_results = []
 
         for peak in range(len(possible_gauss_positions)):
             try:
@@ -96,16 +101,20 @@ def multifit(fit_data, snippet, out_path):
                                      sector_pmts.entries,
                                      # p0=[0.1, possible_gauss_positions[peak]/60.0*3.1415, 0.1],
                                      bounds=(
-                                         [-np.inf, (possible_gauss_positions[peak]/60.0*3.1415)-0.3, -np.inf],
-                                         [np.inf, (possible_gauss_positions[peak]/60.0*3.1415)+0.3, np.inf])
+                                         [0, (possible_gauss_positions[peak]/60.0*3.1415)-0.5, 0.1],
+                                         [np.inf, (possible_gauss_positions[peak]/60.0*3.1415)+0.5, 0.6])
                                      )
                 print(1, possible_gauss_positions[peak] / 60.0 * 3.1415, 1)
-                print(fit)
+                # print(fit)
             except:
                 fit = [1, 1, 1]
                 print("Fit no work")
+            fit_results.append(fit)
 
-        picture_drawer_2(sector_pmts, sector, fit, out_path)
+        print(fit_results)
+        picture_drawer_2(sector_pmts, sector, fit_results, out_path)
+
+
 
 
 def fit_single_gauss_in_sector(sector_pmts):
@@ -170,14 +179,17 @@ def picture_drawer(sector_pmts, sector, single_fit, double_fit, out_path):
 
 def picture_drawer_2(sector_pmts, sector, single_fit, out_path):
     # draw 1 actual data
-    plt.hist(sector_pmts.bins[:-1], len(sector_pmts.bins)-1, weights=sector_pmts.entries)
+    bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
 
-    bin_centers = sector_pmts.bins[:-1] + 0.5 * (sector_pmts.bins[1:] - sector_pmts.bins[:-1])
-    # plt.xlim([-4, 4])
+    # plt.hist(sector_pmts.bins, len(sector_pmts.bins)-1, weights=sector_pmts.entries, color='b')
+    plt.bar(bin_centers, sector_pmts.entries, width=1.0*math.pi/(len(sector_pmts.bins)-1))
 
-    single_gauss_fit_graph = gauss(bin_centers, single_fit[0], single_fit[1], single_fit[2])
-
-    plt.plot(bin_centers, single_gauss_fit_graph, c='k')
+    plt.errorbar(bin_centers, sector_pmts.entries, yerr=np.sqrt(sector_pmts.entries),
+                 fmt='b', linestyle=''
+                 )
+    for param in range(len(single_fit)):
+        single_gauss_fit_graph = gauss(bin_centers, single_fit[param][0], single_fit[param][1], single_fit[param][2])
+        plt.plot(bin_centers, single_gauss_fit_graph, 'k--')
 
     plt.savefig(out_path + str(sector) + ".png")
     plt.close()

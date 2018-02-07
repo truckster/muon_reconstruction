@@ -17,7 +17,7 @@ def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path
     '''iterate snippets'''
     fit_results = []
     # for snippet in range(len(snippet_array)):
-    for snippet in range(13):
+    for snippet in range(9, 10):
         statusAlert.processStatus("processing snippet: " + str(snippet))
 
         statusAlert.processStatus("     combining pmt data to sectors")
@@ -87,9 +87,9 @@ def multifit(fit_data, snippet, out_path):
         bin_centers = 0.5 * (sector_pmts.bins[1:] - sector_pmts.bins[:-1])
         plt.xlim([0, math.pi])
 
-        possible_gauss_positions = get_fit_estimates(sector_pmts.entries, sector_pmts.bins)
+        possible_gauss_positions = get_fit_estimates(sector_pmts.entries)
 
-        plt.errorbar(sector_pmts.bins[:-1], sector_pmts.entries, yerr=np.sqrt(sector_pmts.entries))
+        y_values = plt.errorbar(sector_pmts.bins[:-1], sector_pmts.entries, yerr=np.sqrt(sector_pmts.entries))
         plt.clf()
 
         print(possible_gauss_positions)
@@ -97,29 +97,38 @@ def multifit(fit_data, snippet, out_path):
         fit_results = []
 
         for peak in range(len(possible_gauss_positions)):
-            single_gauss_params = [c, mu, sigma] = [sector_pmts.entries[possible_gauss_positions[peak]],
-                                                    possible_gauss_positions[peak]/60.0*3.1415,
-                                                    0.2]
-            plsq = leastsq(res_single_gauss, single_gauss_params, args=(sector_pmts.entries, bin_centers))
+            print(bin_centers[[possible_gauss_positions[peak]]])
+            print(sector_pmts.entries[[possible_gauss_positions[peak]]])
 
-            print(plsq)
-
-            # try:
-            #     fit, err = curve_fit(gauss,
-            #                          bin_centers,
-            #                          sector_pmts.entries,
-            #                          p0=(sector_pmts.entries[possible_gauss_positions[peak]], (possible_gauss_positions[peak]/60.0*3.1415), 0.1),
-            #                          # bounds=(
-            #                          #     [0, (possible_gauss_positions[peak]/60.0*3.1415), 0],
-            #                          #     [sector_pmts.entries[possible_gauss_positions[peak]], (possible_gauss_positions[peak]/60.0*3.1415)+0.2, 0.2])
-            #                          )
+            # single_gauss_params = [c, mu, sigma] = [sector_pmts.entries[possible_gauss_positions[peak]],
+            #                                         possible_gauss_positions[peak]/float(len(sector_pmts.bins))*3.1415,
+            #                                         0.05]
+            # plsq = leastsq(res_single_gauss, single_gauss_params, args=(bin_centers, sector_pmts.entries))
             #
-            #     # print(1, possible_gauss_positions[peak] / 60.0 * 3.1415, 1)
-            #     # print(fit)
-            # except:
-            #     fit = [1, 1, 1]
-            #     print("Fit no work")
-            fit_results.append(plsq)
+            # print(single_gauss_params)
+            # print(plsq)
+            # fit_results.append(plsq)
+
+            fit_parameters = (sector_pmts.entries[possible_gauss_positions[peak]], (possible_gauss_positions[peak]/60.0*3.1415), 0.1)
+            try:
+                fit, err = curve_fit(gauss,
+                                     bin_centers,
+                                     sector_pmts.entries,
+                                     # bin_centers[sector_pmts.entries[possible_gauss_positions[peak]]-5:sector_pmts.entries[possible_gauss_positions[peak]]+5],
+                                     # sector_pmts.entries[sector_pmts.entries[possible_gauss_positions[peak]]-5:sector_pmts.entries[possible_gauss_positions[peak]]+5],
+                                     p0=fit_parameters,
+                                     # bounds=(
+                                     #     [0, (possible_gauss_positions[peak]/60.0*3.1415), 0],
+                                     #     [sector_pmts.entries[possible_gauss_positions[peak]], (possible_gauss_positions[peak]/60.0*3.1415)+0.2, 0.2])
+                                     )
+
+                # print(1, possible_gauss_positions[peak] / 60.0 * 3.1415, 1)
+                print(fit)
+                print(fit_parameters)
+            except:
+                fit = [1, 1, 1]
+                print("Fit no work")
+            fit_results.append(fit)
 
         picture_drawer_2(sector_pmts, sector, fit_results, out_path)
 
@@ -144,9 +153,7 @@ def fit_double_gauss_in_sector(sector_pmts):
     bin_centers = sector_pmts.bins[:-1] + 0.5 * (sector_pmts.bins[1:] - sector_pmts.bins[:-1])
     plt.xlim([-4, 4])
 
-    gaus_position_estimate = get_fit_estimates(sector_pmts.entries, sector_pmts.bins)
-
-    double_gauss_params = [c1, mu1, sigma1, c2, dmu, sigma2] = [1, -3, 1, 1, 0, 1] # Initial guesses for leastsq
+    double_gauss_params = [c1, mu1, sigma1, c2, dmu, sigma2] = [1, 0, 1, 1, 2, 1] # Initial guesses for leastsq
 
     plsq = leastsq(res_double_gauss_dist, double_gauss_params, args=(sector_pmts.entries, bin_centers))
 
@@ -158,7 +165,7 @@ def fit_double_gauss_in_sector(sector_pmts):
     return plsq
 
 
-def get_fit_estimates(hist_entries, bins):
+def get_fit_estimates(hist_entries):
     max_array = argrelmax(hist_entries)
 
     if len(max_array[0]):
@@ -177,8 +184,11 @@ def picture_drawer(sector_pmts, sector, single_fit, double_fit, out_path):
     single_gauss_fit_graph = single_gaussian(bin_centers, single_fit[0])
     double_gauss_fit_graph = double_gaussian_dist(bin_centers, double_fit[0])
 
-    plt.plot(bin_centers, single_gauss_fit_graph, c='k')
-    plt.plot(bin_centers, double_gauss_fit_graph, c='r')
+    # plt.plot(bin_centers, single_gauss_fit_graph, c='k')
+    plt.plot(sector_pmts.bins[:-1], double_gauss_fit_graph, c='r')
+
+    plt.ylabel("theta (deg)")
+    plt.xlabel("phi (deg)")
 
     plt.savefig(out_path + str(sector) + ".png")
     plt.close()
@@ -186,8 +196,8 @@ def picture_drawer(sector_pmts, sector, single_fit, double_fit, out_path):
 
 def picture_drawer_2(sector_pmts, sector, single_fit, out_path):
     # draw 1 actual data
+    plt.xlim(0, math.pi)
     bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
-
     # plt.hist(sector_pmts.bins, len(sector_pmts.bins)-1, weights=sector_pmts.entries, color='b')
     plt.bar(bin_centers, sector_pmts.entries, width=1.0*math.pi/(len(sector_pmts.bins)-1))
 
@@ -195,10 +205,14 @@ def picture_drawer_2(sector_pmts, sector, single_fit, out_path):
                  fmt='b', linestyle=''
                  )
     for param in range(len(single_fit)):
-        single_gauss_fit_graph = res_single_gauss((single_fit[param][0][0], single_fit[param][0][1], single_fit[param][0][2]),
-                                                  bin_centers,
-                                                  sector_pmts.entries)
-        plt.plot(bin_centers, single_gauss_fit_graph, 'k--')
+        single_gauss_fit_graph = gauss(bin_centers,
+                                       single_fit[param][0],
+                                       single_fit[param][1],
+                                       single_fit[param][2])
+        plt.plot(bin_centers, single_gauss_fit_graph, 'r--')
+
+        plt.ylabel("Number of Photons")
+        plt.xlabel("theta (deg)")
 
     plt.savefig(out_path + str(sector) + ".png")
     plt.close()
@@ -220,20 +234,24 @@ def res_single_gauss(p, x, y):
 
 def single_gaussian(x, params):
     (c, mu, sigma) = params
-    res = (c/(math.sqrt(2.0 * math.pi * sigma **2.0))) * np.exp(-(x - mu) ** 2.0 / (2.0 * sigma ** 2.0))
+    res = (c/(math.sqrt(2.0 * math.pi * sigma ** 2.0))) * np.exp(-(x - mu) ** 2.0 / (2.0 * sigma ** 2.0))
     return res
 
 
 def gauss(x, c, mu, sigma):
     # res = (c / (math.sqrt(2.0 * math.pi * sigma ** 2.0))) * np.exp(-(x - mu) ** 2.0 / (2.0 * sigma ** 2.0))
-    res = c * np.exp(-(x - mu) ** 2.0 / ( sigma ** 2.0))
+    res = c * np.exp(-(x - mu) ** 2.0 / (sigma ** 2.0))
     return res
+
+
+def lorentz(x, A, x0, gamma):
+    return A * gamma**2 / ((x - x0) ** 2 + gamma ** 2)
 
 
 def double_gaussian_dist(x, params):
     (c1, mu1, sigma1, c2, dmu, sigma2) = params
-    res = (c1/(math.sqrt(2.0 * math.pi * sigma1 **2.0))) * np.exp(-(x - mu1) ** 2.0 / (2.0 * sigma1 ** 2.0))\
-          + (c2/(math.sqrt(2.0 * math.pi * sigma2 **2.0))) * np.exp(-(x - (mu1+dmu)) ** 2.0 / (2.0 * sigma2 ** 2.0))
+    res = (c1/(math.sqrt(2.0 * math.pi * sigma1 ** 2.0))) * np.exp(-(x - mu1) ** 2.0 / (2.0 * sigma1 ** 2.0))\
+          + (c2/(math.sqrt(2.0 * math.pi * sigma2 ** 2.0))) * np.exp(-(x - (mu1+dmu)) ** 2.0 / (2.0 * sigma2 ** 2.0))
     return res
 
 

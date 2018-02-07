@@ -38,7 +38,7 @@ def draw_snippet_picture(pmt_position_class, snippet_class, muon_points, snippet
     # scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position, marker='o', c='k')
     scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position,
                               c=snippet_class.time_snippets[snippet], cmap=color_schemes.analysis_design(),
-                              edgecolor='none', label='hit')
+                              edgecolor='k', label='hit')
     cb = fig.colorbar(scatterHits)
 
     '''Nice design'''
@@ -58,7 +58,7 @@ def draw_snippet_picture(pmt_position_class, snippet_class, muon_points, snippet
     cb.set_label("Number of Photons")
 
     # plt.savefig(out_path + str(snippet) + ".pdf")
-    plt.savefig(out_path + str(snippet) + ".png")
+    plt.savefig(out_path + str(snippet) + ".png", bbox_inches='tight')
 
     plt.close()
 

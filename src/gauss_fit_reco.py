@@ -33,11 +33,11 @@ def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path
 
         statusAlert.processStatus("         horizontal")
         # gauss_fit(gauss_fit_data_horizontal, snippet, out_path + "test/horizontal/" + str(snippet) + "/")
-        multifit(gauss_fit_data_horizontal, snippet, out_path + "test/horizontal/" + str(snippet) + "/")
+        multifit(gauss_fit_data_horizontal, snippet, -math.pi, out_path + "test/horizontal/" + str(snippet) + "/")
 
         statusAlert.processStatus("         vertical")
         # gauss_fit(gauss_fit_data_vertical, snippet, out_path + "test/vertical/" + str(snippet) + "/")
-        multifit(gauss_fit_data_vertical, snippet, out_path + "test/vertical/" + str(snippet) + "/")
+        multifit(gauss_fit_data_vertical, snippet, 0, out_path + "test/vertical/" + str(snippet) + "/")
 
 
 class SectorHistoData:
@@ -53,7 +53,7 @@ def get_sector_histo(sector_pmts):
     for pmt in sector_pmts:
         for hits in range(pmt.hits):
             hist_list.append(pmt.phi)
-    n, bins, patches = plt.hist(hist_list, bins=60, range=(0, math.pi))
+    n, bins, patches = plt.hist(hist_list, bins=60, range=(-math.pi, math.pi))
 
     return_data.entries = n
     return_data.bins = bins
@@ -77,7 +77,7 @@ def gauss_fit(fit_data, snippet, out_path):
         picture_drawer(sector_data, sector, single_fit, double_fit, out_path)
 
 
-def multifit(fit_data, snippet, out_path):
+def multifit(fit_data, snippet, x_range_lower, out_path):
     '''get data into numpy arrays'''
     for sector in range(len(fit_data)):
         print("----------------------------------------------------------------------------------------")
@@ -86,7 +86,7 @@ def multifit(fit_data, snippet, out_path):
         sector_pmts = get_sector_histo(pmts_per_sector)
 
         bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
-        plt.xlim([0, math.pi])
+        plt.xlim([x_range_lower, math.pi])
 
         possible_gauss_positions = get_fit_estimates(sector_pmts.entries)
 
@@ -134,39 +134,39 @@ def multifit(fit_data, snippet, out_path):
                 print("Fit no work")
             fit_results.append(fit)
 
-        picture_drawer_2(sector_pmts, sector, fit_results, out_path)
+        picture_drawer_2(sector_pmts, sector, fit_results, x_range_lower, out_path)
 
 
-def fit_single_gauss_in_sector(sector_pmts):
-    bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
-    plt.xlim([-4, 4])
-
-    single_gauss_params = [c, mu, sigma] = [1, -3, 1]
-    plsq = leastsq(res_single_gauss, single_gauss_params, args=(sector_pmts.entries, bin_centers))
-
-    # print("Fit parameters: " + str(plsq[0]))
-    # print("Fit quality parameter: " + str(plsq[1]))
-
-    plt.clf()
-
-    return plsq
-
-
-def fit_double_gauss_in_sector(sector_pmts):
-
-    bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
-    plt.xlim([-4, 4])
-
-    double_gauss_params = [c1, mu1, sigma1, c2, dmu, sigma2] = [1, 0, 1, 1, 2, 1] # Initial guesses for leastsq
-
-    plsq = leastsq(res_double_gauss_dist, double_gauss_params, args=(sector_pmts.entries, bin_centers))
-
-    # print("Fit parameters: " + str(plsq[0]))
-    # print("Fit quality parameter: " + str(plsq[1])
-
-    plt.clf()
-
-    return plsq
+# def fit_single_gauss_in_sector(sector_pmts):
+#     bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
+#     plt.xlim([-4, 4])
+#
+#     single_gauss_params = [c, mu, sigma] = [1, -3, 1]
+#     plsq = leastsq(res_single_gauss, single_gauss_params, args=(sector_pmts.entries, bin_centers))
+#
+#     # print("Fit parameters: " + str(plsq[0]))
+#     # print("Fit quality parameter: " + str(plsq[1]))
+#
+#     plt.clf()
+#
+#     return plsq
+#
+#
+# def fit_double_gauss_in_sector(sector_pmts):
+#
+#     bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
+#     plt.xlim([-4, 4])
+#
+#     double_gauss_params = [c1, mu1, sigma1, c2, dmu, sigma2] = [1, 0, 1, 1, 2, 1] # Initial guesses for leastsq
+#
+#     plsq = leastsq(res_double_gauss_dist, double_gauss_params, args=(sector_pmts.entries, bin_centers))
+#
+#     # print("Fit parameters: " + str(plsq[0]))
+#     # print("Fit quality parameter: " + str(plsq[1])
+#
+#     plt.clf()
+#
+#     return plsq
 
 
 def get_fit_estimates(hist_entries):
@@ -178,32 +178,32 @@ def get_fit_estimates(hist_entries):
         return [0]
 
 
-def picture_drawer(sector_pmts, sector, single_fit, double_fit, out_path):
+# def picture_drawer(sector_pmts, sector, single_fit, double_fit, out_path):
+#     # draw 1 actual data
+#     plt.hist(sector_pmts.bins[:-1], len(sector_pmts.bins)-1, weights=sector_pmts.entries)
+#
+#     bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
+#     # plt.xlim([-4, 4])
+#
+#     single_gauss_fit_graph = single_gaussian(bin_centers, single_fit[0])
+#     double_gauss_fit_graph = double_gaussian_dist(bin_centers, double_fit[0])
+#
+#     # plt.plot(bin_centers, single_gauss_fit_graph, c='k')
+#     plt.plot(sector_pmts.bins[:-1], double_gauss_fit_graph, c='r')
+#
+#     plt.ylabel("theta (deg)")
+#     plt.xlabel("phi (deg)")
+#
+#     plt.savefig(out_path + str(sector) + ".png")
+#     plt.close()
+
+
+def picture_drawer_2(sector_pmts, sector, single_fit, x_range_lower, out_path):
     # draw 1 actual data
-    plt.hist(sector_pmts.bins[:-1], len(sector_pmts.bins)-1, weights=sector_pmts.entries)
-
-    bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
-    # plt.xlim([-4, 4])
-
-    single_gauss_fit_graph = single_gaussian(bin_centers, single_fit[0])
-    double_gauss_fit_graph = double_gaussian_dist(bin_centers, double_fit[0])
-
-    # plt.plot(bin_centers, single_gauss_fit_graph, c='k')
-    plt.plot(sector_pmts.bins[:-1], double_gauss_fit_graph, c='r')
-
-    plt.ylabel("theta (deg)")
-    plt.xlabel("phi (deg)")
-
-    plt.savefig(out_path + str(sector) + ".png")
-    plt.close()
-
-
-def picture_drawer_2(sector_pmts, sector, single_fit, out_path):
-    # draw 1 actual data
-    plt.xlim(0, math.pi)
+    plt.xlim(x_range_lower, math.pi)
     bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
     # plt.hist(sector_pmts.bins, len(sector_pmts.bins)-1, weights=sector_pmts.entries, color='b')
-    plt.bar(bin_centers, sector_pmts.entries, width=1.0*math.pi/(len(sector_pmts.bins)-1))
+    plt.bar(bin_centers, sector_pmts.entries, width=2*math.pi/(len(sector_pmts.bins)-1))
 
     plt.errorbar(bin_centers, sector_pmts.entries, yerr=np.sqrt(sector_pmts.entries),
                  fmt='b', linestyle=''

@@ -24,18 +24,23 @@ def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path
         gauss_fit_data_horizontal = combine_pmts_horizontal(pmt_position_class, snippet_class, snippet)
         gauss_fit_data_vertical = combine_pmts_vertical(pmt_position_class, snippet_class, snippet)
 
-        if not path.isdir(out_path + "test/horizontal/" + str(snippet)):
-            mkdir(out_path + "test/horizontal/" + str(snippet))
-        if not path.isdir(out_path + "test/vertical/" + str(snippet)):
-            mkdir(out_path + "test/vertical/" + str(snippet))
+        if not path.isdir(out_path + "horizontal/"):
+            mkdir(out_path + "horizontal/")
+        if not path.isdir(out_path + "vertical/"):
+            mkdir(out_path + "vertical/")
+
+        if not path.isdir(out_path + "horizontal/" + str(snippet)):
+            mkdir(out_path + "horizontal/" + str(snippet))
+        if not path.isdir(out_path + "vertical/" + str(snippet)):
+            mkdir(out_path + "vertical/" + str(snippet))
 
         statusAlert.processStatus("     performing fit")
 
         statusAlert.processStatus("         horizontal")
-        multifit(gauss_fit_data_horizontal, snippet, -math.pi, out_path + "test/horizontal/" + str(snippet) + "/")
+        multifit(gauss_fit_data_horizontal, snippet, -math.pi, out_path + "horizontal/" + str(snippet) + "/")
 
         statusAlert.processStatus("         vertical")
-        multifit(gauss_fit_data_vertical, snippet, 0, out_path + "test/vertical/" + str(snippet) + "/")
+        multifit(gauss_fit_data_vertical, snippet, 0, out_path + "vertical/" + str(snippet) + "/")
 
 
 class SectorHistoData:
@@ -106,9 +111,9 @@ def multifit(fit_data, snippet, x_range_lower, out_path):
                                      # bin_centers[sector_pmts.entries[possible_gauss_positions[peak]]-5:sector_pmts.entries[possible_gauss_positions[peak]]+5],
                                      # sector_pmts.entries[sector_pmts.entries[possible_gauss_positions[peak]]-5:sector_pmts.entries[possible_gauss_positions[peak]]+5],
                                      # p0=fit_parameters,
-                                     # bounds=(
-                                     #     [0, 0, 0, 0],
-                                     #     [np.inf, np.inf, np.inf, np.inf])
+                                     bounds=(
+                                         [sector_pmts.entries[possible_gauss_positions[peak]]-50, 0, 0],
+                                         [sector_pmts.entries[possible_gauss_positions[peak]]+50, np.inf, 5])
                                      )
 
                 # print(1, possible_gauss_positions[peak] / 60.0 * 3.1415, 1)
@@ -158,8 +163,10 @@ def picture_drawer_2(sector_pmts, sector, single_fit, x_range_lower, out_path):
 
         plt.ylabel("Number of Photons")
         plt.xlabel("theta (deg)")
-        plt.figtext(0.15, 0.79-0.1*param, ("Height/Width: %.1f \nWidth: %.5f "
-                                % (single_fit[param][0]/single_fit[param][2], single_fit[param][2])))
+        plt.figtext(0.15, 0.79-0.12*param, ("Height/Width: %.1f \nWidth: %.5f \nHeight: %.1f"
+                                % (single_fit[param][0]/single_fit[param][2],
+                                   single_fit[param][2],
+                                   single_fit[param][0])))
 
     plt.savefig(out_path + str(sector) + ".png")
     plt.close()

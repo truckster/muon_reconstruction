@@ -6,7 +6,7 @@ from glob import glob
 '''General script to use sub-scripts for muon reconstruction.'''
 statusAlert.processStatus("Process started")
 
-input_path = "/home/gpu/Simulation/mult/test/"
+input_path = "/home/gpu/Simulation/mult/new/"
 # input_path = "/home/gpu/Simulation/single/"
 output_path = "/home/gpu/Analysis/muReconstruction/Output/"
 
@@ -21,8 +21,10 @@ for file in glob("*.root"):
     '''Control, which events are useful for the analysis'''
     # TreeReadFunc.interestChecker(inputpath, "mu", "TrackLengthInScint", "MuMult", "MuMult")
     # TreeReadFunc.interestChecker(inputpath, "mu", "MuMult"
+    # TreeReadFunc.muon_file_reader(file)
 
     new_output_path = recoPreparation.create_output_path(output_path, file, "/totalEventHist/",  input_path)
+    new_output_path_fit = recoPreparation.create_output_path(output_path, file, "/fits/",  input_path)
 
     '''calculate PMT positions for this file'''
     x_sectors = 20
@@ -44,7 +46,7 @@ for file in glob("*.root"):
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
     # reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     # fitting_reco.reco_by_fittig_gauss(PmtPositions, photons_in_time_window, muon_points, output_path)
-    gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, output_path)
+    gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
 statusAlert.processStatus("Process finished")

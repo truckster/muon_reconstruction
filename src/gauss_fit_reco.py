@@ -8,7 +8,7 @@ from scipy.optimize import leastsq
 from scipy.signal import argrelmax
 
 
-def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path):
+def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path, result_file):
     statusAlert.processStatus("search gauss patterns in snippet")
 
     '''photon data pre-processed and ordered into time snippets'''
@@ -37,10 +37,14 @@ def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path
         statusAlert.processStatus("     performing fit")
 
         statusAlert.processStatus("         horizontal")
-        multifit(gauss_fit_data_horizontal, snippet, -math.pi, out_path + "horizontal/" + str(snippet) + "/")
+        fit, snippet, x_range_lower = \
+            multifit(gauss_fit_data_horizontal, snippet, -math.pi, out_path + "horizontal/" + str(snippet) + "/")
+        result_output_writer(result_file, muon_points, fit, x_range_lower)
 
         statusAlert.processStatus("         vertical")
-        multifit(gauss_fit_data_vertical, snippet, 0, out_path + "vertical/" + str(snippet) + "/")
+        fit, snippet, x_range_lower = \
+            multifit(gauss_fit_data_vertical, snippet, 0, out_path + "vertical/" + str(snippet) + "/")
+        result_output_writer(result_file, muon_points, fit, x_range_lower)
 
 
 class SectorHistoData:
@@ -104,16 +108,21 @@ def multifit(fit_data, snippet, x_range_lower, out_path):
             # fit_results.append(plsq)
 
             fit_parameters = (sector_pmts.entries[possible_gauss_positions[peak]], (possible_gauss_positions[peak]/60.0*3.1415), 0.1)
+
+            def gauss_in(x, c, mu, sigma):
+                res = c * np.exp(-(x - mu) ** 2.0 / (sigma ** 2.0))
+                return res
+
             try:
-                fit, err = curve_fit(gauss,
+                fit, err = curve_fit(gauss_in,
                                      interesting_bins,
                                      interesting_entries,
                                      # bin_centers[sector_pmts.entries[possible_gauss_positions[peak]]-5:sector_pmts.entries[possible_gauss_positions[peak]]+5],
                                      # sector_pmts.entries[sector_pmts.entries[possible_gauss_positions[peak]]-5:sector_pmts.entries[possible_gauss_positions[peak]]+5],
                                      # p0=fit_parameters,
-                                     bounds=(
-                                         [sector_pmts.entries[possible_gauss_positions[peak]]-50, 0, 0],
-                                         [sector_pmts.entries[possible_gauss_positions[peak]]+50, np.inf, 5])
+                                     # bounds=(
+                                     #     [sector_pmts.entries[possible_gauss_positions[peak]]-50, 0, 0],
+                                     #     [sector_pmts.entries[possible_gauss_positions[peak]]+50, np.inf, 5])
                                      )
 
                 # print(1, possible_gauss_positions[peak] / 60.0 * 3.1415, 1)
@@ -126,6 +135,8 @@ def multifit(fit_data, snippet, x_range_lower, out_path):
             fit_results.append(fit)
 
         picture_drawer_2(sector_pmts, sector, fit_results, x_range_lower, out_path)
+
+    return fit, snippet, x_range_lower
 
 
 def get_fit_estimates(hist_entries):
@@ -142,7 +153,7 @@ def picture_drawer_2(sector_pmts, sector, single_fit, x_range_lower, out_path):
     plt.xlim(x_range_lower, math.pi)
     bin_centers = 0.5 * (sector_pmts.bins[1:] + sector_pmts.bins[:-1])
     # plt.hist(sector_pmts.bins, len(sector_pmts.bins)-1, weights=sector_pmts.entries, color='b')
-    plt.bar(bin_centers, sector_pmts.entries, width=math.pi/(len(sector_pmts.bins)-1))
+    plt.bar(bin_centers, sector_pmts.entries, width=(math.pi-x_range_lower)/math.pi*math.pi/(len(sector_pmts.bins)-1))
 
     plt.errorbar(bin_centers, sector_pmts.entries, yerr=np.sqrt(sector_pmts.entries),
                  fmt='b', linestyle=''
@@ -163,10 +174,10 @@ def picture_drawer_2(sector_pmts, sector, single_fit, x_range_lower, out_path):
 
         plt.ylabel("Number of Photons")
         plt.xlabel("theta (deg)")
-        plt.figtext(0.15, 0.79-0.12*param, ("Height/Width: %.1f \nWidth: %.5f \nHeight: %.1f"
+        plt.figtext(0.15, 0.75-0.12*param, ("Height/Width: %.1f \nWidth: %.5f \nPosition: %.3f"
                                 % (single_fit[param][0]/single_fit[param][2],
                                    single_fit[param][2],
-                                   single_fit[param][0])))
+                                   single_fit[param][1])), fontsize=10)
 
     plt.savefig(out_path + str(sector) + ".png")
     plt.close()
@@ -220,3 +231,19 @@ def combine_pmts_horizontal(pmt_position_class, snippet_class, snippet):
 
         return_array[pmt_position_class.is_y_sector[pmt_id]].append(pmt_data)
     return return_array
+
+
+def calc_muon_points_sphere(muon_points_raw):
+    muon_points = []
+    for i in range(len(muon_points_raw)):
+        for j in range(len(muon_points_raw[i])):
+            muon_points.append(recoPreparation.calcPMTPolarPhi(muon_points_raw[i][j]))
+            muon_points.append(recoPreparation.calcPMTPolarTheta(muon_points_raw[i][j]))
+    return muon_points
+
+
+def result_output_writer(write_file, reconstructed_muon, orientation):
+    if orientation > 0:
+        write_file.write("Phi: " + reconstructed_muon)
+    if orientation is 0:
+        write_file.write("Theta: " + reconstructed_muon)

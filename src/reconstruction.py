@@ -43,10 +43,20 @@ for file in glob("*.root"):
     # photons_in_time_window.time_snippets, muon_points, PmtPositions, new_output_path, 50
     # )
 
+    '''create output file'''
+    result_file = open(output_path + "results.txt", 'w')
+    '''write header and real muon points'''
+    result_file.write("File: " + str(file)+'\n')
+    muon_sphere_points = gauss_fit_reco.calc_muon_points_sphere(muon_points)
+    for coordinate in muon_sphere_points:
+        result_file.write(str(coordinate)+'\n')
+
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
     # reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     # fitting_reco.reco_by_fittig_gauss(PmtPositions, photons_in_time_window, muon_points, output_path)
-    gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit)
+    gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit, result_file)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
+
+    result_file.close()
 
 statusAlert.processStatus("Process finished")

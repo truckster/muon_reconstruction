@@ -27,8 +27,8 @@ for file in glob("*.root"):
     new_output_path_fit = recoPreparation.create_output_path(output_path, file, "/fits/",  input_path)
 
     '''calculate PMT positions for this file'''
-    x_sectors = 20
-    y_sectors = 10
+    x_sectors = 1
+    y_sectors = 1
     PmtPositions = recoPreparation.calc_pmt_positions(input_path, x_sectors, y_sectors)
 
     '''collect entry and exit points of all muons in event'''
@@ -46,10 +46,11 @@ for file in glob("*.root"):
     '''create output file'''
     result_file = open(output_path + "results.txt", 'w')
     '''write header and real muon points'''
-    result_file.write("File: " + str(file)+'\n')
+    result_file.write("File: " + str(file)+'\n' + "MC truth")
     muon_sphere_points = gauss_fit_reco.calc_muon_points_sphere(muon_points)
     for coordinate in muon_sphere_points:
         result_file.write(str(coordinate)+'\n')
+    result_file.write("----- Reconstructed Values ------" + '\n')
 
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
     # reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)

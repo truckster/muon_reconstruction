@@ -37,14 +37,12 @@ def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path
         statusAlert.processStatus("     performing fit")
 
         statusAlert.processStatus("         horizontal")
-        fit, snippet, x_range_lower = \
-            multifit(gauss_fit_data_horizontal, snippet, -math.pi, out_path + "horizontal/" + str(snippet) + "/")
-        result_output_writer(result_file, muon_points, fit, x_range_lower)
+        fit, x_range_lower = \
+            multifit(gauss_fit_data_horizontal, -math.pi, snippet, out_path + "horizontal/" + str(snippet) + "/", result_file)
 
         statusAlert.processStatus("         vertical")
-        fit, snippet, x_range_lower = \
-            multifit(gauss_fit_data_vertical, snippet, 0, out_path + "vertical/" + str(snippet) + "/")
-        result_output_writer(result_file, muon_points, fit, x_range_lower)
+        fit, x_range_lower = \
+            multifit(gauss_fit_data_vertical, 0, snippet, out_path + "vertical/" + str(snippet) + "/", result_file)
 
 
 class SectorHistoData:
@@ -71,7 +69,7 @@ def get_sector_histo(sector_pmts, x_lower_limit):
     return return_data
 
 
-def multifit(fit_data, snippet, x_range_lower, out_path):
+def multifit(fit_data, x_range_lower, snippet, out_path, result_file):
     '''get data into numpy arrays'''
     for sector in range(len(fit_data)):
         print("----------------------------------------------------------------------------------------")
@@ -107,7 +105,9 @@ def multifit(fit_data, snippet, x_range_lower, out_path):
             # print(plsq)
             # fit_results.append(plsq)
 
-            fit_parameters = (sector_pmts.entries[possible_gauss_positions[peak]], (possible_gauss_positions[peak]/60.0*3.1415), 0.1)
+            fit_parameters = (sector_pmts.entries[possible_gauss_positions[peak]],
+                              (possible_gauss_positions[peak]/60.0*3.1415),
+                              0.1)
 
             def gauss_in(x, c, mu, sigma):
                 res = c * np.exp(-(x - mu) ** 2.0 / (sigma ** 2.0))
@@ -135,8 +135,10 @@ def multifit(fit_data, snippet, x_range_lower, out_path):
             fit_results.append(fit)
 
         picture_drawer_2(sector_pmts, sector, fit_results, x_range_lower, out_path)
+        if abs(fit[0]/fit[2])>15000 and abs(fit[2]<0.08):
+            result_output_writer(result_file, fit, x_range_lower, snippet)
 
-    return fit, snippet, x_range_lower
+    return fit, x_range_lower
 
 
 def get_fit_estimates(hist_entries):
@@ -173,7 +175,10 @@ def picture_drawer_2(sector_pmts, sector, single_fit, x_range_lower, out_path):
         plt.plot(bin_centers, single_gauss_fit_graph, 'r--')
 
         plt.ylabel("Number of Photons")
-        plt.xlabel("theta (deg)")
+        if x_range_lower < 0:
+            plt.xlabel("theta (deg)")
+        else:
+            plt.xlabel("phi (deg)")
         plt.figtext(0.15, 0.75-0.12*param, ("Height/Width: %.1f \nWidth: %.5f \nPosition: %.3f"
                                 % (single_fit[param][0]/single_fit[param][2],
                                    single_fit[param][2],
@@ -237,13 +242,16 @@ def calc_muon_points_sphere(muon_points_raw):
     muon_points = []
     for i in range(len(muon_points_raw)):
         for j in range(len(muon_points_raw[i])):
+            muon_points.append("Phi")
             muon_points.append(recoPreparation.calcPMTPolarPhi(muon_points_raw[i][j]))
+            muon_points.append("Theta")
             muon_points.append(recoPreparation.calcPMTPolarTheta(muon_points_raw[i][j]))
     return muon_points
 
 
-def result_output_writer(write_file, reconstructed_muon, orientation):
-    if orientation > 0:
-        write_file.write("Phi: " + reconstructed_muon)
+def result_output_writer(write_file, reconstructed_muon, orientation, snippet):
+    write_file.write("Snippet: " + str(snippet) + '\n')
+    if orientation < 0:
+        write_file.write("Phi: " + str(reconstructed_muon[1]) + '\n')
     if orientation is 0:
-        write_file.write("Theta: " + reconstructed_muon)
+        write_file.write("Theta: " + str(reconstructed_muon[1]) + '\n')

@@ -133,10 +133,10 @@ def multifit(fit_data, x_range_lower, snippet, out_path, result_file):
                 # fit = [1, 1, 1, 1]
                 print("Fit no work")
             fit_results.append(fit)
+            if abs(fit[0] / fit[2] / fit[2]) > 1000000 and abs(fit[2]) < 0.2:
+                result_output_writer(result_file, fit, x_range_lower, snippet)
 
         picture_drawer_2(sector_pmts, sector, fit_results, x_range_lower, out_path)
-        if abs(fit[0]/fit[2])>15000 and abs(fit[2]<0.08):
-            result_output_writer(result_file, fit, x_range_lower, snippet)
 
     return fit, x_range_lower
 
@@ -179,10 +179,13 @@ def picture_drawer_2(sector_pmts, sector, single_fit, x_range_lower, out_path):
             plt.xlabel("theta (deg)")
         else:
             plt.xlabel("phi (deg)")
-        plt.figtext(0.15, 0.75-0.12*param, ("Height/Width: %.1f \nWidth: %.5f \nPosition: %.3f"
-                                % (single_fit[param][0]/single_fit[param][2],
-                                   single_fit[param][2],
-                                   single_fit[param][1])), fontsize=10)
+        # plt.figtext(0.15, 0.75-0.12*param, ("Height/Width: %.1f \nWidth: %.5f \nPosition: %.3f"
+        #                         % (single_fit[param][0]/single_fit[param][2],
+        #                            single_fit[param][2],
+        #                            single_fit[param][1])), fontsize=10)
+        plt.figtext(0.15, 0.75 - 0.12 * param, ("Height/Width/Width: %.1f"
+                                                % (single_fit[param][0] / single_fit[param][2]/single_fit[param][2])),
+                    fontsize=10)
 
     plt.savefig(out_path + str(sector) + ".png")
     plt.close()

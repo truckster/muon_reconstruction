@@ -1,4 +1,4 @@
-import TreeReadFunc, statusAlert, PMTAnalysis, PointVecDist
+import TreeReadFunc, statusAlert, PointVecDist
 import time, math, random, os
 import ROOT as root
 import numpy as np
@@ -47,61 +47,103 @@ def hitPMTinTimeSnippetHist2(source, wtime):
     return returnClass
 
 
+class MuonIntersecPoint:
+    def __init__(self):
+        self.event = 0
 
-class PhotonPositions:
-    def __init__(self):  # this method creates the class object.
-        self.hits = []
+        self.enters = False
+        self.leaves = False
 
-    def add_hits(self, value):
-        self.hits.append(value)
+        self.x = 0
+        self.y = 0
+        self.z = 0
 
+        self.phi = 0
+        self.theta = 0
 
-def calcPMTPolarPhi(vector):
-    phi = math.atan2(vector[2], vector[1])
-    return phi
-
-
-def calcPMTPolarTheta (vector):
-    radius = PointVecDist.VectorLength(vector[1], vector[2], vector[3])
-    theta = math.acos(-vector[3]/radius)
-    # theta = math.atan(vector[3]/(math.sqrt(pow(vector[1], 2) + pow(vector[2], 2))))
-    return theta
+        self.intersec_time = 0
 
 
-def muonEntryAndExitPoints(source):
+def distance_to_center(x, y, z):
+    dist = math.sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2))
+    return dist
+
+
+def is_muon_in_detector(distance_to_center, radius):
+    if distance_to_center > radius:
+        muon_in_det = False
+    else:
+        muon_in_det = True
+
+    return muon_in_det
+
+
+def calc_muon_detector_intersec_points(source, radius, time_steps):
     """Calculates and gives back the entry and exit points of the muons belonging to the event."""
     statusAlert.processStatus("Calculate entry and exit point of muons in this event from monte carlo truth")
-    data = TreeReadFunc.readMuonRecoData(source)
+    muon_data = TreeReadFunc.read_muon_data(source)
     returnarray = []
-    for i in range(len(data)):
 
-        start = data[i][0]
-        stop = data[i][1]
-        direction = []
-        for i in range(len(start)):
-            length = math.sqrt(pow(stop[0]-start[0], 2) + pow(stop[1]-start[1], 2) + pow(stop[2]-start[2], 2))
-            direction.append((stop[i]-start[i])/length)
+    muon_mass = 105.6583745
+    c = 299792548000
 
-        center = [0,0,0]
-        oMinc = PointVecDist.VectorDifferenceVec(start, center)
-        a = (PointVecDist.VectorTimesVec(direction, oMinc))
-        b = pow(PointVecDist.VectorLengthVec(oMinc),2)-pow(19600,2)
+    for index, muon_event in enumerate(muon_data):
+        muon_in = MuonIntersecPoint()
+        muon_out = MuonIntersecPoint()
 
-        d1 = -a + math.sqrt(pow(a, 2) - b)
-        d2 = -a - math.sqrt(pow(a, 2) - b)
-        hitarray = []
-        hit1 = []
-        hit2 = []
-        hit1.append("in")
-        hit2.append("out")
-        hit1 += PointVecDist.VectorSumVec(PointVecDist.VectorTimesValue(direction, d2), start)
-        hit2 += PointVecDist.VectorSumVec(PointVecDist.VectorTimesValue(direction, d1), start)
-        hitarray.append(hit1)
-        hitarray.append(hit2)
+        muon_in.event = index
+        muon_out.event = index
 
-        returnarray.append(hitarray)
-    statusAlert.processStatus("Done")
+        time_current = 0
+
+        total_momentum = math.sqrt(pow(muon_event.x_momentum_init, 2)
+                                   + pow(muon_event.y_momentum_init, 2)
+                                   + pow(muon_event.z_momentum_init, 2))
+
+        x_velocity = muon_event.x_momentum_init / math.sqrt(pow(muon_mass, 2) + total_momentum**2) * c
+        y_velocity = muon_event.y_momentum_init / math.sqrt(pow(muon_mass, 2) + total_momentum**2) * c
+        z_velocity = muon_event.z_momentum_init / math.sqrt(pow(muon_mass, 2) + total_momentum**2) * c
+
+        x_position_current = muon_event.x_position_init
+        y_position_current = muon_event.y_position_init
+        z_position_current = muon_event.z_position_init
+
+        distance_to_det_center = distance_to_center(x_position_current, y_position_current, z_position_current)
+
+        while z_position_current > -23000:
+            muon_in_detector = is_muon_in_detector(distance_to_det_center, radius)
+            x_position_current = x_position_current + time_steps * x_velocity
+            y_position_current = y_position_current + time_steps * y_velocity
+            z_position_current = z_position_current + time_steps * z_velocity
+            time_current += time_steps
+            distance_to_det_center = distance_to_center(x_position_current, y_position_current, z_position_current)
+            muon_in_detector_second = is_muon_in_detector(distance_to_det_center, radius)
+
+            if muon_in_detector is False and muon_in_detector_second is True:
+                muon_in.enters = True
+                muon_in.x = x_position_current
+                muon_in.y = y_position_current
+                muon_in.z = z_position_current
+
+                muon_in.phi = math.atan2(y_position_current, x_position_current)
+                muon_in.theta = math.acos(z_position_current/radius)
+                muon_in.intersec_time = time_current
+
+                returnarray.append(muon_in)
+
+            elif muon_in_detector is True and muon_in_detector_second is False:
+                muon_out.leaves = True
+                muon_out.x = x_position_current
+                muon_out.y = y_position_current
+                muon_out.z = z_position_current
+
+                muon_out.phi = math.atan2(y_position_current, x_position_current)
+                muon_out.theta = math.acos(z_position_current/radius)
+                muon_out.intersec_time = time_current
+
+                returnarray.append(muon_out)
     return returnarray
+
 
 
 def create_output_path(outpath, file, extension,  inpath):

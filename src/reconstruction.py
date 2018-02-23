@@ -1,5 +1,5 @@
-import recoPreparation, PMTAnalysis, reconstructionAlg, statusAlert, TreeReadFunc, fitting_reco, gauss_fit_reco
-from os import chdir
+import recoPreparation,reconstructionAlg, statusAlert, TreeReadFunc, gauss_fit_reco
+from os import chdir, remove, path
 from glob import glob
 
 
@@ -12,6 +12,10 @@ output_path = "/home/gpu/Analysis/muReconstruction/Output/"
 
 # input_path = "/home/gpu/Simulation/presentation/y/"
 # output_path = "/home/gpu/Analysis/muReconstruction/Output/presentation/y/"
+
+'''Overwrite fit results file'''
+if path.isfile(output_path + "results.txt"):
+    remove(output_path + "results.txt")
 
 TreeReadFunc.check_file(input_path, "mu", "TrackLengthInScint", "MuMult")
 chdir(input_path)
@@ -32,7 +36,8 @@ for file in glob("*.root"):
     PmtPositions = recoPreparation.calc_pmt_positions(input_path, x_sectors, y_sectors)
 
     '''collect entry and exit points of all muons in event'''
-    muon_points = recoPreparation.muonEntryAndExitPoints(file)
+    # muon_points = recoPreparation.muonEntryAndExitPoints(file)
+    muon_points = recoPreparation.calc_muon_detector_intersec_points(file, 17600, 1*10**-9)
 
     '''collect information of all photons within certain time snippet and save the separately'''
     snippet_time_cut = 5
@@ -44,17 +49,17 @@ for file in glob("*.root"):
     # )
 
     '''create output file'''
-    result_file = open(output_path + "results.txt", 'w')
+    result_file = open(output_path + "results.txt", 'a')
     '''write header and real muon points'''
-    result_file.write("File: " + str(file)+'\n' + "MC truth")
-    muon_sphere_points = gauss_fit_reco.calc_muon_points_sphere(muon_points)
-    for coordinate in muon_sphere_points:
-        result_file.write(str(coordinate)+'\n')
+    result_file.write("File: " + str(file)+'\n' + "MC truth"+'\n')
+    for event in muon_points:
+        result_file.write(event.event + '\n')
+        result_file.write(event.phi + '\n')
+        result_file.write(event.theta  + '\n')
     result_file.write("----- Reconstructed Values ------" + '\n')
 
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
-    # reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
-    # fitting_reco.reco_by_fittig_gauss(PmtPositions, photons_in_time_window, muon_points, output_path)
+    reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit, result_file)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 

@@ -63,24 +63,25 @@ def draw_snippet_picture(pmt_position_class, snippet_class, muon_points, snippet
     plt.close()
 
 
-def draw_muon_points(muonPoints):
+def draw_muon_points(muon_points):
     phi_muon_entry = []
     theta_muon_entry = []
     phi_muon_exit = []
     theta_muon_exit = []
 
-    for i in range(len(muonPoints)):
-        for j in range(len(muonPoints[i])):
-            if j == 0:
-                phi_muon_entry.append(recoPreparation.calcPMTPolarPhi(muonPoints[i][j]))
-                theta_muon_entry.append(recoPreparation.calcPMTPolarTheta(muonPoints[i][j]))
-            else:
-                phi_muon_exit.append(recoPreparation.calcPMTPolarPhi(muonPoints[i][j]))
-                theta_muon_exit.append(recoPreparation.calcPMTPolarTheta(muonPoints[i][j]))
+    for muon_event in muon_points:
+        if muon_event.enters is True:
+            phi_muon_entry.append(muon_event.phi)
+            theta_muon_entry.append(muon_event.theta)
+        if muon_event.leaves is True:
+            phi_muon_exit.append(muon_event.phi)
+            theta_muon_exit.append(muon_event.theta)
+
     scatter_muon_entry = plt.scatter(phi_muon_entry, theta_muon_entry,
                                      facecolors='none', edgecolors='white', marker='v', s=120)
     scatter_muon_exit = plt.scatter(phi_muon_exit, theta_muon_exit,
                                    facecolors='none', edgecolors='white', marker='^', s=120)
+
 
 
 def draw_sector_lines(pmt_position_class):

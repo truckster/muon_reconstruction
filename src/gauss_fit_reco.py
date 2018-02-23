@@ -133,7 +133,7 @@ def multifit(fit_data, x_range_lower, snippet, out_path, result_file):
                 # fit = [1, 1, 1, 1]
                 print("Fit no work")
             fit_results.append(fit)
-            if abs(fit[0] / fit[2] / fit[2]) > 1000000 and abs(fit[2]) < 0.2:
+            if abs(fit[0] / fit[2] / fit[2]) > 400000:
                 result_output_writer(result_file, fit, x_range_lower, snippet)
 
         picture_drawer_2(sector_pmts, sector, fit_results, x_range_lower, out_path)
@@ -176,9 +176,9 @@ def picture_drawer_2(sector_pmts, sector, single_fit, x_range_lower, out_path):
 
         plt.ylabel("Number of Photons")
         if x_range_lower < 0:
-            plt.xlabel("theta (deg)")
-        else:
             plt.xlabel("phi (deg)")
+        else:
+            plt.xlabel("theta (deg)")
         # plt.figtext(0.15, 0.75-0.12*param, ("Height/Width: %.1f \nWidth: %.5f \nPosition: %.3f"
         #                         % (single_fit[param][0]/single_fit[param][2],
         #                            single_fit[param][2],
@@ -243,12 +243,11 @@ def combine_pmts_horizontal(pmt_position_class, snippet_class, snippet):
 
 def calc_muon_points_sphere(muon_points_raw):
     muon_points = []
-    for i in range(len(muon_points_raw)):
-        for j in range(len(muon_points_raw[i])):
-            muon_points.append("Phi")
-            muon_points.append(recoPreparation.calcPMTPolarPhi(muon_points_raw[i][j]))
-            muon_points.append("Theta")
-            muon_points.append(recoPreparation.calcPMTPolarTheta(muon_points_raw[i][j]))
+    for muon_event in muon_points_raw:
+            muon_points.append("Phi:")
+            muon_points.append(muon_event.phi)
+            muon_points.append("Theta:")
+            muon_points.append(muon_event.theta)
     return muon_points
 
 

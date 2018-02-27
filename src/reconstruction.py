@@ -6,7 +6,8 @@ from glob import glob
 '''General script to use sub-scripts for muon reconstruction.'''
 statusAlert.processStatus("Process started")
 
-input_path = "/home/gpu/Simulation/mult/new/"
+# input_path = "/home/gpu/Simulation/mult/new/"
+input_path = "/home/gpu/Simulation/mult_xxl/"
 # input_path = "/home/gpu/Simulation/single/"
 output_path = "/home/gpu/Analysis/muReconstruction/Output/"
 
@@ -36,8 +37,9 @@ for file in glob("*.root"):
     PmtPositions = recoPreparation.calc_pmt_positions(input_path, x_sectors, y_sectors)
 
     '''collect entry and exit points of all muons in event'''
-    # muon_points = recoPreparation.muonEntryAndExitPoints(file)
-    muon_points = recoPreparation.calc_muon_detector_intersec_points(file, 17600, 1*10**-9)
+    intersec_radius = 17600
+    time_resolution = 1*10**-9
+    muon_points = recoPreparation.calc_muon_detector_intersec_points(file, intersec_radius, time_resolution)
 
     '''collect information of all photons within certain time snippet and save the separately'''
     snippet_time_cut = 5
@@ -53,9 +55,18 @@ for file in glob("*.root"):
     '''write header and real muon points'''
     result_file.write("File: " + str(file)+'\n' + "MC truth"+'\n')
     for event in muon_points:
-        result_file.write(event.event + '\n')
-        result_file.write(event.phi + '\n')
-        result_file.write(event.theta  + '\n')
+        result_file.write("Event: " + str(event.event) + '\n')
+        if event.enters is True:
+            result_file.write("Entry point: " + '\n')
+        if event.leaves is True:
+            result_file.write("Exit point: " + '\n')
+        result_file.write("Phi: " + str(event.phi) + '\n')
+        result_file.write("Theta: " + str(event.theta) + '\n')
+        result_file.write("Z: " + str(event.z) + '\n')
+        result_file.write("Time: " + str(event.intersec_time) + '\n')
+        result_file.write("------------------------------------------" + '\n'+ '\n')
+        # result_file.write("Calculated snippet: " + str(event.intersec_time//(snippet_time_cut*10**-9)-12) + '\n')
+        # print((event.intersec_time/time_resolution)//snippet_time_cut)
     result_file.write("----- Reconstructed Values ------" + '\n')
 
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''

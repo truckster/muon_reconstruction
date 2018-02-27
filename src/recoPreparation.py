@@ -69,11 +69,11 @@ def distance_to_center(x, y, z):
     return dist
 
 
-def is_muon_in_detector(distance_to_center, radius):
-    if distance_to_center > radius:
-        muon_in_det = False
-    else:
+def is_muon_in_detector(dist_to_center, radius):
+    if dist_to_center < radius:
         muon_in_det = True
+    else:
+        muon_in_det = False
 
     return muon_in_det
 
@@ -115,6 +115,7 @@ def calc_muon_detector_intersec_points(source, radius, time_steps):
             x_position_current = x_position_current + time_steps * x_velocity
             y_position_current = y_position_current + time_steps * y_velocity
             z_position_current = z_position_current + time_steps * z_velocity
+
             time_current += time_steps
             distance_to_det_center = distance_to_center(x_position_current, y_position_current, z_position_current)
             muon_in_detector_second = is_muon_in_detector(distance_to_det_center, radius)
@@ -126,24 +127,23 @@ def calc_muon_detector_intersec_points(source, radius, time_steps):
                 muon_in.z = z_position_current
 
                 muon_in.phi = math.atan2(y_position_current, x_position_current)
-                muon_in.theta = math.acos(z_position_current/radius)
+                muon_in.theta = math.acos(-z_position_current/radius)
                 muon_in.intersec_time = time_current
 
                 returnarray.append(muon_in)
 
-            elif muon_in_detector is True and muon_in_detector_second is False:
+            if muon_in_detector is True and muon_in_detector_second is False:
                 muon_out.leaves = True
                 muon_out.x = x_position_current
                 muon_out.y = y_position_current
                 muon_out.z = z_position_current
 
                 muon_out.phi = math.atan2(y_position_current, x_position_current)
-                muon_out.theta = math.acos(z_position_current/radius)
+                muon_out.theta = math.acos(-z_position_current/radius)
                 muon_out.intersec_time = time_current
 
                 returnarray.append(muon_out)
     return returnarray
-
 
 
 def create_output_path(outpath, file, extension,  inpath):

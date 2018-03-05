@@ -22,6 +22,7 @@ def pattern_detector(pmt_position_class, snippet_class, muon_points, out_path):
     snippet_pattern_array = []
 
     '''iterate snippets'''
+    # for snippet in range(len(snippet_array)):
     for snippet in range(50):
         statusAlert.processStatus("processing snippet: " + str(snippet))
 

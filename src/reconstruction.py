@@ -6,8 +6,8 @@ from glob import glob
 '''General script to use sub-scripts for muon reconstruction.'''
 statusAlert.processStatus("Process started")
 
-# input_path = "/home/gpu/Simulation/mult/new/"
-input_path = "/home/gpu/Simulation/2mult_xxl/"
+input_path = "/home/gpu/Simulation/mult/new/"
+# input_path = "/home/gpu/Simulation/2mult_xxl/"
 # input_path = "/home/gpu/Simulation/single/"
 output_path = "/home/gpu/Analysis/muReconstruction/Output/"
 
@@ -71,8 +71,8 @@ for file in glob("*.root"):
 
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
     # reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
-
-    # gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit, result_file)
+    # reconstructionAlg.pattern_detector_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit, result_file)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
     result_file.close()

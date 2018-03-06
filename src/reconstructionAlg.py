@@ -3,6 +3,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import os
 
 
 class PatternPosition:
@@ -13,13 +14,10 @@ class PatternPosition:
 
 
 def pattern_detector(pmt_position_class, snippet_class, muon_points, out_path):
-    statusAlert.processStatus("search patterns in snippet")
+    statusAlert.processStatus("Iterate snippets and draw")
 
     '''photon data pre-processed and ordered into time snippets'''
     snippet_array = np.asarray(snippet_class.time_snippets)
-
-    '''This array saves all found patterns'''
-    snippet_pattern_array = []
 
     '''iterate snippets'''
     # for snippet in range(len(snippet_array)):
@@ -27,10 +25,29 @@ def pattern_detector(pmt_position_class, snippet_class, muon_points, out_path):
         statusAlert.processStatus("processing snippet: " + str(snippet))
 
         '''Draw the detector picture for the certain time snippet'''
-        draw_snippet_picture(pmt_position_class, snippet_class, muon_points, snippet, out_path)
+        draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
+                             out_path, "absolute")
 
 
-def draw_snippet_picture(pmt_position_class, snippet_class, muon_points, snippet, out_path):
+def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, out_path):
+    statusAlert.processStatus("Iterate snippets and draw")
+
+    '''photon data pre-processed and ordered into time snippets'''
+    snippet_array = np.asarray(snippet_class.time_snippets)
+
+    '''iterate snippets'''
+    # for snippet in range(len(snippet_array)):
+    for snippet in range(50):
+        if snippet > 0:
+            snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
+                           - np.asarray(snippet_class.time_snippets[snippet-1])
+            statusAlert.processStatus("processing snippet: " + str(snippet))
+
+            '''Draw the detector picture for the certain time snippet'''
+            draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
+
+
+def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet, out_path, mode=None):
     statusAlert.processStatus("Creating graphics")
     fig = plt.figure(num=None, figsize=(20, 10))
 
@@ -38,7 +55,7 @@ def draw_snippet_picture(pmt_position_class, snippet_class, muon_points, snippet
     ax1 = fig.add_subplot(111, axisbg='gainsboro')
     # scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position, marker='o', c='k')
     scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position,
-                              c=snippet_class.time_snippets[snippet], cmap=color_schemes.analysis_design(),
+                              c=snippet_array, cmap=color_schemes.analysis_design(),
                               edgecolor='k', label='hit')
     cb = fig.colorbar(scatterHits)
 
@@ -56,12 +73,32 @@ def draw_snippet_picture(pmt_position_class, snippet_class, muon_points, snippet
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")
 
-    cb.set_label("Number of Photons")
+    if mode is "absolute":
+        cb.set_label("Number of photons")
 
-    # plt.savefig(out_path + str(snippet) + ".pdf")
-    plt.savefig(out_path + str(snippet) + ".png", bbox_inches='tight')
+        # plt.savefig(out_path + str(snippet) + ".pdf")
+        try:
+            os.chdir(out_path + "absolute hits/")
+        except:
+            os.makedirs(out_path + "absolute hits/")
+        plt.savefig(out_path + "absolute hits/" + str(snippet) + ".png", bbox_inches='tight')
 
-    plt.close()
+        plt.close()
+
+    elif mode is "differential":
+        cb.set_label("Number of photon difference")
+
+        # plt.savefig(out_path + str(snippet) + ".pdf")
+        try:
+            os.chdir(out_path + "differential hits/")
+        except:
+            os.makedirs(out_path + "differential hits/")
+        plt.savefig(out_path + "differential hits/" + str(snippet) + ".png", bbox_inches='tight')
+
+        plt.close()
+
+    else:
+        print("Nothing to print")
 
 
 def draw_muon_points(muon_points):

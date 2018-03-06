@@ -152,7 +152,6 @@ def create_output_path(outpath, file, extension,  inpath):
     except:
         os.makedirs(outpath + "/")
     os.chdir(outpath)
-    print outpath
     output_path2 = outpath + str(file) + extension
     if os.path.isdir(output_path2) is False:
         statusAlert.processStatus("Create output path")

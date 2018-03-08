@@ -27,6 +27,8 @@ def pattern_detector(pmt_position_class, snippet_class, muon_points, out_path):
         '''Draw the detector picture for the certain time snippet'''
         draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
                              out_path, "absolute")
+        draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
+                             out_path, "absolute")
 
 
 def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, out_path):
@@ -45,6 +47,7 @@ def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, 
 
             '''Draw the detector picture for the certain time snippet'''
             draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
+            draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
 
 
 def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet, out_path, mode=None):
@@ -99,6 +102,51 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
 
     else:
         print("Nothing to print")
+
+
+def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, snippet, out_path, mode=None):
+    statusAlert.processStatus("Creating graphics")
+    fig = plt.figure(num=None, figsize=(20, 10))
+
+    '''Analysis design'''
+    ax1 = fig.add_subplot(111, axisbg='gainsboro')
+    # contour = plt.contour(pmt_position_class.phi_position, pmt_position_class.theta_position, snippet_array)
+
+    phi_i = np.linspace(-math.pi, math.pi, 1000)
+    theta_i = np.linspace(0, math.pi, 500)
+    zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position,
+                           snippet_array, phi_i, theta_i, interp='linear')
+
+    cont_plot = plt.contour(phi_i, theta_i, zi)
+
+    plt.ylabel("theta (deg)")
+    plt.xlabel("phi (deg)")
+
+    plt.clabel(cont_plot, inline=0, fontsize=10)
+
+    draw_muon_points(muon_points)
+
+    if mode is "absolute":
+        try:
+            os.chdir(out_path + "absolute hits contour/")
+        except:
+            os.makedirs(out_path + "absolute hits contour/")
+        plt.savefig(out_path + "absolute hits contour/" + str(snippet) + ".png", bbox_inches='tight')
+
+        plt.close()
+
+    elif mode is "differential":
+        try:
+            os.chdir(out_path + "differential hits contour/")
+        except:
+            os.makedirs(out_path + "differential hits contour/")
+        plt.savefig(out_path + "differential hits contour/" + str(snippet) + ".png", bbox_inches='tight')
+
+        plt.close()
+
+    else:
+        print("Nothing to print")
+
 
 
 def draw_muon_points(muon_points):

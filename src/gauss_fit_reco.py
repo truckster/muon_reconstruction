@@ -46,6 +46,21 @@ def fit_function_caller(pmt_position_class, snippet_class, muon_points, out_path
             statusAlert.processStatus("         vertical")
             fit, x_range_lower = \
                 multifit(gauss_fit_data_vertical, 0, snippet, out_path + "vertical/" + str(snippet) + "/", result_file)
+
+            if snippet > 0:
+                if not path.isdir(out_path + "horizontal/diff/"):
+                    mkdir(out_path + "horizontal/diff/")
+                if not path.isdir(out_path + "vertical/diff/"):
+                    mkdir(out_path + "vertical/diff/")
+
+                if not path.isdir(out_path + "horizontal/diff/" + str(snippet)):
+                    mkdir(out_path + "horizontal/diff/" + str(snippet))
+                if not path.isdir(out_path + "vertical/diff/" + str(snippet)):
+                    mkdir(out_path + "vertical/diff/" + str(snippet))
+
+                fit, x_range_lower = multifit_diff(gauss_fit_data_horizontal_diff, -math.pi, snippet, out_path + "horizontal/diff/" + str(snippet) + "/", result_file)
+                fit, x_range_lower = multifit_diff(gauss_fit_data_vertical_diff, 0, snippet, out_path + "vertical/diff/" + str(snippet) + "/", result_file)
+
         else:
             statusAlert.processStatus("     performing fit")
             statusAlert.processStatus("         horizontal")
@@ -214,6 +229,7 @@ def picture_drawer_2(sector_pmts, sector, single_fit, x_range_lower, out_path):
     plt.errorbar(bin_centers, sector_pmts.entries, yerr=np.sqrt(sector_pmts.entries),
                  fmt='b', linestyle=''
                  )
+    interesting_param = 0
     for param in range(len(single_fit)):
         single_gauss_fit_graph = gauss(bin_centers,
                                        single_fit[param][0],
@@ -237,9 +253,12 @@ def picture_drawer_2(sector_pmts, sector, single_fit, x_range_lower, out_path):
         #                         % (single_fit[param][0]/single_fit[param][2],
         #                            single_fit[param][2],
         #                            single_fit[param][1])), fontsize=10)
-        plt.figtext(0.15, 0.75 - 0.12 * param, ("Height/Width/Width: %.1f"
-                                                % (single_fit[param][0] / single_fit[param][2]/single_fit[param][2])),
-                    fontsize=10)
+
+        if single_fit[param][0] > 10:
+            plt.figtext(0.15, 0.75 - 0.12 * interesting_param, ("Height/Width/Width: %.1f"
+                                                    % (single_fit[param][0] / single_fit[param][2]/single_fit[param][2])),
+                        fontsize=10)
+            interesting_param = interesting_param + 1
 
     if x_range_lower < 0:
         plt.savefig(out_path + str(sector) + ".png")

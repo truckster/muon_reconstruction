@@ -3,6 +3,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+from scipy.ndimage.filters import gaussian_filter
 import os
 
 
@@ -25,10 +26,10 @@ def pattern_detector(pmt_position_class, snippet_class, muon_points, out_path):
         statusAlert.processStatus("processing snippet: " + str(snippet))
 
         '''Draw the detector picture for the certain time snippet'''
-        draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
-                             out_path, "absolute")
-        draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
-                             out_path, "absolute")
+        # draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
+        #                      out_path, "absolute")
+        # draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
+        #                      out_path, "absolute")
 
 
 def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, out_path):
@@ -46,7 +47,7 @@ def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, 
             statusAlert.processStatus("processing snippet: " + str(snippet))
 
             '''Draw the detector picture for the certain time snippet'''
-            draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
+            # draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
             draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
 
 
@@ -110,20 +111,24 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
 
     '''Analysis design'''
     ax1 = fig.add_subplot(111, axisbg='gainsboro')
-    # contour = plt.contour(pmt_position_class.phi_position, pmt_position_class.theta_position, snippet_array)
 
     phi_i = np.linspace(-math.pi, math.pi, 1000)
     theta_i = np.linspace(0, math.pi, 500)
     zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position,
                            snippet_array, phi_i, theta_i, interp='linear')
+    zi = gaussian_filter(zi, 5)
 
-    cont_plot = plt.contour(phi_i, theta_i, zi)
+    cont_plot_axes = plt.contour(phi_i, theta_i, zi)
 
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")
 
-    plt.clabel(cont_plot, inline=0, fontsize=10)
-
+    print(len(cont_plot_axes.collections))
+    # plt.clabel(cont_plot_axes, inline=0, fontsize=10)
+    try:
+        plt.colorbar(cont_plot_axes)
+    except:
+        print("No colorbar possible! ")
     draw_muon_points(muon_points)
 
     if mode is "absolute":

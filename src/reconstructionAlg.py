@@ -112,8 +112,8 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
     '''Analysis design'''
     ax1 = fig.add_subplot(111, axisbg='gainsboro')
 
-    phi_i = np.linspace(-math.pi, math.pi, 1000)
-    theta_i = np.linspace(0, math.pi, 500)
+    phi_i = np.linspace(-math.pi, math.pi, 1200)
+    theta_i = np.linspace(0, math.pi, 600)
     zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position,
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
@@ -123,8 +123,9 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")
 
-    print(len(cont_plot_axes.collections))
-    # plt.clabel(cont_plot_axes, inline=0, fontsize=10)
+    print(len(cont_plot_axes.collections[len(cont_plot_axes.collections)-1].get_paths()))
+    # print(cont_plot_axes.collections[len(cont_plot_axes.collections)-1].get_paths()[0].vertices.T)
+
     try:
         plt.colorbar(cont_plot_axes)
     except:

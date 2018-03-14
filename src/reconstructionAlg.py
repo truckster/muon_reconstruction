@@ -1,4 +1,4 @@
-import statusAlert, recoPreparation, color_schemes
+import statusAlert, recoPreparation, color_schemes, contour_analyze
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -120,9 +120,12 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
 
     cont_plot_axes = plt.contour(phi_i, theta_i, zi)
 
+    contour_analyze.calc_contour_center(cont_plot_axes, len(cont_plot_axes.collections)-1)
+
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")
 
+    print(len(cont_plot_axes.collections))
     print(len(cont_plot_axes.collections[len(cont_plot_axes.collections)-1].get_paths()))
     # print(cont_plot_axes.collections[len(cont_plot_axes.collections)-1].get_paths()[0].vertices.T)
 

@@ -1,4 +1,4 @@
-import recoPreparation,reconstructionAlg, statusAlert, TreeReadFunc, gauss_fit_reco
+import recoPreparation,reconstructionAlg, statusAlert, TreeReadFunc, gauss_fit_reco, contour_analyze
 from os import chdir, remove, path
 from glob import glob
 

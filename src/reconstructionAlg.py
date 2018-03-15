@@ -120,14 +120,13 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
 
     cont_plot_axes = plt.contour(phi_i, theta_i, zi)
 
-    contour_analyze.calc_contour_center(cont_plot_axes, len(cont_plot_axes.collections)-1)
+    contour_data = contour_analyze.get_contour_data(cont_plot_axes)
+    for level in range(len(contour_data)):
+        print(len(contour_data[level].centers))
 
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")
 
-    print(len(cont_plot_axes.collections))
-    print(len(cont_plot_axes.collections[len(cont_plot_axes.collections)-1].get_paths()))
-    # print(cont_plot_axes.collections[len(cont_plot_axes.collections)-1].get_paths()[0].vertices.T)
 
     try:
         plt.colorbar(cont_plot_axes)

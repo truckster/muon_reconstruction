@@ -6,7 +6,7 @@ from glob import glob
 '''General script to use sub-scripts for muon reconstruction.'''
 statusAlert.processStatus("Process started")
 
-input_path = "/home/gpu/Simulation/mult/new3/"
+input_path = "/home/gpu/Simulation/mult/new/"
 # input_path = "/home/gpu/Simulation/2mult_xxl/"
 # input_path = "/home/gpu/Simulation/single/"
 output_path = "/home/gpu/Analysis/muReconstruction/Output/"

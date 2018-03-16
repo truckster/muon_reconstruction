@@ -26,10 +26,10 @@ def pattern_detector(pmt_position_class, snippet_class, muon_points, out_path):
         statusAlert.processStatus("processing snippet: " + str(snippet))
 
         '''Draw the detector picture for the certain time snippet'''
-        # draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
-        #                      out_path, "absolute")
-        # draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
-        #                      out_path, "absolute")
+        draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
+                             out_path, "absolute")
+        draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
+                             out_path, "absolute")
 
 
 def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, out_path):
@@ -47,7 +47,7 @@ def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, 
             statusAlert.processStatus("processing snippet: " + str(snippet))
 
             '''Draw the detector picture for the certain time snippet'''
-            # draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
+            draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
             draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
 
 
@@ -57,7 +57,7 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
 
     '''Analysis design'''
     ax1 = fig.add_subplot(111, axisbg='gainsboro')
-    # scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position, marker='o', c='k')
+    scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position, marker='o', c='k')
     scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position,
                               c=snippet_array, cmap=color_schemes.analysis_design(),
                               edgecolor='k', label='hit')
@@ -66,7 +66,8 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
     '''Nice design'''
     # ax1 = fig.add_subplot(111)
     # scatter_hits_new = ax1.scatter(pmt_position_class.phi_hammer_aitov, pmt_position_class.theta_hammer_aitov,
-    #                                c=snippet_class.time_snippets[snippet], cmap=color_analysis, label='hit')
+    #                                c=snippet_array, cmap=color_schemes.analysis_design(),
+    #                                edgecolor='k', label='hit')
     # cb = fig.colorbar(scatter_hits_new)
 
     draw_sector_lines(pmt_position_class)

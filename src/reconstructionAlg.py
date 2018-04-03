@@ -28,8 +28,9 @@ def pattern_detector(pmt_position_class, snippet_class, muon_points, out_path):
         '''Draw the detector picture for the certain time snippet'''
         draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
                              out_path, "absolute")
-        draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
-                             out_path, "absolute")
+        contour_plt_picture, contour_data = contour_data_reader(pmt_position_class, snippet_class.time_snippets[snippet])
+        draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
+                                  muon_points, snippet, out_path, "absolute")
 
 
 def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, out_path):
@@ -48,6 +49,7 @@ def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, 
 
             '''Draw the detector picture for the certain time snippet'''
             draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
+            contour_plt_picture, contour_data = contour_data_reader(pmt_position_class, snippet_diff)
             draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
 
 
@@ -106,6 +108,22 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
         print("Nothing to print")
 
 
+def contour_data_reader(pmt_position_class, snippet_array):
+    statusAlert.processStatus("Collect contour data")
+
+    phi_i = np.linspace(-math.pi, math.pi, 1200)
+    theta_i = np.linspace(0, math.pi, 600)
+    zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position,
+                           snippet_array, phi_i, theta_i, interp='linear')
+    zi = gaussian_filter(zi, 5)
+
+    cont_plot_axes = plt.contour(phi_i, theta_i, zi)
+
+    contour_data = contour_analyze.get_contour_data(cont_plot_axes)
+
+    return cont_plot_axes, contour_data
+
+
 def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, snippet, out_path, mode=None):
     statusAlert.processStatus("Creating graphics")
     fig = plt.figure(num=None, figsize=(20, 10))
@@ -120,10 +138,6 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
     zi = gaussian_filter(zi, 5)
 
     cont_plot_axes = plt.contour(phi_i, theta_i, zi)
-
-    contour_data = contour_analyze.get_contour_data(cont_plot_axes)
-    for level in range(len(contour_data)):
-        print(len(contour_data[level].centers))
 
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")
@@ -156,6 +170,7 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
     else:
         print("Nothing to print")
 
+    plt.close()
 
 
 def draw_muon_points(muon_points):

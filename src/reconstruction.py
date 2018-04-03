@@ -1,15 +1,15 @@
 import recoPreparation,reconstructionAlg, statusAlert, TreeReadFunc, gauss_fit_reco, contour_analyze
 from os import chdir, remove, path
 from glob import glob
-
+import gc
 
 '''General script to use sub-scripts for muon reconstruction.'''
 statusAlert.processStatus("Process started")
 
-input_path = "/home/gpu/Simulation/mult/new/"
-# input_path = "/home/gpu/Simulation/2mult_xxl/"
+# input_path = "/home/gpu/Simulation/mult/new/"
+input_path = "/home/gpu/Simulation/test/"
 # input_path = "/home/gpu/Simulation/single/"
-output_path = "/home/gpu/Analysis/muReconstruction/Output/"
+output_path = "/home/gpu/Analysis/muReconstruction/Output/LPMT/"
 
 # input_path = "/home/gpu/Simulation/presentation/y/"
 # output_path = "/home/gpu/Analysis/muReconstruction/Output/presentation/y/"
@@ -76,5 +76,7 @@ for file in glob("*.root"):
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
     result_file.close()
+
+    gc.collect()
 
 statusAlert.processStatus("Process finished")

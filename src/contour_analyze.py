@@ -4,6 +4,7 @@ class ContourData:
         self.iso_hit_patches = 0
         self.centers = []
         self.extents = []
+        self.level = 0
 
 
 def get_contour_data(contour_output):

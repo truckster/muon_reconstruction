@@ -7,9 +7,11 @@ import gc
 statusAlert.processStatus("Process started")
 
 # input_path = "/home/gpu/Simulation/mult/new/"
-input_path = "/home/gpu/Simulation/test/"
+input_path = "/home/gpu/Simulation/mult/test/"
+# input_path = "/home/gpu/Simulation/test/"
 # input_path = "/home/gpu/Simulation/single/"
-output_path = "/home/gpu/Analysis/muReconstruction/Output/LPMT/"
+output_path = "/home/gpu/Analysis/muReconstruction/Output/"
+# output_path = "/home/gpu/Analysis/muReconstruction/Output/LPMT/"
 
 # input_path = "/home/gpu/Simulation/presentation/y/"
 # output_path = "/home/gpu/Analysis/muReconstruction/Output/presentation/y/"
@@ -41,6 +43,8 @@ for file in glob("*.root"):
     time_resolution = 1*10**-9
     muon_points = recoPreparation.calc_muon_detector_intersec_points(file, intersec_radius, time_resolution)
 
+    recoPreparation.MC_truth_writer(muon_points, output_path, file)
+
     '''collect information of all photons within certain time snippet and save the separately'''
     snippet_time_cut = 5
     photons_in_time_window = recoPreparation.hitPMTinTimeSnippetHist2(file, snippet_time_cut)
@@ -50,32 +54,16 @@ for file in glob("*.root"):
     # photons_in_time_window.time_snippets, muon_points, PmtPositions, new_output_path, 50
     # )
 
-    '''create output file'''
-    result_file = open(output_path + "results.txt", 'a')
-    '''write header and real muon points'''
-    result_file.write("File: " + str(file)+'\n' + "MC truth"+'\n')
-    for event in muon_points:
-        result_file.write("Event: " + str(event.event) + '\n')
-        if event.enters is True:
-            result_file.write("Entry point: " + '\n')
-        if event.leaves is True:
-            result_file.write("Exit point: " + '\n')
-        result_file.write("Phi: " + str(event.phi) + '\n')
-        result_file.write("Theta: " + str(event.theta) + '\n')
-        result_file.write("Z: " + str(event.z) + '\n')
-        result_file.write("Time: " + str(event.intersec_time) + '\n')
-        result_file.write("------------------------------------------" + '\n'+ '\n')
-        # result_file.write("Calculated snippet: " + str(event.intersec_time//(snippet_time_cut*10**-9)-12) + '\n')
-        # print((event.intersec_time/time_resolution)//snippet_time_cut)
-    result_file.write("----- Reconstructed Values ------" + '\n')
-
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
-    reconstructionAlg.pattern_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
-    reconstructionAlg.pattern_detector_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    result1 = reconstructionAlg.entry_exit_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     # gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit, result_file)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
-    result_file.close()
+    reconstructionAlg.reco_result_writer(output_path, result1)
+
+    del photons_in_time_window
 
     gc.collect()
 

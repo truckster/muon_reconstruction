@@ -1,4 +1,4 @@
-import statusAlert, recoPreparation, color_schemes, contour_analyze
+import statusAlert, recoPreparation, color_schemes, contour_analyze, reco_from_contour
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,7 +14,27 @@ class PatternPosition:
         self.theta = 0
 
 
-def pattern_detector(pmt_position_class, snippet_class, muon_points, out_path):
+def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path):
+    peak_heights = []
+    contour_data_array = []
+    # for snippet in range(len(snippet_array)):
+    for snippet in range(50):
+        statusAlert.processStatus("processing snippet: " + str(snippet))
+        contour_raw, contour_data = contour_data_reader(pmt_position_class, snippet_class.time_snippets[snippet])
+        reco_from_contour.concentric_level_finder(contour_data, snippet)
+        contour_data_array.append(contour_data)
+        if snippet > 0:
+            snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
+                           - np.asarray(snippet_class.time_snippets[snippet - 1])
+            contour_raw_diff, contour_data_diff = contour_data_reader(pmt_position_class, snippet_diff)
+        peak_heights.append(contour_data[-1].height)
+
+    reconstructed_points1 = reco_from_contour.peak_compare(peak_heights, contour_data_array)
+
+    return reconstructed_points1
+
+
+def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path):
     statusAlert.processStatus("Iterate snippets and draw")
 
     '''photon data pre-processed and ordered into time snippets'''
@@ -28,12 +48,11 @@ def pattern_detector(pmt_position_class, snippet_class, muon_points, out_path):
         '''Draw the detector picture for the certain time snippet'''
         draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
                              out_path, "absolute")
-        contour_plt_picture, contour_data = contour_data_reader(pmt_position_class, snippet_class.time_snippets[snippet])
         draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
                                   muon_points, snippet, out_path, "absolute")
 
 
-def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, out_path):
+def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, out_path):
     statusAlert.processStatus("Iterate snippets and draw")
 
     '''photon data pre-processed and ordered into time snippets'''
@@ -49,7 +68,6 @@ def pattern_detector_difference(pmt_position_class, snippet_class, muon_points, 
 
             '''Draw the detector picture for the certain time snippet'''
             draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
-            contour_plt_picture, contour_data = contour_data_reader(pmt_position_class, snippet_diff)
             draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
 
 
@@ -258,3 +276,17 @@ def print_sector_pmts(pmt_position_class, out_path):
         scatterHits = ax1.scatter(phi_np, theta_np)
 
         plt.savefig(out_path + "sectors/" + str(sector) + ".png")
+
+def reco_result_writer(output_path, result_array):
+    '''create output file'''
+    result_file = open(output_path + "results.txt", 'a')
+    result_file.write("----- Reconstructed Values ------" + '\n')
+
+    for point in result_array:
+        result_file.write("Point found in snippet: " + str(point.snippet) + '\n')
+        result_file.write("Phi: " + str(point.phi) + '\n')
+        result_file.write("Theta: " + str(point.theta) + '\n')
+        result_file.write("________________________________________" + '\n')
+
+    result_file.write("End of event" + '\n' + '\n')
+    result_file.close()

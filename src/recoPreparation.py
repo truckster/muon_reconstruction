@@ -268,3 +268,23 @@ def calc_pmt_positions(inpath, x_sector_num, y_sector_num):
 
     return return_class
 
+
+def MC_truth_writer(muon_points, output_path, file):
+    '''create output file'''
+    result_file = open(output_path + "results.txt", 'a')
+    '''write header and real muon points'''
+    result_file.write("File: " + str(file)+'\n' + "MC truth"+'\n')
+    for event in muon_points:
+        result_file.write("Event: " + str(event.event) + '\n')
+        if event.enters is True:
+            result_file.write("Entry point: " + '\n')
+        if event.leaves is True:
+            result_file.write("Exit point: " + '\n')
+        result_file.write("Phi: " + str(event.phi) + '\n')
+        result_file.write("Theta: " + str(event.theta) + '\n')
+        result_file.write("Z: " + str(event.z) + '\n')
+        result_file.write("Time: " + str(event.intersec_time) + '\n')
+        result_file.write("------------------------------------------" + '\n'+ '\n')
+        # result_file.write("Calculated snippet: " + str(event.intersec_time//(snippet_time_cut*10**-9)-12) + '\n')
+        # print((event.intersec_time/time_resolution)//snippet_time_cut)
+    result_file.close()

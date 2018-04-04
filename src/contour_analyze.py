@@ -13,6 +13,7 @@ def get_contour_data(contour_output):
     for level in range(len(levels)):
         patch_data = ContourData()
         patch_data.height = levels[level]
+        patch_data.level = level
         patch_data.iso_hit_patches = len(contour_output.collections[level].get_paths())
         calc_contour_center(contour_output, level, patch_data)
         calc_contour_extent(contour_output, level, patch_data)

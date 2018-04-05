@@ -63,8 +63,6 @@ for file in glob("*.root"):
 
     reconstructionAlg.reco_result_writer(output_path, result1)
 
-    del photons_in_time_window
-
     gc.collect()
 
 statusAlert.processStatus("Process finished")

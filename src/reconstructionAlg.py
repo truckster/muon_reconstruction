@@ -6,6 +6,8 @@ import matplotlib.colors as mcolors
 from scipy.ndimage.filters import gaussian_filter
 import os
 
+compute_snippets = 35
+
 
 class PatternPosition:
     def __init__(self):  # this method creates the class object.
@@ -18,10 +20,12 @@ def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path
     peak_heights = []
     contour_data_array = []
     # for snippet in range(len(snippet_array)):
-    for snippet in range(50):
+    for snippet in range(compute_snippets):
         statusAlert.processStatus("processing snippet: " + str(snippet))
         contour_raw, contour_data = contour_data_reader(pmt_position_class, snippet_class.time_snippets[snippet])
-        reco_from_contour.concentric_level_finder(contour_data, snippet)
+        # reco_from_contour.concentric_level_finder(contour_data, snippet)
+        # reco_from_contour.level_area_difference(contour_data, snippet)
+        reco_from_contour.container(contour_data, contour_raw)
         contour_data_array.append(contour_data)
         if snippet > 0:
             snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
@@ -42,7 +46,7 @@ def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path):
 
     '''iterate snippets'''
     # for snippet in range(len(snippet_array)):
-    for snippet in range(50):
+    for snippet in range(compute_snippets):
         statusAlert.processStatus("processing snippet: " + str(snippet))
 
         '''Draw the detector picture for the certain time snippet'''
@@ -60,7 +64,7 @@ def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, ou
 
     '''iterate snippets'''
     # for snippet in range(len(snippet_array)):
-    for snippet in range(50):
+    for snippet in range(compute_snippets):
         if snippet > 0:
             snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
                            - np.asarray(snippet_class.time_snippets[snippet-1])
@@ -135,7 +139,7 @@ def contour_data_reader(pmt_position_class, snippet_array):
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
 
-    cont_plot_axes = plt.contour(phi_i, theta_i, zi)
+    cont_plot_axes = plt.contour(phi_i, theta_i, zi, 10)
 
     contour_data = contour_analyze.get_contour_data(cont_plot_axes)
 
@@ -155,11 +159,10 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
 
-    cont_plot_axes = plt.contour(phi_i, theta_i, zi)
+    cont_plot_axes = plt.contour(phi_i, theta_i, zi, 10)
 
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")
-
 
     try:
         plt.colorbar(cont_plot_axes)

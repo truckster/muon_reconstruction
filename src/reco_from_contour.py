@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
+import matplotlib.path as mpath
 import math
+import numpy as np
 
 
 class ReconstructIntersecPoint:
@@ -52,11 +54,19 @@ def level_area_difference(contour_data, snippet):
 
 
 def container(contour_data, contour_raw):
-    for level in range(len(contour_data)-1):
-        contour_lines_raw_level = contour_raw.collections[level].get_paths()
-        for single_contour_count, single_contour_array in enumerate(contour_lines_raw_level):
-            isit = single_contour_array.contains_points(contour_data[level+1].centers[0])
+    for level_count, level_data in enumerate(contour_data[:-1]):
+        contour_lines_raw_level = contour_raw.collections[level_count].get_paths()
+        next_contour_level_center_points = contour_data[level_count+1].centers
+        print("--------LEVEL!!!----------")
+        for is_level_contour_count, iso_level_contour_array in enumerate(contour_lines_raw_level):
+            nppath = np.asarray(iso_level_contour_array.vertices)
+            path = mpath.Path(nppath)
+            for next_level_center_count, next_level_center_point in enumerate(next_contour_level_center_points):
+                isit = path.contains_points(next_contour_level_center_points )
             print(isit)
+
+
+
 
 
 

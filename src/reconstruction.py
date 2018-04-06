@@ -55,8 +55,8 @@ for file in glob("*.root"):
     # )
 
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
-    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
-    # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     result1 = reconstructionAlg.entry_exit_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     # gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit, result_file)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)

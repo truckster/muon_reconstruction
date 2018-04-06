@@ -6,7 +6,8 @@ import matplotlib.colors as mcolors
 from scipy.ndimage.filters import gaussian_filter
 import os
 
-compute_snippets = 35
+compute_snippets = 23
+number_contour_level = 5
 
 
 class PatternPosition:
@@ -139,7 +140,7 @@ def contour_data_reader(pmt_position_class, snippet_array):
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
 
-    cont_plot_axes = plt.contour(phi_i, theta_i, zi, 10)
+    cont_plot_axes = plt.contour(phi_i, theta_i, zi, number_contour_level)
 
     contour_data = contour_analyze.get_contour_data(cont_plot_axes)
 
@@ -159,7 +160,12 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
 
-    cont_plot_axes = plt.contour(phi_i, theta_i, zi, 10)
+    cont_plot_axes = plt.contour(phi_i, theta_i, zi, number_contour_level)
+
+    contour_data = contour_analyze.get_contour_data(cont_plot_axes)
+    topevel_center = contour_data[-1].centers
+
+    plt.plot(topevel_center[0][0], topevel_center[0][1], 'r+')
 
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")

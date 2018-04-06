@@ -26,12 +26,16 @@ def calc_contour_center(contour_output, level, return_class):
     for contour in contour_output.collections[level].get_paths():
         x_vals_sum = 0
         y_vals_sum = 0
-        for coordinates in contour.vertices:
+        for coordinates in contour.vertices[:-1]:
             x_vals_sum += coordinates[0]
             y_vals_sum += coordinates[1]
 
-        x_coord = x_vals_sum/(len(contour.vertices)-1)
-        y_coord = y_vals_sum/(len(contour.vertices)-1)
+        if len(contour.vertices) > 1:
+            x_coord = x_vals_sum/float((len(contour.vertices)-1))
+            y_coord = y_vals_sum/float((len(contour.vertices)-1))
+        else:
+            x_coord = x_vals_sum
+            y_coord = y_vals_sum
 
         return_class.centers.append([x_coord, y_coord])
 

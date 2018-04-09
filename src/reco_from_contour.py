@@ -63,7 +63,6 @@ def container(contour_data, contour_raw):
             path = mpath.Path(nppath)
             for next_level_center_count, next_level_center_point in enumerate(next_contour_level_center_points):
                 isit = path.contains_points(next_contour_level_center_points )
-            print(isit)
 
 
 

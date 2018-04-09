@@ -20,8 +20,8 @@ class PatternPosition:
 def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path):
     peak_heights = []
     contour_data_array = []
-    # for snippet in range(len(snippet_array)):
-    for snippet in range(compute_snippets):
+    for snippet in range(len(snippet_array)):
+    # for snippet in range(compute_snippets):
         statusAlert.processStatus("processing snippet: " + str(snippet))
         contour_raw, contour_data = contour_data_reader(pmt_position_class, snippet_class.time_snippets[snippet])
         # reco_from_contour.concentric_level_finder(contour_data, snippet)
@@ -39,42 +39,65 @@ def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path
     return reconstructed_points1
 
 
-def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path):
+def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, max_snippet=None):
     statusAlert.processStatus("Iterate snippets and draw")
 
     '''photon data pre-processed and ordered into time snippets'''
     snippet_array = np.asarray(snippet_class.time_snippets)
 
     '''iterate snippets'''
-    # for snippet in range(len(snippet_array)):
-    for snippet in range(compute_snippets):
-        statusAlert.processStatus("processing snippet: " + str(snippet))
-
-        '''Draw the detector picture for the certain time snippet'''
-        draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
-                             out_path, "absolute")
-        draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
-                                  muon_points, snippet, out_path, "absolute")
-
-
-def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, out_path):
-    statusAlert.processStatus("Iterate snippets and draw")
-
-    '''photon data pre-processed and ordered into time snippets'''
-    snippet_array = np.asarray(snippet_class.time_snippets)
-
-    '''iterate snippets'''
-    # for snippet in range(len(snippet_array)):
-    for snippet in range(compute_snippets):
-        if snippet > 0:
-            snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
-                           - np.asarray(snippet_class.time_snippets[snippet-1])
+    if max_snippet is None:
+        for snippet in range(len(snippet_array)):
             statusAlert.processStatus("processing snippet: " + str(snippet))
 
             '''Draw the detector picture for the certain time snippet'''
-            draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
-            draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points, snippet, out_path, "differential")
+            draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
+                                 out_path, "absolute")
+            draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
+                                      muon_points, snippet, out_path, "absolute")
 
+    else:
+        for snippet in range(max_snippet):
+            statusAlert.processStatus("processing snippet: " + str(snippet))
+
+            '''Draw the detector picture for the certain time snippet'''
+            draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
+                                 out_path, "absolute")
+            draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
+                                      muon_points, snippet, out_path, "absolute")
+
+
+def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, out_path, max_snippet=None):
+    statusAlert.processStatus("Iterate snippets and draw")
+
+    '''photon data pre-processed and ordered into time snippets'''
+    snippet_array = np.asarray(snippet_class.time_snippets)
+
+    '''iterate snippets'''
+    if max_snippet is None:
+        for snippet in range(len(snippet_array)):
+            if snippet > 0:
+                snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
+                               - np.asarray(snippet_class.time_snippets[snippet-1])
+                statusAlert.processStatus("processing snippet: " + str(snippet))
+
+                '''Draw the detector picture for the certain time snippet'''
+                draw_snippet_picture(pmt_position_class, snippet_diff, muon_points,
+                                     snippet, out_path, "differential")
+                draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points,
+                                          snippet, out_path, "differential")
+    else:
+        for snippet in range(max_snippet):
+            if snippet > 0:
+                snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
+                               - np.asarray(snippet_class.time_snippets[snippet - 1])
+                statusAlert.processStatus("processing snippet: " + str(snippet))
+
+                '''Draw the detector picture for the certain time snippet'''
+                draw_snippet_picture(pmt_position_class, snippet_diff, muon_points,
+                                     snippet, out_path, "differential")
+                draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points,
+                                          snippet, out_path, "differential")
 
 def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet, out_path, mode=None):
     statusAlert.processStatus("Creating graphics")
@@ -218,7 +241,6 @@ def draw_muon_points(muon_points):
                                      facecolors='none', edgecolors='white', marker='v', s=120)
     scatter_muon_exit = plt.scatter(phi_muon_exit, theta_muon_exit,
                                    facecolors='none', edgecolors='white', marker='^', s=120)
-
 
 
 def draw_sector_lines(pmt_position_class):

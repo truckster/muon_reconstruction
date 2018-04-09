@@ -11,11 +11,11 @@ def getKey(item):
     return item[0]
 
 
-class photon_snippet_output_c:
+class PhotonPMTHits:
     def __init__(self):  # this method creates the class object.
         self.time_snippets = []
 
-    def add_snippet_array(self, value):
+    def add_pmt_array(self, value):
         self.time_snippets.append(value)
 
 
@@ -31,20 +31,24 @@ def hitPMTinTimeSnippetHist2(source, wtime):
     data_sorted = sorted(data_read, key=lambda x: x.hit_time, reverse=False)
 
     statusAlert.processStatus("Divide arrays")
-    returnClass = photon_snippet_output_c()
-    startTime = data_sorted[0].hit_time
+    return_class_snippets = PhotonPMTHits()
+    return_class_total = PhotonPMTHits()
+    start_time = data_sorted[0].hit_time
     index = 0
 
+    pmt_array_total = [0]*17739
     while index < len(data_sorted)-1:
-        PMTArray = [0] * 17739
-        while data_sorted[index].hit_time < startTime + wtime:
-            if data_sorted[index].pmt_id < 17739: # and datasort[index][2] is 1:
-               PMTArray[data_sorted[index].pmt_id] += 1
+        pmt_array_snippet = [0] * 17739
+        while data_sorted[index].hit_time < start_time + wtime and index < len(data_sorted)-1:
+            if data_sorted[index].pmt_id < 17739:
+                pmt_array_snippet[data_sorted[index].pmt_id] += 1
+                pmt_array_total[data_sorted[index].pmt_id] += 1
             index += 1
-        returnClass.add_snippet_array(PMTArray)
-        startTime = data_sorted[index].hit_time
+        return_class_snippets.add_pmt_array(pmt_array_snippet)
+        start_time = data_sorted[index].hit_time
+    return_class_total.add_pmt_array(pmt_array_total)
     statusAlert.processStatus("Done")
-    return returnClass
+    return return_class_snippets, return_class_total
 
 
 class MuonIntersecPoint:

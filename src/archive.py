@@ -746,3 +746,21 @@ def combine_pmts_horizontal(pmt_position_class, snippet_class, snippet):
 
         return_array[pmt_position_class.is_y_sector[pmt_id]].append(pmt_data)
     return return_array
+
+
+def hit_pmt_in_total_event(source):
+    statusAlert.processStatus("Start read of entire event: ")
+    pmt_time_resolution = 3.0
+    data_read = TreeReadFunc.readPhotonRecoData2(source, pmt_time_resolution)
+
+    return_class = photon_snippet_output_c()
+
+    pmt_array = [0] * 17739
+    for index, photon_hit in enumerate(data_read):
+        if photon_hit.pmt_id < 17739:
+            pmt_array[photon_hit.pmt_id] += 1
+    return_class.add_snippet_array(pmt_array)
+    statusAlert.processStatus("Done")
+    return return_class
+
+

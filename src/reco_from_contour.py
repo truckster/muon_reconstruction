@@ -53,7 +53,7 @@ def level_area_difference(contour_data, snippet):
             print("No data available")
 
 
-def container(contour_data, contour_raw):
+def container(contour_data):
     for level_count, level_data in enumerate(contour_data[:-1]):
         contour_lines_raw_level = contour_raw.collections[level_count].get_paths()
         next_contour_level_center_points = contour_data[level_count+1].centers
@@ -62,11 +62,9 @@ def container(contour_data, contour_raw):
             nppath = np.asarray(iso_level_contour_array.vertices)
             path = mpath.Path(nppath)
             for next_level_center_count, next_level_center_point in enumerate(next_contour_level_center_points):
-                isit = path.contains_points(next_contour_level_center_points )
+                isit = path.contains_points(next_contour_level_center_points)
 
 
-
-
-
-
-
+def gradient(contour_data):
+    for level_index, level_data in enumerate(contour_data):
+        print(contour_data[level_index].iso_hit_patches)

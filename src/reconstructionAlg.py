@@ -7,7 +7,7 @@ from scipy.ndimage.filters import gaussian_filter
 import os
 
 compute_snippets = 23
-number_contour_level = 5
+number_contour_level = 10
 
 
 class PatternPosition:
@@ -20,17 +20,18 @@ class PatternPosition:
 def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path):
     peak_heights = []
     contour_data_array = []
-    for snippet in range(len(snippet_array)):
+    for snippet_index, pmt_array in enumerate(snippet_class.time_snippets):
     # for snippet in range(compute_snippets):
-        statusAlert.processStatus("processing snippet: " + str(snippet))
-        contour_raw, contour_data = contour_data_reader(pmt_position_class, snippet_class.time_snippets[snippet])
+        statusAlert.processStatus("processing snippet: " + str(snippet_index))
+        contour_raw, contour_data = contour_data_reader(pmt_position_class, pmt_array)
         # reco_from_contour.concentric_level_finder(contour_data, snippet)
         # reco_from_contour.level_area_difference(contour_data, snippet)
-        reco_from_contour.container(contour_data, contour_raw)
+        # reco_from_contour.container(contour_data, contour_raw)
+        reco_from_contour.gradient(contour_data)
         contour_data_array.append(contour_data)
-        if snippet > 0:
-            snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
-                           - np.asarray(snippet_class.time_snippets[snippet - 1])
+        if snippet_index > 0:
+            snippet_diff = np.asarray(snippet_class.time_snippets[snippet_index]) \
+                           - np.asarray(snippet_class.time_snippets[snippet_index - 1])
             contour_raw_diff, contour_data_diff = contour_data_reader(pmt_position_class, snippet_diff)
         peak_heights.append(contour_data[-1].height)
 
@@ -186,9 +187,11 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
     cont_plot_axes = plt.contour(phi_i, theta_i, zi, number_contour_level)
 
     contour_data = contour_analyze.get_contour_data(cont_plot_axes)
-    topevel_center = contour_data[-1].centers
-
-    plt.plot(topevel_center[0][0], topevel_center[0][1], 'r+')
+    try:
+        toplevel_center = contour_data[-3].centers
+        plt.plot(toplevel_center[0][0], toplevel_center[0][1], 'r+')
+    except IndexError:
+        pass
 
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")

@@ -68,3 +68,4 @@ def container(contour_data):
 def gradient(contour_data):
     for level_index, level_data in enumerate(contour_data):
         print(contour_data[level_index].iso_hit_patches)
+        print("lala")

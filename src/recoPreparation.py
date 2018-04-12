@@ -19,7 +19,7 @@ class PhotonPMTHits:
         self.time_snippets.append(value)
 
 
-def hitPMTinTimeSnippetHist2(source, wtime):
+def hitPMTinTimeSnippetHist2(source, wtime, snippet_limit):
     """reads time and ID of each event in the given chain. wtime defines the time window for each package of condensed
         events Then it is ordered by hit time and written into arrays:time, X, Y, Z. Furthermore the number of hits per
         PMT and time windows is counted.
@@ -34,20 +34,27 @@ def hitPMTinTimeSnippetHist2(source, wtime):
     return_class_snippets = PhotonPMTHits()
     return_class_total = PhotonPMTHits()
     start_time = data_sorted[0].hit_time
-    index = 0
+    photon_index = 0
+    snippet_index = 0
 
     pmt_array_total = [0]*17739
-    while index < len(data_sorted)-1:
+    while photon_index < len(data_sorted)-1 and snippet_index < snippet_limit:
         pmt_array_snippet = [0] * 17739
-        while data_sorted[index].hit_time < start_time + wtime and index < len(data_sorted)-1:
-            if data_sorted[index].pmt_id < 17739:
-                pmt_array_snippet[data_sorted[index].pmt_id] += 1
-                pmt_array_total[data_sorted[index].pmt_id] += 1
-            index += 1
-        return_class_snippets.add_pmt_array(pmt_array_snippet)
-        start_time = data_sorted[index].hit_time
+        hit_sum_snippet = 0
+        while data_sorted[photon_index].hit_time < start_time + wtime and photon_index < len(data_sorted)-1:
+            if data_sorted[photon_index].pmt_id < 17739:
+                pmt_array_snippet[data_sorted[photon_index].pmt_id] += 1
+                hit_sum_snippet += 1
+                pmt_array_total[data_sorted[photon_index].pmt_id] += 1
+            photon_index += 1
+        snippet_index += 1
+        if hit_sum_snippet > 0:
+            return_class_snippets.add_pmt_array(pmt_array_snippet)
+
+        start_time = data_sorted[photon_index].hit_time
     return_class_total.add_pmt_array(pmt_array_total)
     statusAlert.processStatus("Done")
+
     return return_class_snippets, return_class_total
 
 

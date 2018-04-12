@@ -23,17 +23,17 @@ def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path
     for snippet_index, pmt_array in enumerate(snippet_class.time_snippets):
     # for snippet in range(compute_snippets):
         statusAlert.processStatus("processing snippet: " + str(snippet_index))
-        contour_raw, contour_data = contour_data_reader(pmt_position_class, pmt_array)
+        contour_data = contour_data_reader(pmt_position_class, pmt_array)
         # reco_from_contour.concentric_level_finder(contour_data, snippet)
         # reco_from_contour.level_area_difference(contour_data, snippet)
         # reco_from_contour.container(contour_data, contour_raw)
-        reco_from_contour.gradient(contour_data)
+        # reco_from_contour.gradient(contour_data)
         contour_data_array.append(contour_data)
         if snippet_index > 0:
             snippet_diff = np.asarray(snippet_class.time_snippets[snippet_index]) \
                            - np.asarray(snippet_class.time_snippets[snippet_index - 1])
-            contour_raw_diff, contour_data_diff = contour_data_reader(pmt_position_class, snippet_diff)
-        peak_heights.append(contour_data[-1].height)
+            contour_data_diff = contour_data_reader(pmt_position_class, snippet_diff)
+        peak_heights.append(contour_data[-1][0].height)
 
     reconstructed_points1 = reco_from_contour.peak_compare(peak_heights, contour_data_array)
 
@@ -58,7 +58,7 @@ def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, max
                                       muon_points, snippet, out_path, "absolute")
 
     else:
-        for snippet in range(max_snippet):
+        for snippet in range(max_snippet)-1:
             statusAlert.processStatus("processing snippet: " + str(snippet))
 
             '''Draw the detector picture for the certain time snippet'''
@@ -168,7 +168,7 @@ def contour_data_reader(pmt_position_class, snippet_array):
 
     contour_data = contour_analyze.get_contour_data(cont_plot_axes)
 
-    return cont_plot_axes, contour_data
+    return contour_data
 
 
 def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, snippet, out_path, mode=None):
@@ -184,11 +184,11 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
 
-    cont_plot_axes = plt.contour(phi_i, theta_i, zi, number_contour_level)
+    cont_plot_axes = plt.contour(phi_i, theta_i, zi, number_contour_level, cmap=color_schemes.analysis_design())
 
     contour_data = contour_analyze.get_contour_data(cont_plot_axes)
     try:
-        toplevel_center = contour_data[-3].centers
+        toplevel_center = contour_data[-3][0].center
         plt.plot(toplevel_center[0][0], toplevel_center[0][1], 'r+')
     except IndexError:
         pass

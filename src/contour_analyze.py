@@ -2,59 +2,66 @@ import matplotlib.path as mpath
 import numpy as np
 
 
-class ContourData:
+class ContourDataSinglePatch:
     """class to store the contour data within a given snippet for one specific contour level"""
     def __init__(self):  # this method creates the class object.
         self.height = 0
         self.iso_hit_patches = 0
-        self.centers = []
-        self.extents = []
+        self.center = []
+        self.extent = []
         self.level = 0
         self.contour_coordinates = []
         self.contour_path = 0
 
 
 def get_contour_data(contour_output):
-    """creates an array in which the contour data per level is stored for a given snippet"""
-    return_data = []
+    """creates an array in which the contour data per level is stored for a given snippet
+        returns a 2D-Array per snippet [level][patch]=ContourDataSinglePatch_Class"""
+    return_data_total_snippet = []
     for level in range(len(contour_output.levels)):
-        patch_data = ContourData()
-        patch_data.height = contour_output.levels[level]
-        patch_data.level = level
-        patch_data.iso_hit_patches = len(contour_output.collections[level].get_paths())
-        calc_contour_center(contour_output, level, patch_data)
-        calc_contour_extent(contour_output, level, patch_data)
+        if level > 0:
+            """iterates over all contour levels in the snippet"""
+            return_data_iso_hit_patches = []
+            for patch in contour_output.collections[level].get_paths():
+                """iterates over all iso hit patches of the given level in the contour"""
+                patch_data = ContourDataSinglePatch()
+                patch_data.height = contour_output.levels[level]
+                patch_data.level = level
+                patch_data.iso_hit_patches = len(contour_output.collections[level].get_paths())
+                patch_data.center = calc_contour_center(patch)
+                patch_data.extent = calc_contour_extent(contour_output, level)
 
-        try:
-            patch_data.contour_path = contour_output.collections[level].get_paths()[0]
-            patch_data.contour_coordinates = contour_output.collections[level].get_paths()[0].vertices
-        except IndexError:
-            pass
+                try:
+                    patch_data.contour_path = contour_output.collections[level].get_paths()[0]
+                    patch_data.contour_coordinates = contour_output.collections[level].get_paths()[0].vertices
+                except IndexError:
+                    pass
 
-        return_data.append(patch_data)
+                return_data_iso_hit_patches.append(patch_data)
 
-    return return_data
+            return_data_total_snippet.append(return_data_iso_hit_patches)
 
-
-def calc_contour_center(contour_output, level, return_class):
-    for contour in contour_output.collections[level].get_paths():
-        x_vals_sum = 0
-        y_vals_sum = 0
-        for coordinates in contour.vertices[:-1]:
-            x_vals_sum += coordinates[0]
-            y_vals_sum += coordinates[1]
-
-        if len(contour.vertices) > 1:
-            x_coord = x_vals_sum/float((len(contour.vertices)-1))
-            y_coord = y_vals_sum/float((len(contour.vertices)-1))
-        else:
-            x_coord = x_vals_sum
-            y_coord = y_vals_sum
-
-        return_class.centers.append([x_coord, y_coord])
+    return return_data_total_snippet
 
 
-def calc_contour_extent(contour_output, level, return_class):
+def calc_contour_center(patch_path_data):
+    x_vals_sum = 0
+    y_vals_sum = 0
+    for coordinates in patch_path_data.vertices[:-1]:
+        x_vals_sum += coordinates[0]
+        y_vals_sum += coordinates[1]
+
+    if len(patch_path_data.vertices) > 1:
+        x_coord = x_vals_sum/float((len(patch_path_data)-1))
+        y_coord = y_vals_sum/float((len(patch_path_data)-1))
+    else:
+        x_coord = x_vals_sum
+        y_coord = y_vals_sum
+
+    return [x_coord, y_coord]
+
+
+def calc_contour_extent(contour_output, level):
     for contour in contour_output.collections[level].get_paths():
         area = 0
         for pair in range(len(contour.vertices[:-1])):
@@ -66,7 +73,7 @@ def calc_contour_extent(contour_output, level, return_class):
 
             area += abs(0.5*(y0*dx - x0*dy))
 
-        return_class.extents.append(area)
+        return area
 
 
 def is_center_in_next_higher_level_contained(contour_center_current_level, contour_path_next_level):

@@ -1,5 +1,5 @@
 import recoPreparation,reconstructionAlg, statusAlert, TreeReadFunc, gauss_fit_reco, contour_analyze
-import charge_cluster_finder
+import total_event_reconstruction
 
 from os import chdir, remove, path
 from glob import glob
@@ -8,8 +8,8 @@ import gc
 '''General script to use sub-scripts for muon reconstruction.'''
 statusAlert.processStatus("Process started")
 
-# input_path = "/home/gpu/Simulation/mult/new/"
-input_path = "/home/gpu/Simulation/mult/test/"
+input_path = "/home/gpu/Simulation/mult/new/"
+# input_path = "/home/gpu/Simulation/mult/test/"
 # input_path = "/home/gpu/Simulation/test/"
 # input_path = "/home/gpu/Simulation/single/"
 output_path = "/home/gpu/Analysis/muReconstruction/Output/"
@@ -48,9 +48,11 @@ for file in glob("*.root"):
     recoPreparation.MC_truth_writer(muon_points, output_path, file)
 
     '''collect information of all photons within certain time snippet and save the separately'''
-    snippet_time_cut = 3
-    max_snips = 55
-    photons_in_time_window, photons_of_entire_event = recoPreparation.hitPMTinTimeSnippetHist2(file, snippet_time_cut)
+    snippet_time_cut = 10
+    max_snips = 30
+    photons_in_time_window, photons_of_entire_event = recoPreparation.hitPMTinTimeSnippetHist2(file,
+                                                                                               snippet_time_cut,
+                                                                                               max_snips)
 
     '''draw pictures of all snippets'''
     # PMTAnalysis.drawPMTHitMapHisto(
@@ -58,15 +60,16 @@ for file in glob("*.root"):
     # )
 
     '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
-    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path, max_snips)
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path, max_snips)
-    result1 = reconstructionAlg.entry_exit_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    # result1 = reconstructionAlg.entry_exit_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
     # gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit, result_file)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
     '''Reconstruction by looking at entire event'''
     total_path = recoPreparation.create_output_path(output_path, file, "/total_event/", input_path)
     reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path)
+    total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event)
 
     # reconstructionAlg.reco_result_writer(output_path, result1)
 

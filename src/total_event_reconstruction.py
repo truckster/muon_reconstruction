@@ -12,20 +12,18 @@ def entry_exit_detector(pmt_position_class, snippet_class):
 
 def standalone_contour_lines(contour_data_total):
     local_max_patches = []
-    for level in contour_data_total:
-        for patch in level:
+    for level_observed in contour_data_total:
+        for patch in level_observed:
             local_max_patch = True
-            for patch2 in level:
-                if (mpath.Path(np.asarray(patch.contour_coordinates)).contains_points([patch2.contour_coordinates[0]])
-                and patch is not patch2):
-                    local_max_patch = False
+            for level_others in contour_data_total:
+                for patch2 in level_others:
+                    if patch2.level > patch.level:
+                        if mpath.Path(np.asarray(patch.contour_coordinates)).\
+                                contains_path(mpath.Path(np.asarray(patch2.contour_coordinates))):
+                            print(str(patch.level) + " contains " + str(patch2.level))
+                            local_max_patch = False
+
             if local_max_patch:
+                local_max_patches.append(patch.level)
                 local_max_patches.append(patch.center)
-
     print(local_max_patches)
-
-
-# nppath = np.asarray(iso_level_contour_array.vertices)
-# path = mpath.Path(nppath)
-# for next_level_center_count, next_level_center_point in enumerate(next_contour_level_center_points):
-#     isit = path.contains_points(next_contour_level_center_points)

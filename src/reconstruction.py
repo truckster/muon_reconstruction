@@ -1,4 +1,4 @@
-import recoPreparation,reconstructionAlg, statusAlert, TreeReadFunc, gauss_fit_reco, contour_analyze
+import recoPreparation, reconstructionAlg, statusAlert, TreeReadFunc, gauss_fit_reco, contour_analyze
 import total_event_reconstruction
 
 from os import chdir, remove, path
@@ -25,6 +25,7 @@ if path.isfile(output_path + "results.txt"):
 TreeReadFunc.check_file(input_path, "mu", "TrackLengthInScint", "MuMult")
 chdir(input_path)
 for file in glob("*.root"):
+    # TODO start new process for each file. This might solve the memory problem.
     statusAlert.processStatus("Reading file: " + str(file))
 
     '''Control, which events are useful for the analysis'''

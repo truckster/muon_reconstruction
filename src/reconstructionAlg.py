@@ -7,7 +7,7 @@ from scipy.ndimage.filters import gaussian_filter
 import os
 
 compute_snippets = 23
-number_contour_level = 10
+number_contour_level = 11
 
 
 class PatternPosition:

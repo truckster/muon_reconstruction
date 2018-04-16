@@ -32,8 +32,8 @@ def get_contour_data(contour_output):
                 patch_data.extent = calc_contour_extent(contour_output, level)
 
                 try:
-                    patch_data.contour_path = contour_output.collections[level].get_paths()[0]
-                    patch_data.contour_coordinates = contour_output.collections[level].get_paths()[0].vertices
+                    patch_data.contour_path = patch
+                    patch_data.contour_coordinates = patch.vertices
                 except IndexError:
                     pass
 

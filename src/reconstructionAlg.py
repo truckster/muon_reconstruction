@@ -311,10 +311,11 @@ def print_sector_pmts(pmt_position_class, out_path):
 
         plt.savefig(out_path + "sectors/" + str(sector) + ".png")
 
+
 def reco_result_writer(output_path, result_array):
     '''create output file'''
     result_file = open(output_path + "results.txt", 'a')
-    result_file.write("----- Reconstructed Values ------" + '\n')
+    result_file.write("----- Reconstructed Values (Frames) ------" + '\n')
 
     for point in result_array:
         result_file.write("Point found in snippet: " + str(point.snippet) + '\n')

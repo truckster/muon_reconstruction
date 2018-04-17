@@ -4,10 +4,11 @@ import matplotlib.path as mpath
 
 
 def entry_exit_detector(pmt_position_class, snippet_class):
-    for snippet_index, pmt_array in enumerate(snippet_class.time_snippets):
-        statusAlert.processStatus("Total event: ")
-        contour_data = reconstructionAlg.contour_data_reader(pmt_position_class, pmt_array)
-        standalone_contour_lines(contour_data)
+    pmt_array = snippet_class.time_snippets[0]
+    statusAlert.processStatus("Total event: ")
+    contour_data = reconstructionAlg.contour_data_reader(pmt_position_class, pmt_array)
+    found_points = standalone_contour_lines(contour_data)
+    return found_points
 
 
 def standalone_contour_lines(contour_data_total):
@@ -21,10 +22,23 @@ def standalone_contour_lines(contour_data_total):
                 for patch2 in level_others:
                     if patch2 is not patch:
                         if mpath.Path(patch.contour_coordinates).contains_point(patch2.contour_coordinates[0]):
-                            print(str(patch.level) + " contains " + str(patch2.level))
+                            # print(str(patch.level) + " contains " + str(patch2.level))
                             local_max_patch = False
 
             if local_max_patch:
-                local_max_patches.append(patch.level)
                 local_max_patches.append(patch.center)
-    print(local_max_patches)
+    return local_max_patches
+
+
+def reco_result_writer(output_path, result_array):
+    '''create output file'''
+    result_file = open(output_path + "results.txt", 'a')
+    result_file.write("----- Reconstructed Values (Total)------" + '\n')
+
+    for point in result_array:
+        result_file.write("Phi: " + str(point[0]) + '\n')
+        result_file.write("Theta: " + str(point[1]) + '\n')
+        result_file.write("________________________________________" + '\n')
+
+    result_file.write("End of event" + '\n' + '\n')
+    result_file.close()

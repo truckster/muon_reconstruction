@@ -1,5 +1,5 @@
 import recoPreparation, reconstructionAlg, statusAlert, TreeReadFunc, gauss_fit_reco, contour_analyze
-import total_event_reconstruction
+import total_event_reconstruction, intersec_time_finder
 
 from os import chdir, remove, path
 from glob import glob
@@ -55,24 +55,19 @@ for file in glob("*.root"):
                                                                                                snippet_time_cut,
                                                                                                max_snips)
 
-    '''draw pictures of all snippets'''
-    # PMTAnalysis.drawPMTHitMapHisto(
-    # photons_in_time_window.time_snippets, muon_points, PmtPositions, new_output_path, 50
-    # )
-
-    '''Take data from 'snippets' for reconstruction: find all patches within one time snippet'''
-    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
-    # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path, max_snips)
-    # result1 = reconstructionAlg.entry_exit_detector(PmtPositions, photons_in_time_window, muon_points, new_output_path)
-    # gauss_fit_reco.fit_function_caller(PmtPositions, photons_in_time_window, muon_points, new_output_path_fit, result_file)
-    # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
-
     '''Reconstruction by looking at entire event'''
     total_path = recoPreparation.create_output_path(output_path, file, "/total_event/", input_path)
-    reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path)
-    total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event)
+    # # reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path)
+    found_points = total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event)
+    # total_event_reconstruction.reco_result_writer(output_path, found_points)
 
-    # reconstructionAlg.reco_result_writer(output_path, result1)
+    '''Detection of entry and exit time of muons'''
+    intersec_time_finder.find_times(PmtPositions, photons_in_time_window, found_points)
+
+    '''Draw all kinds of images'''
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path, max_snips)
+    # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
     gc.collect()
 

@@ -46,27 +46,28 @@ for file in glob("*.root"):
     time_resolution = 1*10**-9
     muon_points = recoPreparation.calc_muon_detector_intersec_points(file, intersec_radius, time_resolution)
 
-    recoPreparation.MC_truth_writer(muon_points, output_path, file)
-
     '''collect information of all photons within certain time snippet and save the separately'''
-    snippet_time_cut = 10
-    max_snips = 30
+    frame_time_cut = 10
+    max_frames = 30
     photons_in_time_window, photons_of_entire_event = recoPreparation.hitPMTinTimeSnippetHist2(file,
-                                                                                               snippet_time_cut,
-                                                                                               max_snips)
+                                                                                               frame_time_cut,
+                                                                                               max_frames)
+
+    recoPreparation.MC_truth_writer(muon_points, output_path, file, frame_time_cut)
 
     '''Reconstruction by looking at entire event'''
     total_path = recoPreparation.create_output_path(output_path, file, "/total_event/", input_path)
-    # # reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path)
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path)
     found_points = total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event)
-    # total_event_reconstruction.reco_result_writer(output_path, found_points)
+    total_event_reconstruction.reco_result_writer(output_path, found_points)
 
     '''Detection of entry and exit time of muons'''
-    intersec_time_finder.find_times(PmtPositions, photons_in_time_window, found_points)
+    found_frames = intersec_time_finder.find_times(PmtPositions, photons_in_time_window, found_points)
+    intersec_time_finder.reco_result_writer(output_path, found_frames)
 
     '''Draw all kinds of images'''
     # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
-    # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path, max_snips)
+    # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path, max_frames)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
     gc.collect()

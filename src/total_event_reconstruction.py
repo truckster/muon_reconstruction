@@ -25,20 +25,20 @@ def standalone_contour_lines(contour_data_total):
                             # print(str(patch.level) + " contains " + str(patch2.level))
                             local_max_patch = False
 
-            if local_max_patch:
+            if local_max_patch and patch.level > data_1[-6][0].level:
                 local_max_patches.append(patch.center)
     return local_max_patches
 
 
 def reco_result_writer(output_path, result_array):
-    '''create output file'''
+    '''Add reconstructed intersection points to file'''
     result_file = open(output_path + "results.txt", 'a')
     result_file.write("----- Reconstructed Values (Total)------" + '\n')
 
     for point in result_array:
         result_file.write("Phi: " + str(point[0]) + '\n')
         result_file.write("Theta: " + str(point[1]) + '\n')
-        result_file.write("________________________________________" + '\n')
+        result_file.write("--------------------------------" + '\n')
 
     result_file.write("End of event" + '\n' + '\n')
     result_file.close()

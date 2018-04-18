@@ -280,25 +280,35 @@ def calc_pmt_positions(inpath, x_sector_num, y_sector_num):
     return return_class
 
 
-def MC_truth_writer(muon_points, output_path, file):
+def MC_truth_writer(muon_points, output_path, file, time_cut):
     '''create output file'''
-    result_file = open(output_path + "results.txt", 'a')
+    result_file = ""
     '''write header and real muon points'''
-    result_file.write("::::::::::::::::::::::::::::::::"+'\n')
-    result_file.write("File: " + str(file)+'\n')
-    result_file.write("::::::::::::::::::::::::::::::::"+'\n')
-    result_file.write("---------MC truth---------"+'\n')
+    result_file += ("::::::::::::::::::::::::::::::::"+'\n')
+    result_file += ("File: " + str(file)+'\n')
+    result_file += ("::::::::::::::::::::::::::::::::"+'\n')
+    result_file += ("---------MC truth---------"+'\n')
+    times = []
     for event in muon_points:
-        result_file.write("Event: " + str(event.event) + '\n')
+        result_file += ("Event: " + str(event.event) + '\n')
         if event.enters is True:
-            result_file.write("Entry point: " + '\n')
+            result_file += ("Entry point: " + '\n')
         if event.leaves is True:
-            result_file.write("Exit point: " + '\n')
-        result_file.write("Phi: " + str(event.phi) + '\n')
-        result_file.write("Theta: " + str(event.theta) + '\n')
-        result_file.write("Z: " + str(event.z) + '\n')
-        result_file.write("Time: " + str(event.intersec_time) + '\n')
-        result_file.write("------------------------------------------" + '\n')
+            result_file += ("Exit point: " + '\n')
+        result_file += ("Phi: " + str(event.phi) + '\n')
+        result_file += ("Theta: " + str(event.theta) + '\n')
+        result_file += ("Z: " + str(event.z) + '\n')
+        result_file += ("Time: " + str(event.intersec_time) + '\n')
+        result_file += ("------------------------------------------" + '\n')
+        times.append(event.intersec_time)
         # result_file.write("Calculated snippet: " + str(event.intersec_time//(snippet_time_cut*10**-9)-12) + '\n')
         # print((event.intersec_time/time_resolution)//snippet_time_cut)
-    result_file.close()
+    first_intersec_time = min(times)
+    frames = []
+    result_file += "---------Frames of intersection---------"+'\n'
+    for i in range(len(times)):
+        # frames.append((times[i]-first_intersec_time)/time_cut)
+        result_file += ("Frame: " + str((times[i]-first_intersec_time)/time_cut*pow(10, 9)) + '\n')
+    r_file = open(output_path + "results.txt", 'a')
+    r_file.write(result_file)
+    r_file.close()

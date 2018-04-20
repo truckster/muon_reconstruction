@@ -4,11 +4,11 @@ import numpy as np
 import matplotlib.path as mpath
 
 
-def find_times(pmt_position_class, snippet_class, intersec_points):
-    point_hit_array = [[] for _ in range(4)]
-    for frame, pmt_array in enumerate(snippet_class.time_snippets):
+def find_times(contour_array, intersec_points):
+    statusAlert.processStatus("Reconstruct intersection frames of muon")
+    point_hit_array = [[] for _ in range(len(intersec_points))]
+    for frame, contour_data in enumerate(contour_array):
         statusAlert.processStatus("processing snippet: " + str(frame))
-        contour_data = reconstructionAlg.contour_data_reader(pmt_position_class, pmt_array)
         for point_index, point in enumerate(intersec_points):
             current_level=0
             for level_index, level in enumerate(contour_data):
@@ -20,7 +20,6 @@ def find_times(pmt_position_class, snippet_class, intersec_points):
 
     frame_array = []
     for frame, point_hit_list in enumerate(point_hit_array):
-        print(point_hit_list.index(max(point_hit_list)))
         frame_array.append(point_hit_list.index(max(point_hit_list)))
 
     return frame_array

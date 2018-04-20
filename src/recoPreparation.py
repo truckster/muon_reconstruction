@@ -305,7 +305,7 @@ def MC_truth_writer(muon_points, output_path, file, time_cut):
         # print((event.intersec_time/time_resolution)//snippet_time_cut)
     first_intersec_time = min(times)
     frames = []
-    result_file += "---------Frames of intersection---------"+'\n'
+    result_file += "---------Frames of intersection (MC)---------"+'\n'
     for i in range(len(times)):
         # frames.append((times[i]-first_intersec_time)/time_cut)
         result_file += ("Frame: " + str((times[i]-first_intersec_time)/time_cut*pow(10, 9)) + '\n')

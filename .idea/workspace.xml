@@ -2,11 +2,56 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a9033b00-3a1a-4ed2-be6b-371d28214cd7" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/point_allocate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/0.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/1.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/10.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/10.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/11.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/11.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/12.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/12.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/13.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/13.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/14.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/14.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/15.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/15.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/16.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/16.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/17.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/17.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/18.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/18.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/19.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/19.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/2.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/20.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/20.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/21.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/21.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/22.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/22.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/23.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/23.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/24.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/24.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/25.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/25.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/26.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/26.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/27.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/27.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/28.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/28.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/29.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/29.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/3.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/30.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/30.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/31.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/31.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/32.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/32.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/33.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/33.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/34.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/34.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/35.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/35.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/36.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/36.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/37.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/37.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/38.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/38.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/39.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/39.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/4.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/40.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/40.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/41.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/41.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/42.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/42.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/43.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/43.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/44.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/44.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/5.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/6.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/7.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/7.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/8.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/8.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Output/sectors/9.png" beforeDir="false" afterPath="$PROJECT_DIR$/Output/sectors/9.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/intersec_time_finder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/intersec_time_finder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/recoPreparation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/recoPreparation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/reconstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/reconstruction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/total_event_reconstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/total_event_reconstruction.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,14 +62,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="reconstruction.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="reconstruction.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/reconstruction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
-              <caret line="65" column="39" selection-start-line="65" selection-start-column="39" selection-end-line="65" selection-end-column="39" />
+            <state relative-caret-position="435">
+              <caret line="62" column="77" selection-start-line="62" selection-start-column="77" selection-end-line="62" selection-end-column="77" />
               <folding>
                 <element signature="e#0#101#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="point_allocate.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/point_allocate.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -33,7 +87,7 @@
         <entry file="file://$PROJECT_DIR$/src/reconstructionAlg.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="465">
-              <caret line="168" column="47" selection-start-line="168" selection-start-column="47" selection-end-line="168" selection-end-column="47" />
+              <caret line="168" column="42" selection-start-line="168" selection-start-column="42" selection-end-line="168" selection-end-column="42" />
               <folding>
                 <element signature="e#0#86#0" expanded="true" />
               </folding>
@@ -44,8 +98,8 @@
       <file leaf-file-name="total_event_reconstruction.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/total_event_reconstruction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
+            <state relative-caret-position="120">
+              <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
               <folding>
                 <element signature="e#0#37#0" expanded="true" />
               </folding>
@@ -53,11 +107,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="recoPreparation.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="recoPreparation.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/recoPreparation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1110">
-              <caret line="310" column="89" selection-start-line="310" selection-start-column="89" selection-end-line="310" selection-end-column="89" />
+            <state relative-caret-position="-2625">
+              <caret line="54" column="53" selection-start-line="54" selection-start-column="53" selection-end-line="54" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -77,8 +131,8 @@
       <file leaf-file-name="intersec_time_finder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/intersec_time_finder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
+            <state relative-caret-position="555">
+              <caret line="37" selection-start-line="37" selection-end-line="37" />
               <folding>
                 <element signature="e#109#146#0" expanded="true" />
               </folding>
@@ -138,12 +192,13 @@
         <option value="$PROJECT_DIR$/src/reco_from_contour.py" />
         <option value="$PROJECT_DIR$/total_event_reconstruction.py" />
         <option value="$PROJECT_DIR$/src/contour_analyze.py" />
-        <option value="$PROJECT_DIR$/src/reconstructionAlg.py" />
         <option value="$PROJECT_DIR$/../libs/TreeReadFunc.py" />
-        <option value="$PROJECT_DIR$/src/reconstruction.py" />
-        <option value="$PROJECT_DIR$/src/intersec_time_finder.py" />
-        <option value="$PROJECT_DIR$/src/total_event_reconstruction.py" />
         <option value="$PROJECT_DIR$/src/recoPreparation.py" />
+        <option value="$PROJECT_DIR$/src/total_event_reconstruction.py" />
+        <option value="$PROJECT_DIR$/src/reconstructionAlg.py" />
+        <option value="$PROJECT_DIR$/src/intersec_time_finder.py" />
+        <option value="$PROJECT_DIR$/src/reconstruction.py" />
+        <option value="$PROJECT_DIR$/src/point_allocate.py" />
       </list>
     </option>
   </component>
@@ -457,7 +512,14 @@
       <option name="project" value="LOCAL" />
       <updated>1523991023518</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="18.4.18">
+      <created>1524060746352</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1524060746352</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -514,7 +576,8 @@
     <MESSAGE value="13.4.18" />
     <MESSAGE value="16.4.18" />
     <MESSAGE value="17.4.18" />
-    <option name="LAST_COMMIT_MESSAGE" value="17.4.18" />
+    <MESSAGE value="18.4.18" />
+    <option name="LAST_COMMIT_MESSAGE" value="18.4.18" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -522,10 +585,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Output/test/35.png" />
-    <entry file="file://$PROJECT_DIR$/Output/test/34.png" />
-    <entry file="file://$PROJECT_DIR$/Output/test/17.png" />
-    <entry file="file://$PROJECT_DIR$/Output/test/16.png" />
     <entry file="file://$PROJECT_DIR$/Output/test/5.png" />
     <entry file="file://$PROJECT_DIR$/Output/test/12.png" />
     <entry file="file://$PROJECT_DIR$/Output/test/13.png" />
@@ -669,6 +728,64 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/.local/lib/python2.7/site-packages/numpy/core/numeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="543" selection-start-line="543" selection-end-line="543" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/matplotlib/axes/_axes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="3969" selection-start-line="3969" selection-end-line="3969" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/matplotlib/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="1716" selection-start-line="1716" selection-end-line="1716" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/total_event_reconstruction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="16" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/recoPreparation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2625">
+          <caret line="54" column="53" selection-start-line="54" selection-start-column="53" selection-end-line="54" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/intersec_time_finder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
+          <folding>
+            <element signature="e#109#146#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/reconstructionAlg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="168" column="42" selection-start-line="168" selection-start-column="42" selection-end-line="168" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#86#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/contour_analyze.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -679,50 +796,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/total_event_reconstruction.py">
+    <entry file="file://$PROJECT_DIR$/src/point_allocate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="105">
+          <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/reconstruction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="65" column="39" selection-start-line="65" selection-start-column="39" selection-end-line="65" selection-end-column="39" />
+        <state relative-caret-position="435">
+          <caret line="62" column="77" selection-start-line="62" selection-start-column="77" selection-end-line="62" selection-end-column="77" />
           <folding>
             <element signature="e#0#101#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/intersec_time_finder.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
-          <folding>
-            <element signature="e#109#146#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/reconstructionAlg.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="168" column="47" selection-start-line="168" selection-start-column="47" selection-end-line="168" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#86#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/recoPreparation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1110">
-          <caret line="310" column="89" selection-start-line="310" selection-start-column="89" selection-end-line="310" selection-end-column="89" />
         </state>
       </provider>
     </entry>

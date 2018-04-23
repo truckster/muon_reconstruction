@@ -6,5 +6,5 @@ import matplotlib.path as mpath
 
 
 def allocate_points(contour_diffs, intersec_points, intersec_times):
-    for frame, contour in enumerate(contour_diffs):
-        print(contour[0][0].level)
+    # for frame, contour in enumerate(contour_diffs):
+    a=1

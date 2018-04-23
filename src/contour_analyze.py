@@ -1,5 +1,6 @@
 import matplotlib.path as mpath
 import numpy as np
+import reconstructionAlg, statusAlert
 
 
 class ContourDataSinglePatch:
@@ -42,6 +43,19 @@ def get_contour_data(contour_output):
             return_data_total_snippet.append(return_data_iso_hit_patches)
 
     return return_data_total_snippet
+
+
+def collect_contour_data(photons_in_time_window, PmtPositions):
+    contour_data_array = []
+    diff_contour_data_array = []
+    for frame, pmt_array in enumerate(photons_in_time_window.time_snippets):
+        statusAlert.processStatus("processing snippet: " + str(frame))
+        contour_data_array.append(reconstructionAlg.contour_data_reader(PmtPositions, pmt_array))
+        if frame > 0:
+            snippet_diff = np.asarray(pmt_array) - np.asarray(photons_in_time_window.time_snippets[frame - 1])
+            diff_contour_data_array.append(reconstructionAlg.contour_data_reader(PmtPositions, snippet_diff))
+
+    return contour_data_array, diff_contour_data_array
 
 
 def calc_contour_center(patch_path_data):

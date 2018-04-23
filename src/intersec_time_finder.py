@@ -8,7 +8,7 @@ def find_times(contour_array, intersec_points):
     statusAlert.processStatus("Reconstruct intersection frames of muon")
     point_hit_array = [[] for _ in range(len(intersec_points))]
     for frame, contour_data in enumerate(contour_array):
-        statusAlert.processStatus("processing snippet: " + str(frame))
+        # statusAlert.processStatus("processing snippet: " + str(frame))
         for point_index, point in enumerate(intersec_points):
             current_level=0
             for level_index, level in enumerate(contour_data):

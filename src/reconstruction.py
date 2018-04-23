@@ -10,6 +10,7 @@ import numpy as np
 statusAlert.processStatus("Process started")
 
 input_path = "/home/gpu/Simulation/mult/new/"
+# input_path = "/home/gpu/Simulation/temp/"
 # input_path = "/home/gpu/Simulation/mult/test/"
 # input_path = "/home/gpu/Simulation/test/"
 # input_path = "/home/gpu/Simulation/single/"
@@ -49,33 +50,27 @@ for file in glob("*.root"):
 
     '''collect information of all photons within certain time snippet and save the separately'''
     frame_time_cut = 5
-    max_frames = 50
+    max_frames = 40
     photons_in_time_window, photons_of_entire_event = recoPreparation.hitPMTinTimeSnippetHist2(file,
                                                                                                frame_time_cut,
                                                                                                max_frames)
-    contour_data_array = []
-    diff_contour_data_array = []
-    for frame, pmt_array in enumerate(photons_in_time_window.time_snippets):
-        statusAlert.processStatus("processing snippet: " + str(frame))
-        contour_data_array.append(reconstructionAlg.contour_data_reader(PmtPositions, pmt_array))
-        if frame > 0:
-            snippet_diff = np.asarray(pmt_array) - np.asarray(photons_in_time_window.time_snippets[frame-1])
-            diff_contour_data_array.append(reconstructionAlg.contour_data_reader(PmtPositions, snippet_diff))
 
+    contour_array_total, contour_array_diff = contour_analyze.collect_contour_data(photons_in_time_window, PmtPositions)
     recoPreparation.MC_truth_writer(muon_points, output_path, file, frame_time_cut)
 
     '''Reconstruction by looking at entire event'''
     total_path = recoPreparation.create_output_path(output_path, file, "/total_event/", input_path)
     reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path)
     found_points = total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event)
-    total_event_reconstruction.reco_result_writer(output_path, found_points)
+    # total_event_reconstruction.reco_result_writer(output_path, found_points)
+
 
     '''Detection of entry and exit time of muons'''
-    found_frames = intersec_time_finder.find_times(contour_data_array, found_points)
-    intersec_time_finder.reco_result_writer(output_path, found_frames)
+    # found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
+    # intersec_time_finder.reco_result_writer(output_path, found_frames)
 
     '''Allocate respective points'''
-    point_allocate.allocate_points(diff_contour_data_array, found_points, found_frames)
+    # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
 
     '''Draw all kinds of images'''
     # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)

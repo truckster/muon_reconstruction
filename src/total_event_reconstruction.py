@@ -7,8 +7,8 @@ def entry_exit_detector(pmt_position_class, snippet_class):
     pmt_array = snippet_class.time_snippets[0]
     statusAlert.processStatus("Total event: ")
     contour_data = reconstructionAlg.contour_data_reader(pmt_position_class, pmt_array)
-    found_points = standalone_contour_lines(contour_data)
-    return found_points
+    top_levels = standalone_contour_lines(contour_data)
+    toplevel_check(top_levels, contour_data)
 
 
 def standalone_contour_lines(contour_data_total):
@@ -25,9 +25,19 @@ def standalone_contour_lines(contour_data_total):
                             # print(str(patch.level) + " contains " + str(patch2.level))
                             local_max_patch = False
 
-            if local_max_patch and patch.level > data_1[-6][0].level:
-                local_max_patches.append(patch.center)
+            if local_max_patch:
+                local_max_patches.append(patch)
     return local_max_patches
+
+
+def toplevel_check(top_level_patches, contour_data_total):
+    print("Patches found: " + str(len(top_level_patches)))
+    for patch_index, patch in enumerate(top_level_patches):
+        print(patch.contour_coordinates)
+        for level_observed in contour_data_total:
+            for patch2 in level_observed:
+                if mpath.Path(patch2.contour_coordinates).contains_point(patch.contour_coordinates[0]):
+                    print("Patchlevel: " + str(patch2.level) + " contains patch: " + str(patch_index))
 
 
 def reco_result_writer(output_path, result_array):

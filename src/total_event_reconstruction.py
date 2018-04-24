@@ -33,11 +33,11 @@ def standalone_contour_lines(contour_data_total):
 def toplevel_check(top_level_patches, contour_data_total):
     print("Patches found: " + str(len(top_level_patches)))
     for patch_index, patch in enumerate(top_level_patches):
-        print(patch.contour_coordinates)
-        for level_observed in contour_data_total:
-            for patch2 in level_observed:
-                if mpath.Path(patch2.contour_coordinates).contains_point(patch.contour_coordinates[0]):
-                    print("Patchlevel: " + str(patch2.level) + " contains patch: " + str(patch_index))
+        get_closest_surrounder(patch, contour_data_total)
+        # for level_observed in contour_data_total:
+        #     for patch2 in level_observed:
+        #         if mpath.Path(patch2.contour_coordinates).contains_point(patch.contour_coordinates[0]):
+        #             print("Patchlevel: " + str(patch2.level) + " contains patch: " + str(patch_index))
 
 
 def reco_result_writer(output_path, result_array):
@@ -52,3 +52,11 @@ def reco_result_writer(output_path, result_array):
 
     result_file.write("End of event" + '\n' + '\n')
     result_file.close()
+
+
+def get_closest_surrounder(patch, contour_data):
+    level_patch = patch.level
+    for patch_level_below in contour_data[level_patch-1]:
+        print(patch_level_below.center)
+        if mpath.Path(patch_level_below.contour_coordinates).contains_point(patch.contour_coordinates[0]):
+            print("SURROUNDER")

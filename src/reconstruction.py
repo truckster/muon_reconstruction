@@ -9,8 +9,8 @@ import numpy as np
 '''General script to use sub-scripts for muon reconstruction.'''
 statusAlert.processStatus("Process started")
 
-input_path = "/home/gpu/Simulation/mult/new/"
-# input_path = "/home/gpu/Simulation/temp/"
+# input_path = "/home/gpu/Simulation/mult/new/"
+input_path = "/home/gpu/Simulation/temp/"
 # input_path = "/home/gpu/Simulation/mult/test/"
 # input_path = "/home/gpu/Simulation/test/"
 # input_path = "/home/gpu/Simulation/single/"

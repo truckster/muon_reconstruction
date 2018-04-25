@@ -8,7 +8,9 @@ def entry_exit_detector(pmt_position_class, snippet_class):
     statusAlert.processStatus("Total event: ")
     contour_data = reconstructionAlg.contour_data_reader(pmt_position_class, pmt_array)
     top_levels = standalone_contour_lines(contour_data)
-    toplevel_check(top_levels, contour_data)
+    real_top_patches = toplevel_check(top_levels, contour_data)
+
+    return real_top_patches
 
 
 def standalone_contour_lines(contour_data_total):
@@ -31,13 +33,11 @@ def standalone_contour_lines(contour_data_total):
 
 
 def toplevel_check(top_level_patches, contour_data_total):
-    print("Patches found: " + str(len(top_level_patches)))
+    real_patches = []
     for patch_index, patch in enumerate(top_level_patches):
-        get_closest_surrounder(patch, contour_data_total)
-        # for level_observed in contour_data_total:
-        #     for patch2 in level_observed:
-        #         if mpath.Path(patch2.contour_coordinates).contains_point(patch.contour_coordinates[0]):
-        #             print("Patchlevel: " + str(patch2.level) + " contains patch: " + str(patch_index))
+        if is_real_toplevel_patch(patch, contour_data_total):
+            real_patches.append(patch)
+    return real_patches
 
 
 def reco_result_writer(output_path, result_array):
@@ -45,18 +45,24 @@ def reco_result_writer(output_path, result_array):
     result_file = open(output_path + "results.txt", 'a')
     result_file.write("----- Reconstructed Values (Total)------" + '\n')
 
-    for point in result_array:
-        result_file.write("Phi: " + str(point[0]) + '\n')
-        result_file.write("Theta: " + str(point[1]) + '\n')
+    for patch in result_array:
+        result_file.write("Phi: " + str(patch.center[0]) + '\n')
+        result_file.write("Theta: " + str(patch.center[1]) + '\n')
         result_file.write("--------------------------------" + '\n')
 
     result_file.write("End of event" + '\n' + '\n')
     result_file.close()
 
 
-def get_closest_surrounder(patch, contour_data):
-    level_patch = patch.level
-    for patch_level_below in contour_data[level_patch-1]:
-        print(patch_level_below.center)
+def is_real_toplevel_patch(patch, contour_data):
+    patch_is_real_top = True
+    for patch_level_below in contour_data[patch.level-1]:
         if mpath.Path(patch_level_below.contour_coordinates).contains_point(patch.contour_coordinates[0]):
-            print("SURROUNDER")
+            for neighbour_patch in contour_data[patch.level]:
+                if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
+                    if neighbour_patch is not patch:
+                        patch_is_real_top = False
+
+    return patch_is_real_top
+
+

@@ -71,6 +71,10 @@ class MuonIntersecPoint:
 
         self.phi = 0
         self.theta = 0
+        self.theta2 = 0
+
+        self.phi_hammer_aitoff = 0
+        self.theta_hammer_aitoff = 0
 
         self.intersec_time = 0
 
@@ -139,6 +143,14 @@ def calc_muon_detector_intersec_points(source, radius, time_steps):
 
                 muon_in.phi = math.atan2(y_position_current, x_position_current)
                 muon_in.theta = math.acos(-z_position_current/radius)
+                muon_in.theta2 = math.acos(-z_position_current/radius) - (math.pi/2)
+
+                muon_in.phi_hammer_aitoff = (math.sqrt(8) * math.cos(muon_out.theta) * math.sin(muon_out.phi / 2)) / \
+                                             (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
+
+                muon_in.theta_hammer_aitoff = (math.sqrt(2) * math.sin(muon_out.theta)) / \
+                                               (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
+
                 muon_in.intersec_time = time_current
 
                 returnarray.append(muon_in)
@@ -151,6 +163,14 @@ def calc_muon_detector_intersec_points(source, radius, time_steps):
 
                 muon_out.phi = math.atan2(y_position_current, x_position_current)
                 muon_out.theta = math.acos(-z_position_current/radius)
+                muon_out.theta2 = math.acos(-z_position_current/radius) - (math.pi/2)
+
+                muon_out.phi_hammer_aitoff = (math.sqrt(8) * math.cos(muon_out.theta) * math.sin(muon_out.phi / 2)) / \
+                          (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
+
+                muon_out.theta_hammer_aitoff = (math.sqrt(2) * math.sin(muon_out.theta)) / \
+                            (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
+
                 muon_out.intersec_time = time_current
 
                 returnarray.append(muon_out)
@@ -184,6 +204,7 @@ class PMTPositions:
         self.z_position = []
         self.phi_position = []
         self.theta_position = []
+        self.theta_position2 = []
         self.phi_hammer_aitov = []
         self.theta_hammer_aitov = []
         self.sector_list_id = []
@@ -209,8 +230,13 @@ class PMTPositions:
     def add_phi_position(self, value):
         self.phi_position.append(value)
 
+    """0deg to 180deg"""
     def add_theta_position(self, value):
         self.theta_position.append(value)
+
+    """-90deg to 90deg"""
+    def add_theta_position2(self, value):
+        self.theta_position2.append(value)
 
     def add_phi_hammer_aitov(self, value):
         self.phi_hammer_aitov.append((value))
@@ -250,6 +276,7 @@ def calc_pmt_positions(inpath, x_sector_num, y_sector_num):
         radius = PointVecDist.VectorLength(event.__getattr__("x"), event.__getattr__("y"), event.__getattr__("z"))
         theta_position = math.acos(- event.__getattr__("z")/radius)
         return_class.add_theta_position(theta_position)
+        return_class.add_theta_position2(theta_position - (math.pi/2))
 
         x_sector = int((phi_position + math.pi) / 2.01 / math.pi * x_sector_num)
         y_sector = int(theta_position/math.pi * y_sector_num)
@@ -296,13 +323,12 @@ def MC_truth_writer(muon_points, output_path, file, time_cut):
         if event.leaves is True:
             result_file += ("Exit point: " + '\n')
         result_file += ("Phi: " + str(event.phi) + '\n')
-        result_file += ("Theta: " + str(event.theta) + '\n')
+        result_file += ("Theta: " + str(event.theta2) + '\n')
         result_file += ("Z: " + str(event.z) + '\n')
         result_file += ("Time: " + str(event.intersec_time) + '\n')
         result_file += ("------------------------------------------" + '\n')
         times.append(event.intersec_time)
-        # result_file.write("Calculated snippet: " + str(event.intersec_time//(snippet_time_cut*10**-9)-12) + '\n')
-        # print((event.intersec_time/time_resolution)//snippet_time_cut)
+
     first_intersec_time = min(times)
     frames = []
     result_file += "---------Frames of intersection (MC)---------"+'\n'

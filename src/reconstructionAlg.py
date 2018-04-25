@@ -7,7 +7,7 @@ from scipy.ndimage.filters import gaussian_filter
 import os
 
 compute_snippets = 23
-number_contour_level = 11
+number_contour_level = 8
 
 
 class PatternPosition:
@@ -105,11 +105,11 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
     fig = plt.figure(num=None, figsize=(20, 10))
 
     '''Analysis design'''
-    ax1 = fig.add_subplot(111, axisbg='gainsboro')
-    scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position, marker='o', c='k')
-    scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position,
+    ax1 = fig.add_subplot(111, axisbg='gainsboro', projection='aitoff')
+    # scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position, marker='o', c='k')
+    scatterHits = ax1.scatter(pmt_position_class.phi_position, pmt_position_class.theta_position2,
                               c=snippet_array, cmap=color_schemes.analysis_design(),
-                              edgecolor='k', label='hit')
+                              edgecolor='k', label='hit', )
     cb = fig.colorbar(scatterHits)
 
     '''Nice design'''
@@ -119,8 +119,8 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
     #                                edgecolor='k', label='hit')
     # cb = fig.colorbar(scatter_hits_new)
 
-    draw_sector_lines(pmt_position_class)
-    draw_muon_points(muon_points)
+    # draw_sector_lines(pmt_position_class)
+    draw_muon_points(muon_points, ax1)
     # draw_pattern_results(sector_pattern_array, template_radius, ax1)
     # draw_reco_muons(muon_finder_psnippet)
 
@@ -157,14 +157,18 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
 
 def contour_data_reader(pmt_position_class, snippet_array):
     statusAlert.processStatus("Collect contour data")
+    ax = plt.subplot(111, projection='aitoff')
 
     phi_i = np.linspace(-math.pi, math.pi, 1200)
-    theta_i = np.linspace(0, math.pi, 600)
-    zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position,
+    theta_i = np.linspace(-math.pi / 2, math.pi / 2, 600)
+    # zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position,
+    #                        snippet_array, phi_i, theta_i, interp='linear')
+
+    zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position2,
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
 
-    cont_plot_axes = plt.contour(phi_i, theta_i, zi, number_contour_level)
+    cont_plot_axes = ax.contour(phi_i, theta_i, zi, number_contour_level)
 
     contour_data = contour_analyze.get_contour_data(cont_plot_axes)
 
@@ -176,22 +180,18 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
     fig = plt.figure(num=None, figsize=(20, 10))
 
     '''Analysis design'''
-    ax1 = fig.add_subplot(111, axisbg='gainsboro')
 
     phi_i = np.linspace(-math.pi, math.pi, 1200)
-    theta_i = np.linspace(0, math.pi, 600)
-    zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position,
+    theta_i = np.linspace(-math.pi/2, math.pi/2, 600)
+    zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position2,
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
 
-    cont_plot_axes = plt.contour(phi_i, theta_i, zi, number_contour_level, cmap=color_schemes.analysis_design())
+    ax = plt.subplot(111, axisbg='gainsboro', projection='aitoff')
+    ax.grid(True)
+    cont_plot_axes = ax.contour(phi_i, theta_i, zi, number_contour_level, cmap=color_schemes.analysis_design())
 
     contour_data = contour_analyze.get_contour_data(cont_plot_axes)
-    try:
-        toplevel_center = contour_data[-3][0].center
-        plt.plot(toplevel_center[0][0], toplevel_center[0][1], 'r+')
-    except IndexError:
-        pass
 
     plt.ylabel("theta (deg)")
     plt.xlabel("phi (deg)")
@@ -200,7 +200,7 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
         plt.colorbar(cont_plot_axes)
     except:
         print("No colorbar possible! ")
-    draw_muon_points(muon_points)
+    draw_muon_points(muon_points, ax)
 
     if mode is "absolute":
         try:
@@ -226,7 +226,7 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
     plt.close()
 
 
-def draw_muon_points(muon_points):
+def draw_muon_points(muon_points, subplott):
     phi_muon_entry = []
     theta_muon_entry = []
     phi_muon_exit = []
@@ -235,14 +235,14 @@ def draw_muon_points(muon_points):
     for muon_event in muon_points:
         if muon_event.enters is True:
             phi_muon_entry.append(muon_event.phi)
-            theta_muon_entry.append(muon_event.theta)
+            theta_muon_entry.append(muon_event.theta2)
         if muon_event.leaves is True:
             phi_muon_exit.append(muon_event.phi)
-            theta_muon_exit.append(muon_event.theta)
+            theta_muon_exit.append(muon_event.theta2)
 
-    scatter_muon_entry = plt.scatter(phi_muon_entry, theta_muon_entry,
+    scatter_muon_entry = subplott.scatter(phi_muon_entry, theta_muon_entry,
                                      facecolors='none', edgecolors='white', marker='v', s=120)
-    scatter_muon_exit = plt.scatter(phi_muon_exit, theta_muon_exit,
+    scatter_muon_exit = subplott.scatter(phi_muon_exit, theta_muon_exit,
                                    facecolors='none', edgecolors='white', marker='^', s=120)
 
 

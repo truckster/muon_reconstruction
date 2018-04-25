@@ -13,7 +13,7 @@ def find_times(contour_array, intersec_points):
             current_level=0
             for level_index, level in enumerate(contour_data):
                 for patch_index, patch in enumerate(level):
-                    if mpath.Path(patch.contour_coordinates).contains_point(point):
+                    if mpath.Path(patch.contour_coordinates).contains_point(point.contour_coordinates[0]):
                         current_level = patch.height
                         # print(current_level)
             point_hit_array[point_index].append(current_level)

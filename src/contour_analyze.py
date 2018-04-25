@@ -20,27 +20,26 @@ def get_contour_data(contour_output):
         returns a 2D-Array per snippet [level][patch]=ContourDataSinglePatch_Class"""
     return_data_total_snippet = []
     for level in range(len(contour_output.levels)):
-        if level > 0:
-            """iterates over all contour levels in the snippet"""
-            return_data_iso_hit_patches = []
-            for patch in contour_output.collections[level].get_paths():
-                """iterates over all iso hit patches of the given level in the contour"""
-                patch_data = ContourDataSinglePatch()
-                patch_data.height = contour_output.levels[level]
-                patch_data.level = level
-                patch_data.iso_hit_patches = len(contour_output.collections[level].get_paths())
-                patch_data.center = calc_contour_center(patch)
-                patch_data.extent = calc_contour_extent(contour_output, level)
+        """iterates over all contour levels in the snippet"""
+        return_data_iso_hit_patches = []
+        for patch in contour_output.collections[level].get_paths():
+            """iterates over all iso hit patches of the given level in the contour"""
+            patch_data = ContourDataSinglePatch()
+            patch_data.height = contour_output.levels[level]
+            patch_data.level = level
+            patch_data.iso_hit_patches = len(contour_output.collections[level].get_paths())
+            patch_data.center = calc_contour_center(patch)
+            patch_data.extent = calc_contour_extent(contour_output, level)
 
-                try:
-                    patch_data.contour_path = patch
-                    patch_data.contour_coordinates = patch.vertices
-                except IndexError:
-                    pass
+            try:
+                patch_data.contour_path = patch
+                patch_data.contour_coordinates = patch.vertices
+            except IndexError:
+                pass
 
-                return_data_iso_hit_patches.append(patch_data)
+            return_data_iso_hit_patches.append(patch_data)
 
-            return_data_total_snippet.append(return_data_iso_hit_patches)
+        return_data_total_snippet.append(return_data_iso_hit_patches)
 
     return return_data_total_snippet
 

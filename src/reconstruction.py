@@ -14,6 +14,7 @@ input_path = "/home/gpu/Simulation/temp/"
 # input_path = "/home/gpu/Simulation/mult/test/"
 # input_path = "/home/gpu/Simulation/test/"
 # input_path = "/home/gpu/Simulation/single/"
+
 output_path = "/home/gpu/Analysis/muReconstruction/Output/"
 # output_path = "/home/gpu/Analysis/muReconstruction/Output/LPMT/"
 
@@ -62,19 +63,19 @@ for file in glob("*.root"):
     total_path = recoPreparation.create_output_path(output_path, file, "/total_event/", input_path)
     reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path)
     found_points = total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event)
-    # total_event_reconstruction.reco_result_writer(output_path, found_points)
+    total_event_reconstruction.reco_result_writer(output_path, found_points)
 
 
     '''Detection of entry and exit time of muons'''
-    # found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
-    # intersec_time_finder.reco_result_writer(output_path, found_frames)
+    found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
+    intersec_time_finder.reco_result_writer(output_path, found_frames)
 
     '''Allocate respective points'''
     # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
 
     '''Draw all kinds of images'''
-    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
-    # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path, max_frames)
+    reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
+    reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path, max_frames)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
     gc.collect()

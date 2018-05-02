@@ -44,15 +44,16 @@ def get_contour_data(contour_output):
     return return_data_total_snippet
 
 
-def collect_contour_data(photons_in_time_window, PmtPositions):
+def collect_contour_data(photons_in_time_window, PmtPositions, number_contour_level):
     contour_data_array = []
     diff_contour_data_array = []
     for frame, pmt_array in enumerate(photons_in_time_window.time_snippets):
         statusAlert.processStatus("processing snippet: " + str(frame))
-        contour_data_array.append(reconstructionAlg.contour_data_reader(PmtPositions, pmt_array))
+        contour_data_array.append(reconstructionAlg.contour_data_reader(PmtPositions, pmt_array, number_contour_level))
         if frame > 0:
             snippet_diff = np.asarray(pmt_array) - np.asarray(photons_in_time_window.time_snippets[frame - 1])
-            diff_contour_data_array.append(reconstructionAlg.contour_data_reader(PmtPositions, snippet_diff))
+            diff_contour_data_array.append(reconstructionAlg.contour_data_reader(PmtPositions, snippet_diff,
+                                                                                 number_contour_level))
 
     return contour_data_array, diff_contour_data_array
 

@@ -1,5 +1,5 @@
 import recoPreparation, reconstructionAlg, statusAlert, TreeReadFunc, gauss_fit_reco, contour_analyze
-import total_event_reconstruction, intersec_time_finder, point_allocate
+import total_event_reconstruction, intersec_time_finder, point_allocate, diff_event_analysis
 
 from os import chdir, remove, path
 from glob import glob
@@ -10,13 +10,14 @@ import numpy as np
 statusAlert.processStatus("Process started")
 
 # input_path = "/home/gpu/Simulation/mult/new/"
-input_path = "/home/gpu/Simulation/temp/"
+# input_path = "/home/gpu/Simulation/temp/"
 # input_path = "/home/gpu/Simulation/mult/test/"
-# input_path = "/home/gpu/Simulation/test/"
+input_path = "/home/gpu/Simulation/test/"
+# input_path = "/home/gpu/Simulation/test_short/"
 # input_path = "/home/gpu/Simulation/single/"
 
-output_path = "/home/gpu/Analysis/muReconstruction/Output/"
-# output_path = "/home/gpu/Analysis/muReconstruction/Output/LPMT/"
+# output_path = "/home/gpu/Analysis/muReconstruction/Output/"
+output_path = "/home/gpu/Analysis/muReconstruction/Output/LPMT/"
 
 # input_path = "/home/gpu/Simulation/presentation/y/"
 # output_path = "/home/gpu/Analysis/muReconstruction/Output/presentation/y/"
@@ -24,6 +25,8 @@ output_path = "/home/gpu/Analysis/muReconstruction/Output/"
 '''Overwrite fit results file'''
 if path.isfile(output_path + "results.txt"):
     remove(output_path + "results.txt")
+
+reco_accuracy = []
 
 TreeReadFunc.check_file(input_path, "mu", "TrackLengthInScint", "MuMult")
 chdir(input_path)
@@ -50,21 +53,28 @@ for file in glob("*.root"):
     muon_points = recoPreparation.calc_muon_detector_intersec_points(file, intersec_radius, time_resolution)
 
     '''collect information of all photons within certain time snippet and save the separately'''
-    frame_time_cut = 5
+    frame_time_cut = 10
     max_frames = 40
     photons_in_time_window, photons_of_entire_event = recoPreparation.hitPMTinTimeSnippetHist2(file,
                                                                                                frame_time_cut,
                                                                                                max_frames)
 
-    contour_array_total, contour_array_diff = contour_analyze.collect_contour_data(photons_in_time_window, PmtPositions)
-    recoPreparation.MC_truth_writer(muon_points, output_path, file, frame_time_cut)
+    number_contour_level = 10
+
+    contour_array_total, contour_array_diff = contour_analyze.collect_contour_data(photons_in_time_window, PmtPositions,
+                                                                                   number_contour_level)
+    MC_positions = recoPreparation.MC_truth_writer(muon_points, output_path, file, frame_time_cut)
 
     '''Reconstruction by looking at entire event'''
     total_path = recoPreparation.create_output_path(output_path, file, "/total_event/", input_path)
-    reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path)
-    found_points = total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event)
-    total_event_reconstruction.reco_result_writer(output_path, found_points)
+    found_points = total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event,
+                                                                  number_contour_level)
+    reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
+                                     number_contour_level, found_points)
+    reco_positions = total_event_reconstruction.reco_result_writer(output_path, found_points)
 
+    """Cross-check results with diffs"""
+    # diff_event_analysis.intersec_crosscheck(contour_array_diff, found_points)
 
     '''Detection of entry and exit time of muons'''
     found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
@@ -73,11 +83,18 @@ for file in glob("*.root"):
     '''Allocate respective points'''
     # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
 
-    '''Draw all kinds of images'''
-    reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path)
-    reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window, muon_points, new_output_path, max_frames)
+    # '''Draw all kinds of images'''
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
+    #                                  muon_points, new_output_path, number_contour_level, found_points)
+    #
+    # number_contour_level = 5
+    # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window,
+    #                                             muon_points, new_output_path, number_contour_level, found_points)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
+
+    reco_accuracy.append(reconstructionAlg.reco_comparer(MC_positions, reco_positions))
 
     gc.collect()
 
+reconstructionAlg.reco_resulter(reco_accuracy, output_path)
 statusAlert.processStatus("Process finished")

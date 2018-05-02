@@ -6,9 +6,6 @@ import matplotlib.colors as mcolors
 from scipy.ndimage.filters import gaussian_filter
 import os
 
-compute_snippets = 23
-number_contour_level = 8
-
 
 class PatternPosition:
     def __init__(self):  # this method creates the class object.
@@ -40,14 +37,14 @@ def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path
     return reconstructed_points1
 
 
-def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, max_snippet=None):
+def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, number_contour_level, reco_points=None):
     statusAlert.processStatus("Iterate snippets and draw")
 
     '''photon data pre-processed and ordered into time snippets'''
     snippet_array = np.asarray(snippet_class.time_snippets)
 
     '''iterate snippets'''
-    if max_snippet is None:
+    if reco_points is None:
         for snippet in range(len(snippet_array)):
             statusAlert.processStatus("processing snippet: " + str(snippet))
 
@@ -55,27 +52,28 @@ def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, max
             draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
                                  out_path, "absolute")
             draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
-                                      muon_points, snippet, out_path, "absolute")
+                                      muon_points, snippet, out_path, number_contour_level, "absolute")
 
     else:
-        for snippet in range(max_snippet)-1:
+        for snippet in range(len(snippet_array)):
             statusAlert.processStatus("processing snippet: " + str(snippet))
 
             '''Draw the detector picture for the certain time snippet'''
             draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
-                                 out_path, "absolute")
+                                 out_path, reco_points, "absolute")
             draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
-                                      muon_points, snippet, out_path, "absolute")
+                                      muon_points, snippet, out_path, number_contour_level, reco_points, "absolute")
 
 
-def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, out_path, max_snippet=None):
+def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, out_path,
+                              number_contour_level = 16, reco_points=None):
     statusAlert.processStatus("Iterate snippets and draw")
 
     '''photon data pre-processed and ordered into time snippets'''
     snippet_array = np.asarray(snippet_class.time_snippets)
 
     '''iterate snippets'''
-    if max_snippet is None:
+    if reco_points is None:
         for snippet in range(len(snippet_array)):
             if snippet > 0:
                 snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
@@ -86,9 +84,9 @@ def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, ou
                 draw_snippet_picture(pmt_position_class, snippet_diff, muon_points,
                                      snippet, out_path, "differential")
                 draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points,
-                                          snippet, out_path, "differential")
+                                          snippet, out_path, number_contour_level, "differential")
     else:
-        for snippet in range(max_snippet):
+        for snippet in range(len(snippet_array)):
             if snippet > 0:
                 snippet_diff = np.asarray(snippet_class.time_snippets[snippet]) \
                                - np.asarray(snippet_class.time_snippets[snippet - 1])
@@ -96,11 +94,12 @@ def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, ou
 
                 '''Draw the detector picture for the certain time snippet'''
                 draw_snippet_picture(pmt_position_class, snippet_diff, muon_points,
-                                     snippet, out_path, "differential")
+                                     snippet, out_path, reco_points, "differential")
                 draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points,
-                                          snippet, out_path, "differential")
+                                          snippet, out_path, number_contour_level, reco_points, "differential")
 
-def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet, out_path, mode=None):
+
+def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet, out_path, reco_points=None, mode=None):
     statusAlert.processStatus("Creating graphics")
     fig = plt.figure(num=None, figsize=(20, 10))
 
@@ -121,6 +120,10 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
 
     # draw_sector_lines(pmt_position_class)
     draw_muon_points(muon_points, ax1)
+    if reco_points is None:
+        a=1
+    else:
+        draw_reconstructed_points(reco_points, ax1)
     # draw_pattern_results(sector_pattern_array, template_radius, ax1)
     # draw_reco_muons(muon_finder_psnippet)
 
@@ -155,7 +158,7 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
         print("Nothing to print")
 
 
-def contour_data_reader(pmt_position_class, snippet_array):
+def contour_data_reader(pmt_position_class, snippet_array, number_contour_level):
     statusAlert.processStatus("Collect contour data")
     ax = plt.subplot(111, projection='aitoff')
 
@@ -175,7 +178,8 @@ def contour_data_reader(pmt_position_class, snippet_array):
     return contour_data
 
 
-def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, snippet, out_path, mode=None):
+def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points,
+                              snippet, out_path, number_contour_level, reco_points = None, mode=None):
     statusAlert.processStatus("Creating graphics")
     fig = plt.figure(num=None, figsize=(20, 10))
 
@@ -200,7 +204,12 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
         plt.colorbar(cont_plot_axes)
     except:
         print("No colorbar possible! ")
+
     draw_muon_points(muon_points, ax)
+    if reco_points is None:
+        pass
+    else:
+        draw_reconstructed_points(reco_points, ax)
 
     if mode is "absolute":
         try:
@@ -227,23 +236,34 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
 
 
 def draw_muon_points(muon_points, subplott):
-    phi_muon_entry = []
-    theta_muon_entry = []
-    phi_muon_exit = []
-    theta_muon_exit = []
+    phi_muon_first = []
+    theta_muon_first = []
+    phi_muon_sec = []
+    theta_muon_sec = []
 
     for muon_event in muon_points:
-        if muon_event.enters is True:
-            phi_muon_entry.append(muon_event.phi)
-            theta_muon_entry.append(muon_event.theta2)
-        if muon_event.leaves is True:
-            phi_muon_exit.append(muon_event.phi)
-            theta_muon_exit.append(muon_event.theta2)
+        if muon_event.event is 0:
+            phi_muon_first.append(muon_event.phi)
+            theta_muon_first.append(muon_event.theta2)
+        if muon_event.event is 1:
+            phi_muon_sec.append(muon_event.phi)
+            theta_muon_sec.append(muon_event.theta2)
 
-    scatter_muon_entry = subplott.scatter(phi_muon_entry, theta_muon_entry,
+    scatter_muon_entry = subplott.scatter(phi_muon_first, theta_muon_first,
                                      facecolors='none', edgecolors='white', marker='v', s=120)
-    scatter_muon_exit = subplott.scatter(phi_muon_exit, theta_muon_exit,
+    scatter_muon_exit = subplott.scatter(phi_muon_sec, theta_muon_sec,
                                    facecolors='none', edgecolors='white', marker='^', s=120)
+
+
+def draw_reconstructed_points(reco_points, subplott):
+    reco_phi = []
+    reco_theta = []
+
+    for point in reco_points:
+        reco_phi.append(point.center[0])
+        reco_theta.append(point.center[1])
+    scatter_reco_point = subplott.scatter(reco_phi, reco_theta,
+                                          edgecolors='black', facecolors='none', marker='o', s=120)
 
 
 def draw_sector_lines(pmt_position_class):
@@ -325,3 +345,34 @@ def reco_result_writer(output_path, result_array):
 
     result_file.write("End of event" + '\n' + '\n')
     result_file.close()
+
+
+def reco_comparer(truth_points, reco_points):
+    if len(truth_points) is not len(reco_points):
+        print("PROBLEM")
+
+    min_differences = []
+    for truth_point in truth_points:
+        differences = []
+        for reco_point in reco_points:
+            differences.append(math.sqrt(pow(truth_point[0]-reco_point[0], 2) + pow(truth_point[1]-reco_point[1], 2)))
+        min_differences.append(min(differences))
+    return min_differences
+
+
+def reco_resulter(difference_array, outdir):
+    result_array = []
+    for event in difference_array:
+        for point_diff in event:
+            result_array.append(point_diff)
+    n, bins, patches = plt.hist(result_array, 20)
+
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
+
+    plt.xlabel(r'$\Delta\phi$ ($^\circ$)')
+    plt.ylabel('Detected points')
+    plt.grid(True)
+
+    plt.savefig(outdir + "reco_accuracy.pdf", bbox_inches='tight')
+    plt.savefig(outdir + "reco_accuracy.png", bbox_inches='tight')

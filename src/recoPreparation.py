@@ -155,7 +155,7 @@ def calc_muon_detector_intersec_points(source, radius, time_steps):
 
                 returnarray.append(muon_in)
 
-            if muon_in_detector is True and muon_in_detector_second is False:
+            if muon_in_detector is True and muon_in_detector_second is False and is_muon_stopping(muon_event) is False:
                 muon_out.leaves = True
                 muon_out.x = x_position_current
                 muon_out.y = y_position_current
@@ -175,6 +175,17 @@ def calc_muon_detector_intersec_points(source, radius, time_steps):
 
                 returnarray.append(muon_out)
     return returnarray
+
+
+def is_muon_stopping(muon_event):
+    x_position_current = muon_event.x_position_final
+    y_position_current = muon_event.y_position_final
+    z_position_current = muon_event.z_position_final
+
+    if PointVecDist.VectorLength(x_position_current, y_position_current, z_position_current) > 0:
+        return False
+    else:
+        return True
 
 
 def create_output_path(outpath, file, extension,  inpath):
@@ -316,18 +327,20 @@ def MC_truth_writer(muon_points, output_path, file, time_cut):
     result_file += ("::::::::::::::::::::::::::::::::"+'\n')
     result_file += ("---------MC truth---------"+'\n')
     times = []
+    positions = []
     for event in muon_points:
         result_file += ("Event: " + str(event.event) + '\n')
         if event.enters is True:
             result_file += ("Entry point: " + '\n')
         if event.leaves is True:
             result_file += ("Exit point: " + '\n')
-        result_file += ("Phi: " + str(event.phi) + '\n')
-        result_file += ("Theta: " + str(event.theta2) + '\n')
-        result_file += ("Z: " + str(event.z) + '\n')
+        result_file += ("Phi: " + str(event.phi/math.pi*180.0) + '\n')
+        result_file += ("Theta: " + str(event.theta2/math.pi*180.0) + '\n')
+        # result_file += ("Z: " + str(event.z) + '\n')
         result_file += ("Time: " + str(event.intersec_time) + '\n')
         result_file += ("------------------------------------------" + '\n')
         times.append(event.intersec_time)
+        positions.append([event.phi/math.pi*180.0, event.theta2/math.pi*180.0])
 
     first_intersec_time = min(times)
     frames = []
@@ -338,3 +351,5 @@ def MC_truth_writer(muon_points, output_path, file, time_cut):
     r_file = open(output_path + "results.txt", 'a')
     r_file.write(result_file)
     r_file.close()
+
+    return positions

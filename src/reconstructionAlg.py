@@ -376,3 +376,5 @@ def reco_resulter(difference_array, outdir):
 
     plt.savefig(outdir + "reco_accuracy.pdf", bbox_inches='tight')
     plt.savefig(outdir + "reco_accuracy.png", bbox_inches='tight')
+
+    print(result_array)

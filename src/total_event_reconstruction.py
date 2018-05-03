@@ -66,13 +66,15 @@ def is_real_toplevel_patch(patch, contour_data):
     # patch_degree = [coord /math.pi * 180.0 for coord in patch.center]
     # print(patch.level)
     # print(patch_degree)
+    if patch.level < 4:
+        patch_is_real_top = False
     for patch_level_below in contour_data[patch.level-1]:
         if mpath.Path(patch_level_below.contour_coordinates).contains_point(patch.contour_coordinates[0]):
             # print(patch_level_below.level)
             # patch_degree = [coord / math.pi * 180.0 for coord in patch_level_below.center]
             # print(patch_degree)
             for neighbour_patch in contour_data[patch.level]:
-                if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
+                if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]) and patch.level < 4:
                     if neighbour_patch is not patch:
                         patch_is_real_top = False
 
@@ -93,7 +95,6 @@ def is_real_toplevel_patch(patch, contour_data):
 
 
 def compare_points(a, b):
-    points_are_equal = True
     if a[0] == b[0] and a[1] == b[1]:
         return True
     else:

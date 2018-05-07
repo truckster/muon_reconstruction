@@ -11,13 +11,13 @@ import numpy as np
 statusAlert.processStatus("Process started")
 
 # input_path = "/home/gpu/Simulation/mult/new/"
-input_path = "/home/gpu/Simulation/processed_sim/"
+input_path = "/home/gpu/Simulation/processed_sim/test/"
 # input_path = "/home/gpu/Simulation/mult/test/"
 # input_path = "/home/gpu/Simulation/test/"
 # input_path = "/home/gpu/Simulation/test_short/"
 # input_path = "/home/gpu/Simulation/single/"
 
-output_path = "/home/gpu/Analysis/muReconstruction/Output/"
+output_path = "/home/gpu/Analysis/muReconstruction/Output/dev/"
 # output_path = "/home/gpu/Analysis/muReconstruction/Output/LPMT/"
 
 # input_path = "/home/gpu/Simulation/presentation/y/"
@@ -31,14 +31,14 @@ reco_accuracy = []
 
 chdir(input_path)
 for folder in glob("*/"):
+    new_output_path = recoPreparation.create_output_path(output_path, folder, "/totalEventHist/",  input_path)
+    new_output_path_fit = recoPreparation.create_output_path(output_path, folder, "/fits/",  input_path)
+    total_path = recoPreparation.create_output_path(output_path, folder, "/total_event/", input_path)
+
     chdir(input_path + folder)
     # TODO start new process for each file. This might solve the memory problem.
     statusAlert.processStatus("Reading file: " + str(folder))
 
-    '''Control, which events are useful for the analysis'''
-
-    new_output_path = recoPreparation.create_output_path(output_path, folder, "/totalEventHist/",  input_path)
-    new_output_path_fit = recoPreparation.create_output_path(output_path, folder, "/fits/",  input_path)
     '''calculate PMT positions for this file'''
     PmtPositions = pickle.load(open("PMT_positions.pkl", 'rb'))
 
@@ -50,19 +50,20 @@ for folder in glob("*/"):
     '''collect information of all photons within certain time snippet and save the separately'''
     photons_in_time_window = pickle.load(open("framed_photons.pkl", 'rb'))
     photons_of_entire_event = pickle.load(open("total_event_photons.pkl", 'rb'))
-
     frame_time_cut = 10
     number_contour_level = 10
-    contour_array_total, contour_array_diff = contour_analyze.collect_contour_data(photons_in_time_window, PmtPositions,
-                                                                                   number_contour_level)
+    # contour_array_total, contour_array_diff = contour_analyze.collect_contour_data(photons_in_time_window, PmtPositions,
+    #                                                                                number_contour_level)
+    contour_array_total = pickle.load(open("Contours/contour_array_total.pkl"))
+    contour_array_diff = pickle.load(open("Contours/contour_array_diff.pkl"))
+
     MC_positions = recoPreparation.MC_truth_writer(muon_points, output_path, folder, frame_time_cut)
 
     '''Reconstruction by looking at entire event'''
-    total_path = recoPreparation.create_output_path(output_path, folder, "/total_event/", input_path)
     found_points = total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event,
                                                                   number_contour_level)
-    reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
-                                     number_contour_level, found_points)
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
+    #                                  number_contour_level, found_points)
     reco_positions = total_event_reconstruction.reco_result_writer(output_path, found_points)
 
     """Cross-check results with diffs"""
@@ -73,13 +74,13 @@ for folder in glob("*/"):
     intersec_time_finder.reco_result_writer(output_path, found_frames)
 
     '''Allocate respective points'''
-    # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
+    point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
 
     # '''Draw all kinds of images'''
     # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
     #                                  muon_points, new_output_path, number_contour_level, found_points)
     #
-    # number_contour_level = 5
+    # number_contour_level = 10
     # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window,
     #                                             muon_points, new_output_path, number_contour_level, found_points)
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)

@@ -182,7 +182,7 @@ def is_muon_stopping(muon_event):
     y_position_current = muon_event.y_position_final
     z_position_current = muon_event.z_position_final
 
-    if PointVecDist.VectorLength(x_position_current, y_position_current, z_position_current) > 0:
+    if PointVecDist.VectorLength(x_position_current, y_position_current, z_position_current) < 17600:
         return False
     else:
         return True

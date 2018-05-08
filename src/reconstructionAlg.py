@@ -7,11 +7,10 @@ from scipy.ndimage.filters import gaussian_filter
 import os
 
 
-class PatternPosition:
+class RecoPointClass:
     def __init__(self):  # this method creates the class object.
-        self.hits = 0
-        self.phi = 0
-        self.theta = 0
+        self.frame = 0
+        self.coordinates = []
 
 
 def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path):
@@ -355,7 +354,8 @@ def reco_comparer(truth_points, reco_points):
     for truth_point in truth_points:
         differences = []
         for reco_point in reco_points:
-            differences.append(math.sqrt(pow(truth_point[0]-reco_point[0], 2) + pow(truth_point[1]-reco_point[1], 2)))
+            differences.append(math.sqrt(pow(truth_point[0]-reco_point.coordinates[0], 2)
+                                         + pow(truth_point[1]-reco_point.coordinates[1], 2)))
         min_differences.append(min(differences))
     return min_differences
 
@@ -377,4 +377,3 @@ def reco_resulter(difference_array, outdir):
     plt.savefig(outdir + "reco_accuracy.pdf", bbox_inches='tight')
     plt.savefig(outdir + "reco_accuracy.png", bbox_inches='tight')
 
-    print(result_array)

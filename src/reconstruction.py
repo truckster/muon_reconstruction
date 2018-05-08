@@ -59,24 +59,27 @@ for folder in glob("*/"):
 
     MC_positions = recoPreparation.MC_truth_writer(muon_points, output_path, folder, frame_time_cut)
 
+    reco_points = []
+
     '''Reconstruction by looking at entire event'''
     found_points = total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event,
                                                                   number_contour_level)
-    # reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
-    #                                  number_contour_level, found_points)
-    reco_positions = total_event_reconstruction.reco_result_writer(output_path, found_points)
-
     """Cross-check results with diffs"""
-    # diff_event_analysis.intersec_crosscheck(contour_array_diff, found_points)
+    improved_reco_points = diff_event_analysis.intersec_crosscheck(contour_array_diff, found_points)
+    reco_positions = total_event_reconstruction.reco_result_writer(output_path, improved_reco_points, reco_points)
 
     '''Detection of entry and exit time of muons'''
-    found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
-    intersec_time_finder.reco_result_writer(output_path, found_frames)
+    found_frames = intersec_time_finder.find_times(contour_array_total, improved_reco_points)
+    intersec_time_finder.reco_result_writer(output_path, found_frames, reco_points)
+
+    diff_event_analysis.point_merger(reco_points)
 
     '''Allocate respective points'''
-    point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
+    # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
 
     # '''Draw all kinds of images'''
+    reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
+                                     number_contour_level, improved_reco_points)
     # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
     #                                  muon_points, new_output_path, number_contour_level, found_points)
     #

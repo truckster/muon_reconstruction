@@ -41,7 +41,7 @@ def toplevel_check(top_level_patches, contour_data_total):
     return real_patches
 
 
-def reco_result_writer(output_path, result_array):
+def reco_result_writer(output_path, result_array, return_array):
     '''Add reconstructed intersection points to file'''
     result_file = open(output_path + "results.txt", 'a')
     result_file.write("----- Reconstructed Values (Total)------" + '\n')
@@ -50,15 +50,18 @@ def reco_result_writer(output_path, result_array):
     positions = []
 
     for patch in result_array:
+        reco_point = reconstructionAlg.RecoPointClass
         result_file.write("Phi: " + str(patch.center[0]/math.pi * 180.0) + '\n')
         result_file.write("Theta: " + str(patch.center[1]/math.pi * 180.0) + '\n')
         result_file.write("--------------------------------" + '\n')
-        positions.append([patch.center[0]/math.pi * 180.0, patch.center[1]/math.pi * 180.0])
+        # positions.append([patch.center[0]/math.pi * 180.0, patch.center[1]/math.pi * 180.0])
+        reco_point.coordinates = [patch.center[0] / math.pi * 180.0, patch.center[1] / math.pi * 180.0]
+        return_array.append(reco_point)
 
     result_file.write("End of event" + '\n' + '\n')
     result_file.close()
 
-    return positions
+    return return_array
 
 
 def is_real_toplevel_patch(patch, contour_data):
@@ -74,7 +77,7 @@ def is_real_toplevel_patch(patch, contour_data):
             # patch_degree = [coord / math.pi * 180.0 for coord in patch_level_below.center]
             # print(patch_degree)
             for neighbour_patch in contour_data[patch.level]:
-                if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]) and patch.level < 4:
+                if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]) and patch.level < 3:
                     if neighbour_patch is not patch:
                         patch_is_real_top = False
 
@@ -85,8 +88,9 @@ def is_real_toplevel_patch(patch, contour_data):
                     if neighbour_patch is not patch:
                         patch_is_real_top = False
 
-    if not compare_points(patch.contour_coordinates[0], patch.contour_coordinates[-1]):
-        patch_is_real_top = False
+    #TODO: Use level check here. Non-close paths of high level are okay.
+    # if not compare_points(patch.contour_coordinates[0], patch.contour_coordinates[-1]):
+    #     patch_is_real_top = False
 
     # if patch.level < 2:
     #     patch_is_real_top = False

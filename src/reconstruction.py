@@ -11,7 +11,8 @@ import numpy as np
 statusAlert.processStatus("Process started")
 
 # input_path = "/home/gpu/Simulation/mult/new/"
-input_path = "/home/gpu/Simulation/processed_sim/test/"
+input_path = "/home/gpu/Simulation/processed_sim/lala2/"
+# input_path = "/home/gpu/Simulation/processed_sim/test/"
 # input_path = "/home/gpu/Simulation/mult/test/"
 # input_path = "/home/gpu/Simulation/test/"
 # input_path = "/home/gpu/Simulation/test_short/"
@@ -52,24 +53,29 @@ for folder in glob("*/"):
     photons_of_entire_event = pickle.load(open("total_event_photons.pkl", 'rb'))
     frame_time_cut = 10
     number_contour_level = 10
-    # contour_array_total, contour_array_diff = contour_analyze.collect_contour_data(photons_in_time_window, PmtPositions,
-    #                                                                                number_contour_level)
+
     contour_array_total = pickle.load(open("Contours/contour_array_total.pkl"))
     contour_array_diff = pickle.load(open("Contours/contour_array_diff.pkl"))
+    contour_array_total_phi_rotate = pickle.load(open("Contours/contour_array_total_phi_rotate.pkl"))
+    contour_array_diff_phi_rotate = pickle.load(open("Contours/contour_array_diff_phi_rotate.pkl"))
+    contour_array_total_theta_rotate = pickle.load(open("Contours/contour_array_total_theta_rotate.pkl"))
+    contour_array_diff_theta_rotate = pickle.load(open("Contours/contour_array_diff_theta_rotate.pkl"))
+
+    contour_entire_event = pickle.load(open("Contours/event_photons.pkl"))
+    contour_entire_event_dPhi = pickle.load(open("Contours/event_photons_dPhi.pkl"))
+    contour_entire_event_dTheta = pickle.load(open("Contours/event_photons_dTheta.pkl"))
 
     MC_positions = recoPreparation.MC_truth_writer(muon_points, output_path, folder, frame_time_cut)
 
     reco_points = []
 
     '''Reconstruction by looking at entire event'''
-    found_points = total_event_reconstruction.entry_exit_detector(PmtPositions, photons_of_entire_event,
-                                                                  number_contour_level)
+    found_points = total_event_reconstruction.entry_exit_detector(contour_entire_event_dPhi[0], number_contour_level)
     """Cross-check results with diffs"""
-    improved_reco_points = diff_event_analysis.intersec_crosscheck(contour_array_diff, found_points)
-    reco_positions = total_event_reconstruction.reco_result_writer(output_path, improved_reco_points, reco_points)
+    found_points = diff_event_analysis.intersec_crosscheck(contour_array_diff, found_points)
 
     '''Detection of entry and exit time of muons'''
-    found_frames = intersec_time_finder.find_times(contour_array_total, improved_reco_points)
+    found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
     intersec_time_finder.reco_result_writer(output_path, found_frames, reco_points)
 
     diff_event_analysis.point_merger(reco_points)
@@ -77,21 +83,23 @@ for folder in glob("*/"):
     '''Allocate respective points'''
     # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
 
-    # '''Draw all kinds of images'''
+    reco_positions = total_event_reconstruction.reco_result_writer(output_path, found_points, reco_points)
+    '''Draw all kinds of images'''
     reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
-                                     number_contour_level, improved_reco_points)
+                                     number_contour_level, found_points)
     # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
     #                                  muon_points, new_output_path, number_contour_level, found_points)
-    #
     # number_contour_level = 10
     # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window,
     #                                             muon_points, new_output_path, number_contour_level, found_points)
+
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
-    reco_accuracy.append(reconstructionAlg.reco_comparer(MC_positions, reco_positions))
+    # reco_accuracy.append(reconstructionAlg.reco_comparer(MC_positions, reco_positions))
 
     gc.collect()
 
-reconstructionAlg.reco_resulter(reco_accuracy, output_path)
+
+# reconstructionAlg.reco_resulter(reco_accuracy, output_path)
 statusAlert.processStatus("Process finished")
 

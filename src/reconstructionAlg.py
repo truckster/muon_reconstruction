@@ -163,10 +163,11 @@ def contour_data_reader(pmt_position_class, snippet_array, number_contour_level)
 
     phi_i = np.linspace(-math.pi, math.pi, 1200)
     theta_i = np.linspace(-math.pi / 2, math.pi / 2, 600)
-    # zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position,
-    #                        snippet_array, phi_i, theta_i, interp='linear')
 
-    zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position2,
+    phi_position = pmt_position_class.phi_position
+    theta_position2 = pmt_position_class.theta_position2
+
+    zi = plt.mlab.griddata(phi_position, theta_position2,
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
 
@@ -186,7 +187,14 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points,
 
     phi_i = np.linspace(-math.pi, math.pi, 1200)
     theta_i = np.linspace(-math.pi/2, math.pi/2, 600)
-    zi = plt.mlab.griddata(pmt_position_class.phi_position, pmt_position_class.theta_position2,
+
+    phi_position_draw = pmt_position_class.phi_position
+    theta_position2_draw = pmt_position_class.theta_position2
+
+    # phi_position_draw = pmt_position_class.phi_position
+    # theta_position2_draw = pmt_position_class.theta_shifted
+
+    zi = plt.mlab.griddata(phi_position_draw, theta_position2_draw,
                            snippet_array, phi_i, theta_i, interp='linear')
     zi = gaussian_filter(zi, 5)
 
@@ -347,8 +355,7 @@ def reco_result_writer(output_path, result_array):
 
 
 def reco_comparer(truth_points, reco_points):
-    if len(truth_points) is not len(reco_points):
-        print("PROBLEM")
+    # if len(truth_points) is not len(reco_points):
 
     min_differences = []
     for truth_point in truth_points:
@@ -356,6 +363,10 @@ def reco_comparer(truth_points, reco_points):
         for reco_point in reco_points:
             differences.append(math.sqrt(pow(truth_point[0]-reco_point.coordinates[0], 2)
                                          + pow(truth_point[1]-reco_point.coordinates[1], 2)))
+            differences.append(math.sqrt(pow(truth_point[0] - reco_point.coordinates[0] - 360, 2)
+                                         + pow(truth_point[1] - reco_point.coordinates[1], 2)))
+            differences.append(math.sqrt(pow(truth_point[0] - reco_point.coordinates[0] + 360, 2)
+                                         + pow(truth_point[1] - reco_point.coordinates[1], 2)))
         min_differences.append(min(differences))
     return min_differences
 
@@ -365,7 +376,7 @@ def reco_resulter(difference_array, outdir):
     for event in difference_array:
         for point_diff in event:
             result_array.append(point_diff)
-    n, bins, patches = plt.hist(result_array, 20)
+    n, bins, patches = plt.hist(result_array, bins=20, range=(0, 30))
 
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')

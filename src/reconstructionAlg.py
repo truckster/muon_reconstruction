@@ -179,7 +179,7 @@ def contour_data_reader(pmt_position_class, snippet_array, number_contour_level)
 
 
 def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points,
-                              snippet, out_path, number_contour_level, reco_points = None, mode=None):
+                              snippet, out_path, number_contour_level, reco_points=None, mode=None):
     statusAlert.processStatus("Creating graphics")
     fig = plt.figure(num=None, figsize=(20, 10))
 
@@ -191,11 +191,13 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points,
     phi_position_draw = pmt_position_class.phi_position
     theta_position2_draw = pmt_position_class.theta_position2
 
-    # phi_position_draw = pmt_position_class.phi_position
-    # theta_position2_draw = pmt_position_class.theta_shifted
-
+    # threshold = max([max(snippet_array)/2, 200])
+    # print(len(snippet_array))
+    # snippet_array = [max(threshold, min(value, max(snippet_array))) for value in snippet_array]
+    # print(len(snippet_array))
     zi = plt.mlab.griddata(phi_position_draw, theta_position2_draw,
                            snippet_array, phi_i, theta_i, interp='linear')
+
     zi = gaussian_filter(zi, 5)
 
     ax = plt.subplot(111, axisbg='gainsboro', projection='aitoff')

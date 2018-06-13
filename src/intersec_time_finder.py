@@ -29,7 +29,6 @@ def reco_result_writer(output_path, result_array, return_array):
     '''Add reconstructed intersection frames to file'''
     result_file = open(output_path + "results.txt", 'a')
     result_file.write("----- Reconstructed Values (Intersection frames)------" + '\n')
-
     for frame, event in zip(result_array, return_array):
         result_file.write("Frame: " + str(frame) + '\n')
         event.frame = frame

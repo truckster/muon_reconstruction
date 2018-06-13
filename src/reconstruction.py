@@ -52,14 +52,14 @@ for folder in glob("*/"):
     photons_in_time_window = pickle.load(open("framed_photons.pkl", 'rb'))
     photons_of_entire_event = pickle.load(open("total_event_photons.pkl", 'rb'))
     frame_time_cut = 10
-    number_contour_level = 10
+    number_contour_level = 5
 
     contour_array_total = pickle.load(open("Contours/contour_array_total.pkl"))
     contour_array_diff = pickle.load(open("Contours/contour_array_diff.pkl"))
-    contour_array_total_phi_rotate = pickle.load(open("Contours/contour_array_total_phi_rotate.pkl"))
-    contour_array_diff_phi_rotate = pickle.load(open("Contours/contour_array_diff_phi_rotate.pkl"))
-    contour_array_total_theta_rotate = pickle.load(open("Contours/contour_array_total_theta_rotate.pkl"))
-    contour_array_diff_theta_rotate = pickle.load(open("Contours/contour_array_diff_theta_rotate.pkl"))
+    contour_array_total_dPhi = pickle.load(open("Contours/contour_array_total_phi_rotate.pkl"))
+    contour_array_diff_dPhi = pickle.load(open("Contours/contour_array_diff_phi_rotate.pkl"))
+    contour_array_total_dTheta = pickle.load(open("Contours/contour_array_total_theta_rotate.pkl"))
+    contour_array_diff_dTheta = pickle.load(open("Contours/contour_array_diff_theta_rotate.pkl"))
 
     contour_entire_event = pickle.load(open("Contours/event_photons.pkl"))
     contour_entire_event_dPhi = pickle.load(open("Contours/event_photons_dPhi.pkl"))
@@ -69,27 +69,31 @@ for folder in glob("*/"):
 
     reco_points = []
 
+    total_event = [contour_entire_event, contour_entire_event_dPhi, contour_entire_event_dTheta, "total"]
+    framed_event = [contour_array_total, contour_array_total_dPhi, contour_array_total_dTheta, "framed"]
+    diff_event = [contour_array_diff, contour_array_diff_dPhi, contour_array_diff_dTheta, "differential"]
+
     '''Reconstruction by looking at entire event'''
-    found_points = total_event_reconstruction.entry_exit_detector(contour_entire_event_dPhi[0], number_contour_level)
+    found_points = total_event_reconstruction.entry_exit_detector(total_event)
     """Cross-check results with diffs"""
     found_points = diff_event_analysis.intersec_crosscheck(contour_array_diff, found_points)
 
     '''Detection of entry and exit time of muons'''
     found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
-    intersec_time_finder.reco_result_writer(output_path, found_frames, reco_points)
+    intersec_time_finder.reco_result_writer(output_path, found_frames, found_points)
 
     diff_event_analysis.point_merger(reco_points)
 
     '''Allocate respective points'''
     # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
 
-    reco_positions = total_event_reconstruction.reco_result_writer(output_path, found_points, reco_points)
+    total_event_reconstruction.reco_result_writer(output_path, found_points, reco_points)
+
     '''Draw all kinds of images'''
     reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
                                      number_contour_level, found_points)
-    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
-    #                                  muon_points, new_output_path, number_contour_level, found_points)
-    # number_contour_level = 10
+    reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
+                                     muon_points, new_output_path, number_contour_level, found_points)
     # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window,
     #                                             muon_points, new_output_path, number_contour_level, found_points)
 

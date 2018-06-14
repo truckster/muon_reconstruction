@@ -7,12 +7,6 @@ from scipy.ndimage.filters import gaussian_filter
 import os
 
 
-class RecoPointClass:
-    def __init__(self):  # this method creates the class object.
-        self.frame = 0
-        self.coordinates = []
-
-
 def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path):
     peak_heights = []
     contour_data_array = []
@@ -390,3 +384,29 @@ def reco_resulter(difference_array, outdir):
     plt.savefig(outdir + "reco_accuracy.pdf", bbox_inches='tight')
     plt.savefig(outdir + "reco_accuracy.png", bbox_inches='tight')
 
+
+def coordinate_calculation(reco_points):
+    for orientation_index, orientation in enumerate(reco_points):
+        for point_index, point in enumerate(orientation):
+            contours = point.contour_data
+            point.x_coordinate = contours.center[0]/math.pi * 180.0
+            point.y_coordinate = contours.center[1]/math.pi * 180.0
+
+
+def orientation_resolver(reco_points):
+    return_points = []
+    for orientation_index, orientation in enumerate(reco_points):
+        for point_index, point in enumerate(orientation):
+            if orientation_index is '1':
+                if point.x_coordinate > 0:
+                    point.x_coordinate -= 180
+                else:
+                    point.x_coordinate += 180
+
+                if point.y_coordinate > 0:
+                    point.x_coordinate -= 90
+                else:
+                    point.y_coordinate += 90
+            return_points.append(point)
+
+    return return_points

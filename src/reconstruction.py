@@ -76,24 +76,26 @@ for folder in glob("*/"):
     '''Reconstruction by looking at entire event'''
     found_points = total_event_reconstruction.entry_exit_detector(total_event)
     """Cross-check results with diffs"""
-    found_points = diff_event_analysis.intersec_crosscheck(contour_array_diff, found_points)
+    found_points = diff_event_analysis.intersec_crosscheck(diff_event, found_points)
+    reconstructionAlg.coordinate_calculation(found_points)
+    found_points = reconstructionAlg.orientation_resolver(found_points)
+    diff_event_analysis.point_merger(reco_points)
 
     '''Detection of entry and exit time of muons'''
-    found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
-    intersec_time_finder.reco_result_writer(output_path, found_frames, found_points)
-
-    diff_event_analysis.point_merger(reco_points)
+    # found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
+    # intersec_time_finder.reco_result_writer(output_path, found_frames, found_points)
+    #
 
     '''Allocate respective points'''
     # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
 
-    total_event_reconstruction.reco_result_writer(output_path, found_points, reco_points)
+    # total_event_reconstruction.reco_result_writer(output_path, found_points, reco_points)
 
     '''Draw all kinds of images'''
-    reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
-                                     number_contour_level, found_points)
-    reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
-                                     muon_points, new_output_path, number_contour_level, found_points)
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
+    #                                  number_contour_level, found_points)
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
+    #                                  muon_points, new_output_path, number_contour_level, found_points)
     # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window,
     #                                             muon_points, new_output_path, number_contour_level, found_points)
 

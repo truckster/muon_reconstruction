@@ -6,21 +6,30 @@ import math
 
 def entry_exit_detector(contour_data):
 
-    for set, data in enumerate(contour_data):
+    real_top_patches = []
+    for orientation_index, data in enumerate(contour_data[:-1]):
         statusAlert.processStatus("Searching entry and exit points: ")
-        top_levels = standalone_contour_lines(data[0], set)
-        real_top_patches = toplevel_check(top_levels, data[0], set)
+        top_levels = standalone_contour_lines(data[0], orientation_index)
+        real_top_patches.append(toplevel_check(top_levels, data[0], orientation_index))
 
     return real_top_patches
 
 
 class RecoPointClass:
-    def __init__(self):  # this method creates the class object.
+    def __init__(self):
         self.frame = 0
-        self.coordinates = []
+        self.x_coordinate = 0
+        self.y_coordinate = 0
+        self.contour_data = 0
+        self.orientation_index = 0
 
 
-def standalone_contour_lines(contour_data_total):
+def standalone_contour_lines(contour_data_total, orientation):
+    """Function to detect local maximum patches
+
+    - takes contour data of entire event in an anrray with the three orientations
+    - creates result class and adds the local max patch and the respective orientation
+    - result class is written to list and passed"""
     data_1 = contour_data_total
     data_2 = contour_data_total
     local_max_patches = []
@@ -35,16 +44,54 @@ def standalone_contour_lines(contour_data_total):
                             local_max_patch = False
 
             if local_max_patch:
-                local_max_patches.append(patch)
+                patch_class = RecoPointClass()
+                patch_class.contour_data = patch
+                patch_class.orientation_index = orientation
+                local_max_patches.append(patch_class)
     return local_max_patches
 
 
-def toplevel_check(top_level_patches, contour_data_total):
+def toplevel_check(top_level_patches, contour_data_total, orientation):
+    """Function to iterate through previously detected local maximum patches and passes them to check_function"""
     real_patches = []
     for patch_index, patch in enumerate(top_level_patches):
-        if is_real_toplevel_patch(patch, contour_data_total):
+        if is_real_toplevel_patch(patch.contour_data, contour_data_total):
             real_patches.append(patch)
     return real_patches
+
+
+def is_real_toplevel_patch(patch, contour_data):
+    """checks if patches are interesting for entry-/exit-point search"""
+    patch_is_real_top = True
+
+    """"check if patch excees given level threshold"""
+    if patch.level < 2:
+        patch_is_real_top = False
+    """check if found patch has a neighbour patch at same level which is contained by the same contour level below.
+    If so -> discard"""
+    for patch_level_below in contour_data[patch.level-1]:
+        if mpath.Path(patch_level_below.contour_coordinates).contains_point(patch.contour_coordinates[0]):
+            for neighbour_patch in contour_data[patch.level]:
+                if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
+                    if neighbour_patch is not patch:
+                        patch_is_real_top = False
+    """Same as above, but should find patches which are surrounded by a contour of same level
+    Actually makes no sense to me. Maybe there was a case when this was necessary"""
+    for patch_level_same in contour_data[patch.level]:
+        if mpath.Path(patch_level_same.contour_coordinates).contains_point(patch.contour_coordinates[0]):
+            for neighbour_patch in contour_data[patch.level]:
+                if mpath.Path(patch_level_same.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
+                    if neighbour_patch is not patch:
+                        patch_is_real_top = False
+
+    #TODO: Use level check here. Non-close paths of high level are okay.
+    # if not compare_points(patch.contour_coordinates[0], patch.contour_coordinates[-1]):
+    #     patch_is_real_top = False
+
+    # if patch.level < 2:
+    #     patch_is_real_top = False
+
+    return patch_is_real_top
 
 
 def reco_result_writer(output_path, result_array, return_array):
@@ -65,40 +112,6 @@ def reco_result_writer(output_path, result_array, return_array):
 
     result_file.write("End of event" + '\n' + '\n')
     result_file.close()
-
-
-def is_real_toplevel_patch(patch, contour_data):
-    patch_is_real_top = True
-    # patch_degree = [coord /math.pi * 180.0 for coord in patch.center]
-    # print(patch.level)
-    # print(patch_degree)
-    if patch.level < 2:
-        patch_is_real_top = False
-    for patch_level_below in contour_data[patch.level-1]:
-        if mpath.Path(patch_level_below.contour_coordinates).contains_point(patch.contour_coordinates[0]):
-            # print(patch_level_below.level)
-            # patch_degree = [coord / math.pi * 180.0 for coord in patch_level_below.center]
-            # print(patch_degree)
-            for neighbour_patch in contour_data[patch.level]:
-                if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]) and patch.level < 2:
-                    if neighbour_patch is not patch:
-                        patch_is_real_top = False
-
-    for patch_level_same in contour_data[patch.level]:
-        if mpath.Path(patch_level_same.contour_coordinates).contains_point(patch.contour_coordinates[0]):
-            for neighbour_patch in contour_data[patch.level]:
-                if mpath.Path(patch_level_same.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
-                    if neighbour_patch is not patch:
-                        patch_is_real_top = False
-
-    #TODO: Use level check here. Non-close paths of high level are okay.
-    # if not compare_points(patch.contour_coordinates[0], patch.contour_coordinates[-1]):
-    #     patch_is_real_top = False
-
-    # if patch.level < 2:
-    #     patch_is_real_top = False
-
-    return patch_is_real_top
 
 
 def compare_points(a, b):

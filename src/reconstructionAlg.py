@@ -263,10 +263,11 @@ def draw_reconstructed_points(reco_points, subplott):
     reco_theta = []
 
     for point in reco_points:
-        reco_phi.append(point.center[0])
-        reco_theta.append(point.center[1])
+        reco_phi.append(point.x_coordinate_rad)
+        reco_theta.append(point.y_coordinate_rad)
     scatter_reco_point = subplott.scatter(reco_phi, reco_theta,
                                           edgecolors='black', facecolors='none', marker='o', s=120)
+
 
 
 def draw_sector_lines(pmt_position_class):
@@ -386,27 +387,40 @@ def reco_resulter(difference_array, outdir):
 
 
 def coordinate_calculation(reco_points):
+    return_points = []
     for orientation_index, orientation in enumerate(reco_points):
+        orientation_array = []
         for point_index, point in enumerate(orientation):
             contours = point.contour_data
-            point.x_coordinate = contours.center[0]/math.pi * 180.0
-            point.y_coordinate = contours.center[1]/math.pi * 180.0
+            point.x_coordinate_rad = contours.center[0]
+            point.y_coordinate_rad = contours.center[1]
+            point.x_coordinate_deg = contours.center[0]/math.pi * 180.0
+            point.y_coordinate_deg = contours.center[1]/math.pi * 180.0
+            orientation_array.append(point)
+        return_points.append(orientation_array)
+    return return_points
 
 
 def orientation_resolver(reco_points):
     return_points = []
     for orientation_index, orientation in enumerate(reco_points):
         for point_index, point in enumerate(orientation):
-            if orientation_index is '1':
-                if point.x_coordinate > 0:
-                    point.x_coordinate -= 180
+            if orientation_index is 1:
+                if point.x_coordinate_deg > 0:
+                    point.x_coordinate_deg -= 180
+                    point.x_coordinate_rad -= math.pi
                 else:
-                    point.x_coordinate += 180
-
-                if point.y_coordinate > 0:
-                    point.x_coordinate -= 90
+                    point.x_coordinate_deg += 180
+                    point.x_coordinate_rad += math.pi
+            elif orientation_index is 2:
+                if point.y_coordinate_deg > 0:
+                    point.y_coordinate_deg -= 90
+                    point.y_coordinate_rad -= math.pi/2
                 else:
-                    point.y_coordinate += 90
+                    point.y_coordinate_deg += 90
+                    point.y_coordinate_rad += math.pi/2
+            else:
+                pass
             return_points.append(point)
 
     return return_points

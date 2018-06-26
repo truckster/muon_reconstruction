@@ -4,6 +4,7 @@ import statusAlert, reconstructionAlg, PointVecDist
 import numpy as np
 import matplotlib.path as mpath
 import math
+import PointVecDist
 
 
 class DirectionReco:
@@ -43,3 +44,71 @@ def have_same_surrounder(contour_data, patch1, patch2):
                     they_do = True
 
     return they_do
+
+
+def create_direction_matrix(reco_points):
+    pairing_matrix = [[0] * len(reco_points) for _ in range(len(reco_points))]
+    r = 17600
+    for point1_index, point1 in enumerate(reco_points):
+        x1 = r * math.cos(point1.y_coordinate_rad) * math.cos(point1.x_coordinate_rad)
+        y1 = r * math.cos(point1.y_coordinate_rad) * math.sin(point1.x_coordinate_rad)
+        z1 = r * math.sin(point1.y_coordinate_rad)
+
+        for point2_index, point2 in enumerate(reco_points):
+            x2 = r * math.cos(point2.y_coordinate_rad) * math.cos(point2.x_coordinate_rad)
+            y2 = r * math.cos(point2.y_coordinate_rad) * math.sin(point2.x_coordinate_rad)
+            z2 = r * math.sin(point2.y_coordinate_rad)
+
+            distance = PointVecDist.VectorLength(x2-x1, y2-y1, z2-z1)
+
+            if distance > 0:
+                direction = [(x2-x1)/distance, (y2-y1)/distance, (z2-z1)/distance]
+                pairing_matrix[point1_index][point2_index] = direction
+    print(pairing_matrix)
+    return pairing_matrix
+
+
+def allocator(pairing_matrix):
+    for point1_index, point1 in enumerate(pairing_matrix[:-2]):
+        for vector1_index, vector1 in enumerate(point1[point1_index+1:]):
+            print(":::::")
+            print(vector1)
+            print(":::::")
+            for point2_index, point2 in enumerate(pairing_matrix[point1_index+1:-1]):
+                for vector2_index, vector2 in enumerate(point2[point1_index + point2_index + 2:]):
+                    print(vector2)
+                    print("-------------")
+
+
+def parallelism_check(vector1, vector2, accuracy):
+    if len(vector1) != len(vector2):
+        print("Vectors have different lengths!")
+        return 0
+    else:
+        vecs_are_parallel = 1
+        for coordinate in range(len(vector1)):
+            if abs(abs(vector1[coordinate]) - abs(vector2[coordinate])) < accuracy:
+                vecs_are_parallel *= 1
+            else:
+                vecs_are_parallel *= 0
+    if vecs_are_parallel is 1:
+        return True
+    else:
+        return False
+
+
+def are_same_vector(vector1, vector2):
+    if len(vector1) != len(vector2):
+        print("Vectors have different lengths!")
+        return 0
+    else:
+        vecs_are_same = 1
+        for coordinate in range(len(vector1)):
+            if abs(vector1[coordinate]) == abs(vector2[coordinate]):
+                vecs_are_same *= 1
+            else:
+                vecs_are_same *= 0
+    if vecs_are_same is 1:
+        return True
+    else:
+        return False

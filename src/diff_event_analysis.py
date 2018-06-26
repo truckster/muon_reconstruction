@@ -41,7 +41,8 @@ def point_merger(reco_points):
     for point1 in reco_points:
         for point2 in reco_points:
             frame_diff = abs(point1.frame - point2.frame)
-            distance = math.sqrt(pow(point1.coordinates[0]-point2.coordinates[0], 2)
-                                 + pow(point1.coordinates[1]-point2.coordinates[1], 2))
+            distance = math.sqrt(pow(point1.x_coordinate_rad-point2.x_coordinate_rad, 2)
+                                 + pow(point1.y_coordinate_rad-point2.y_coordinate_rad, 2))
+
             if point1 is not point2 and frame_diff < 1 and distance < 0.9:
                 reco_points.remove(point2)

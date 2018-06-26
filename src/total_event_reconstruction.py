@@ -7,7 +7,7 @@ import math
 def entry_exit_detector(contour_data):
 
     real_top_patches = []
-    for orientation_index, data in enumerate(contour_data[:-1]):
+    for orientation_index, data in enumerate(contour_data):
         statusAlert.processStatus("Searching entry and exit points: ")
         top_levels = standalone_contour_lines(data[0], orientation_index)
         real_top_patches.append(toplevel_check(top_levels, data[0], orientation_index))
@@ -18,8 +18,10 @@ def entry_exit_detector(contour_data):
 class RecoPointClass:
     def __init__(self):
         self.frame = 0
-        self.x_coordinate = 0
-        self.y_coordinate = 0
+        self.x_coordinate_deg = 0
+        self.y_coordinate_deg = 0
+        self.x_coordinate_rad = 0
+        self.y_coordinate_rad = 0
         self.contour_data = 0
         self.orientation_index = 0
 
@@ -84,9 +86,9 @@ def is_real_toplevel_patch(patch, contour_data):
                     if neighbour_patch is not patch:
                         patch_is_real_top = False
 
-    #TODO: Use level check here. Non-close paths of high level are okay.
-    # if not compare_points(patch.contour_coordinates[0], patch.contour_coordinates[-1]):
-    #     patch_is_real_top = False
+    """Check for non-closed contour paths"""
+    if not compare_points(patch.contour_coordinates[0], patch.contour_coordinates[-1]):
+        patch_is_real_top = False
 
     # if patch.level < 2:
     #     patch_is_real_top = False
@@ -94,21 +96,18 @@ def is_real_toplevel_patch(patch, contour_data):
     return patch_is_real_top
 
 
-def reco_result_writer(output_path, result_array, return_array):
+def reco_result_writer(output_path, result_array):
     '''Add reconstructed intersection points to file'''
     result_file = open(output_path + "results.txt", 'a')
     result_file.write("----- Reconstructed Values (Total)------" + '\n')
 
     result_file.write("Found patches: " + str(len(result_array)) + '\n' + '\n')
-    positions = []
 
     for patch in result_array:
-        result_file.write("Phi: " + str(patch.center[0]/math.pi * 180.0) + '\n')
-        # print("Phi: " + str(patch.center[0]/math.pi * 180.0))
-        result_file.write("Theta: " + str(patch.center[1]/math.pi * 180.0) + '\n')
-        # print("Theta: " + str(patch.center[1]/math.pi * 180.0))
+        result_file.write("Frame: " + str(patch.frame) + '\n')
+        result_file.write("Phi: " + str(patch.x_coordinate_deg) + '\n')
+        result_file.write("Theta: " + str(patch.y_coordinate_deg) + '\n')
         result_file.write("--------------------------------" + '\n')
-        # positions.append([patch.center[0]/math.pi * 180.0, patch.center[1]/math.pi * 180.0])
 
     result_file.write("End of event" + '\n' + '\n')
     result_file.close()

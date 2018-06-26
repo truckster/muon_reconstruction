@@ -67,29 +67,30 @@ for folder in glob("*/"):
 
     MC_positions = recoPreparation.MC_truth_writer(muon_points, output_path, folder, frame_time_cut)
 
-    reco_points = []
-
-    total_event = [contour_entire_event, contour_entire_event_dPhi, contour_entire_event_dTheta, "total"]
-    framed_event = [contour_array_total, contour_array_total_dPhi, contour_array_total_dTheta, "framed"]
-    diff_event = [contour_array_diff, contour_array_diff_dPhi, contour_array_diff_dTheta, "differential"]
+    total_event = [contour_entire_event, contour_entire_event_dPhi, contour_entire_event_dTheta]
+    # total_event = [contour_entire_event]
+    framed_event = [contour_array_total, contour_array_total_dPhi, contour_array_total_dTheta]
+    diff_event = [contour_array_diff, contour_array_diff_dPhi, contour_array_diff_dTheta]
 
     '''Reconstruction by looking at entire event'''
     found_points = total_event_reconstruction.entry_exit_detector(total_event)
     """Cross-check results with diffs"""
     found_points = diff_event_analysis.intersec_crosscheck(diff_event, found_points)
-    reconstructionAlg.coordinate_calculation(found_points)
+    found_points = reconstructionAlg.coordinate_calculation(found_points)
     found_points = reconstructionAlg.orientation_resolver(found_points)
-    diff_event_analysis.point_merger(reco_points)
+    diff_event_analysis.point_merger(found_points)
 
     '''Detection of entry and exit time of muons'''
-    # found_frames = intersec_time_finder.find_times(contour_array_total, found_points)
-    # intersec_time_finder.reco_result_writer(output_path, found_frames, found_points)
+    intersec_time_finder.find_times(contour_array_total, found_points)
+    # intersec_time_finder.reco_result_writer(output_path, found_points)
     #
 
     '''Allocate respective points'''
     # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
+    alloc_matrix = point_allocate.create_direction_matrix(found_points)
+    point_allocate.allocator(alloc_matrix)
 
-    # total_event_reconstruction.reco_result_writer(output_path, found_points, reco_points)
+    total_event_reconstruction.reco_result_writer(output_path, found_points)
 
     '''Draw all kinds of images'''
     # reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
@@ -102,8 +103,6 @@ for folder in glob("*/"):
     # reconstructionAlg.print_sector_pmts(PmtPositions, output_path)
 
     # reco_accuracy.append(reconstructionAlg.reco_comparer(MC_positions, reco_positions))
-
-    gc.collect()
 
 
 # reconstructionAlg.reco_resulter(reco_accuracy, output_path)

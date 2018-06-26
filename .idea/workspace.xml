@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a9033b00-3a1a-4ed2-be6b-371d28214cd7" name="Default" comment="08.5.18">
+    <list default="true" id="a9033b00-3a1a-4ed2-be6b-371d28214cd7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/diff_event_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/diff_event_analysis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/intersec_time_finder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/intersec_time_finder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/point_allocate.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/point_allocate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/reconstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/reconstruction.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/reconstructionAlg.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/reconstructionAlg.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/total_event_reconstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/total_event_reconstruction.py" afterDir="false" />
@@ -20,8 +22,8 @@
       <file leaf-file-name="reconstruction.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/reconstruction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="89" column="41" lean-forward="true" selection-start-line="89" selection-start-column="41" selection-end-line="89" selection-end-column="41" />
+            <state relative-caret-position="795">
+              <caret line="90" column="24" selection-start-line="90" selection-start-column="24" selection-end-line="90" selection-end-column="24" />
               <folding>
                 <element signature="e#0#101#0" expanded="true" />
               </folding>
@@ -29,32 +31,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="recoPreparation.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/recoPreparation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4740">
-              <caret line="320" column="4" selection-start-line="320" selection-start-column="4" selection-end-line="320" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="diff_event_analysis.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/diff_event_analysis.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#37#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="point_allocate.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="point_allocate.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/point_allocate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="33" column="74" selection-start-line="33" selection-start-column="74" selection-end-line="33" selection-end-column="74" />
+            <state relative-caret-position="330">
+              <caret line="72" column="8" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="8" />
               <folding>
                 <element signature="e#160#211#0" expanded="true" />
               </folding>
@@ -62,50 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="reconstructionAlg.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/reconstructionAlg.py">
+      <file leaf-file-name="PointVecDist.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../libs/PointVecDist.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="16" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#86#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="total_event_reconstruction.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/total_event_reconstruction.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1005">
-              <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
-              <folding>
-                <element signature="e#0#37#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="intersec_time_finder.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/intersec_time_finder.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
-              <folding>
-                <element signature="e#109#146#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="contour_analyze.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/contour_analyze.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="165">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
             </state>
           </provider>
         </entry>
@@ -121,13 +63,13 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>print</find>
       <find>math.pi</find>
       <find>bin_centers</find>
       <find>xlim</find>
       <find>boring</find>
       <find>interes</find>
       <find>if patch2.level &gt; patch.level:</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -164,19 +106,18 @@
         <option value="$PROJECT_DIR$/src/contour_analyze.py" />
         <option value="$PROJECT_DIR$/src/recoPreparation.py" />
         <option value="$PROJECT_DIR$/../libs/TreeReadFunc.py" />
-        <option value="$PROJECT_DIR$/src/point_allocate.py" />
         <option value="$PROJECT_DIR$/src/diff_event_analysis.py" />
         <option value="$PROJECT_DIR$/src/reconstructionAlg.py" />
         <option value="$PROJECT_DIR$/src/intersec_time_finder.py" />
-        <option value="$PROJECT_DIR$/src/reconstruction.py" />
         <option value="$PROJECT_DIR$/src/total_event_reconstruction.py" />
+        <option value="$PROJECT_DIR$/src/reconstruction.py" />
+        <option value="$PROJECT_DIR$/src/point_allocate.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1" />
-    <option name="width" value="1922" />
-    <option name="height" value="1053" />
+    <option name="width" value="1914" />
+    <option name="height" value="1049" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -185,36 +126,7 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="muReconstruction" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muReconstruction" type="47feb1d3:ProjectViewModuleNode" />
-            </path>
-            <path>
-              <item name="muReconstruction" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muReconstruction" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="muReconstruction" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="muReconstruction" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muReconstruction" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="muReconstruction" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="muReconstruction" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muReconstruction" type="47feb1d3:ProjectViewModuleNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="Python" />
@@ -235,7 +147,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.reconstruction (1)">
-    <configuration name="function_tester" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="intersec_time_finder" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="muReconstruction" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -247,7 +159,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/function_tester.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/intersec_time_finder.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -408,18 +320,18 @@
     <list>
       <item itemvalue="Python.scratch" />
       <item itemvalue="Python.reconstruction (1)" />
-      <item itemvalue="Python.function_tester" />
       <item itemvalue="Python.reco_from_contour" />
       <item itemvalue="Python.total_event_reconstruction" />
       <item itemvalue="Python.point_allocate" />
+      <item itemvalue="Python.intersec_time_finder" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.reconstruction (1)" />
+        <item itemvalue="Python.intersec_time_finder" />
         <item itemvalue="Python.point_allocate" />
         <item itemvalue="Python.total_event_reconstruction" />
         <item itemvalue="Python.reco_from_contour" />
-        <item itemvalue="Python.function_tester" />
       </list>
     </recent_temporary>
   </component>
@@ -560,24 +472,29 @@
       <option name="project" value="LOCAL" />
       <updated>1528124106436</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="13.6.18">
+      <created>1528901337644</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1528901337644</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1922" height="1053" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.122395836" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.122395836" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5025" side_tool="true" weight="0.28526315" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.3273684" />
-      <window_info anchor="bottom" x="1921" y="25" width="1598" height="1174" id="Run" order="2" sideWeight="0.4975" weight="0.17263158" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Python Console" order="8" />
+      <window_info active="true" anchor="bottom" x="1921" y="25" width="1598" height="1147" id="Run" order="2" sideWeight="0.4975" type="WINDOWED" visible="true" weight="0.17263158" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="9" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39915967" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39894736" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -585,26 +502,27 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3273684" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.122395836" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Data View" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info active="true" anchor="bottom" x="1921" y="25" width="1598" height="1174" id="Run" order="2" sideWeight="0.4975" type="WINDOWED" visible="true" weight="0.17263158" />
+      <window_info active="true" anchor="bottom" x="1921" y="25" width="1598" height="1147" id="Run" order="2" sideWeight="0.4975" type="WINDOWED" visible="true" weight="0.17263158" />
+      <window_info anchor="bottom" id="Python Console" order="8" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3273684" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39915967" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5025" side_tool="true" weight="0.28526315" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Python Console" order="8" />
+      <window_info id="Favorites" order="2" side_tool="true" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -625,7 +543,8 @@
     <MESSAGE value="3.5.18" />
     <MESSAGE value="03.5.18" />
     <MESSAGE value="08.5.18" />
-    <option name="LAST_COMMIT_MESSAGE" value="08.5.18" />
+    <MESSAGE value="13.6.18" />
+    <option name="LAST_COMMIT_MESSAGE" value="13.6.18" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -759,13 +678,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../libs/PointVecDist.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python2.7/dist-packages/matplotlib/mlab.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -808,30 +720,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/recoPreparation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4740">
-          <caret line="320" column="4" selection-start-line="320" selection-start-column="4" selection-end-line="320" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/point_allocate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" column="74" selection-start-line="33" selection-start-column="74" selection-end-line="33" selection-end-column="74" />
-          <folding>
-            <element signature="e#160#211#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/contour_analyze.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/intersec_time_finder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/total_event_reconstruction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="98" column="48" selection-start-line="98" selection-start-column="36" selection-end-line="98" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -839,48 +745,46 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/intersec_time_finder.py">
+    <entry file="file://$PROJECT_DIR$/src/recoPreparation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
-          <folding>
-            <element signature="e#109#146#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="706">
+          <caret line="320" column="4" selection-start-line="320" selection-start-column="4" selection-end-line="320" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/reconstructionAlg.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="16" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#86#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="291">
+          <caret line="269" selection-start-line="269" selection-end-line="269" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../libs/PointVecDist.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/reconstruction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="89" column="41" lean-forward="true" selection-start-line="89" selection-start-column="41" selection-end-line="89" selection-end-column="41" />
+        <state relative-caret-position="795">
+          <caret line="90" column="24" selection-start-line="90" selection-start-column="24" selection-end-line="90" selection-end-column="24" />
           <folding>
             <element signature="e#0#101#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/total_event_reconstruction.py">
+    <entry file="file://$PROJECT_DIR$/src/point_allocate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
+        <state relative-caret-position="330">
+          <caret line="72" column="8" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="8" />
           <folding>
-            <element signature="e#0#37#0" expanded="true" />
+            <element signature="e#160#211#0" expanded="true" />
           </folding>
         </state>
       </provider>

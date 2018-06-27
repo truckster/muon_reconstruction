@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a9033b00-3a1a-4ed2-be6b-371d28214cd7" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/diff_event_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/diff_event_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/intersec_time_finder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/intersec_time_finder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/point_allocate.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/point_allocate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reconstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/reconstruction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reconstructionAlg.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/reconstructionAlg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/total_event_reconstruction.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/total_event_reconstruction.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,7 +17,7 @@
       <file leaf-file-name="reconstruction.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/reconstruction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="795">
+            <state relative-caret-position="1245">
               <caret line="90" column="24" selection-start-line="90" selection-start-column="24" selection-end-line="90" selection-end-column="24" />
               <folding>
                 <element signature="e#0#101#0" expanded="true" />
@@ -34,8 +29,8 @@
       <file leaf-file-name="point_allocate.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/point_allocate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="72" column="8" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="8" />
+            <state relative-caret-position="540">
+              <caret line="113" column="20" selection-start-line="113" selection-start-column="20" selection-end-line="113" selection-end-column="20" />
               <folding>
                 <element signature="e#160#211#0" expanded="true" />
               </folding>
@@ -479,11 +474,19 @@
       <option name="project" value="LOCAL" />
       <updated>1528901337644</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="26.6.18">
+      <created>1530024506596</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1530024506596</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1922" height="1053" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.122395836" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -508,21 +511,21 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.122395836" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="right" id="Data View" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info active="true" anchor="bottom" x="1921" y="25" width="1598" height="1147" id="Run" order="2" sideWeight="0.4975" type="WINDOWED" visible="true" weight="0.17263158" />
-      <window_info anchor="bottom" id="Python Console" order="8" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3273684" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39915967" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5025" side_tool="true" weight="0.28526315" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Python Console" order="8" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -544,7 +547,8 @@
     <MESSAGE value="03.5.18" />
     <MESSAGE value="08.5.18" />
     <MESSAGE value="13.6.18" />
-    <option name="LAST_COMMIT_MESSAGE" value="13.6.18" />
+    <MESSAGE value="26.6.18" />
+    <option name="LAST_COMMIT_MESSAGE" value="26.6.18" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -771,7 +775,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/reconstruction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
+        <state relative-caret-position="1245">
           <caret line="90" column="24" selection-start-line="90" selection-start-column="24" selection-end-line="90" selection-end-column="24" />
           <folding>
             <element signature="e#0#101#0" expanded="true" />
@@ -781,8 +785,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/point_allocate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="72" column="8" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="8" />
+        <state relative-caret-position="540">
+          <caret line="113" column="20" selection-start-line="113" selection-start-column="20" selection-end-line="113" selection-end-column="20" />
           <folding>
             <element signature="e#160#211#0" expanded="true" />
           </folding>

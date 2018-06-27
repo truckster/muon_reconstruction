@@ -68,16 +68,33 @@ def create_direction_matrix(reco_points):
     return pairing_matrix
 
 
+# def allocator(pairing_matrix):
+#     for point1_index, point1 in enumerate(pairing_matrix[:-2]):
+#         for vector1_index, vector1 in enumerate(point1[point1_index+1:]):
+#             print(":::::")
+#             print(vector1)
+#             print(":::::")
+#             for point2_index, point2 in enumerate(pairing_matrix[point1_index+1:-1]):
+#                 for vector2_index, vector2 in enumerate(point2[point1_index + point2_index + 2:]):
+#                     print(vector2)
+#                     print("-------------")
+
+
 def allocator(pairing_matrix):
-    for point1_index, point1 in enumerate(pairing_matrix[:-2]):
-        for vector1_index, vector1 in enumerate(point1[point1_index+1:]):
-            print(":::::")
-            print(vector1)
-            print(":::::")
-            for point2_index, point2 in enumerate(pairing_matrix[point1_index+1:-1]):
-                for vector2_index, vector2 in enumerate(point2[point1_index + point2_index + 2:]):
-                    print(vector2)
-                    print("-------------")
+    for point1_index, point1 in enumerate(pairing_matrix):
+        for vector1_index, vector1 in enumerate(point1):
+            if not is_middle_diagonal_element(point1_index, vector1_index):
+                for point2_index, point2 in enumerate(pairing_matrix):
+                    for vector2_index, vector2 in enumerate(point2):
+                        if not is_middle_diagonal_element(point2_index, vector2_index):
+                            if not are_mirror_matrix_element(point1_index, vector1_index, point2_index, vector2_index)\
+                                    and not are_same_matrix_element(point1_index, vector1_index, point2_index, vector2_index):
+                                if parallelism_check(vector1, vector2, 0.1):
+                                    print(vector1)
+                                    print(vector2)
+                                    print("1: " + str(point1_index) + ":" + str(vector1_index))
+                                    print("2: " + str(point2_index) + ":" + str(vector2_index))
+                                    print("--------------------------")
 
 
 def parallelism_check(vector1, vector2, accuracy):
@@ -92,6 +109,27 @@ def parallelism_check(vector1, vector2, accuracy):
             else:
                 vecs_are_parallel *= 0
     if vecs_are_parallel is 1:
+        return True
+    else:
+        return False
+
+
+def are_mirror_matrix_element(column1, row1, column2, row2):
+    if column1 is row2 and column2 is row1:
+        return True
+    else:
+        return False
+
+
+def are_same_matrix_element(column1, row1, column2, row2):
+    if column1 is column2 and row1 is row2:
+        return True
+    else:
+        return False
+
+
+def is_middle_diagonal_element(column, row):
+    if column is row:
         return True
     else:
         return False

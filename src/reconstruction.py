@@ -87,9 +87,7 @@ for folder in glob("*/"):
 
     '''Allocate respective points'''
     # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
-    alloc_matrix = point_allocate.create_direction_matrix(found_points)
-    point_allocate.allocator(alloc_matrix)
-
+    point_allocate.allocate_tracks_to_points(found_points)
     total_event_reconstruction.reco_result_writer(output_path, found_points)
 
     '''Draw all kinds of images'''

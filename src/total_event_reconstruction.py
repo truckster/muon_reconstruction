@@ -24,6 +24,7 @@ class RecoPointClass:
         self.y_coordinate_rad = 0
         self.contour_data = 0
         self.orientation_index = 0
+        self.track = 0
 
 
 def standalone_contour_lines(contour_data_total, orientation):

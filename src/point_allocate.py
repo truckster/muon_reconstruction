@@ -50,12 +50,17 @@ def allocate_tracks_to_points(reco_points):
     pairing_matrix = create_direction_matrix(reco_points)
     pairing_vector = allocator(pairing_matrix)
     result_class_writer(reco_points, pairing_vector)
+    return pairing_vector
 
 
 def result_class_writer(reco_points, pairing_vector):
-    alloc_vector = [[None]*2 for _ in range(len(pairing_vector)/2)]
-    # for index, element in enumerate(pairing_vector):
-        # reco_points[element].track
+    if len(pairing_vector) > 1:
+        print("Several solutions found!!!")
+    else:
+        for result in pairing_vector:
+            for pair_index, pair in enumerate(result):
+                reco_points[pair.index_point_1].track = pair_index
+                reco_points[pair.index_point_2].track = pair_index
 
 
 def create_direction_matrix(reco_points):
@@ -82,8 +87,8 @@ def create_direction_matrix(reco_points):
 class DirectionClass:
     def __init__(self):
         self.direction = []
-        self.index_row = 0
-        self.index_col = 0
+        self.index_point_1 = 0
+        self.index_point_2 = 0
 
 
 def allocator(pairing_matrix):
@@ -94,8 +99,8 @@ def allocator(pairing_matrix):
             if col_index > row_index:
                 direction_start = DirectionClass()
                 direction_start.direction = row[col_index]
-                direction_start.index_row = row_index
-                direction_start.index_col = col_index
+                direction_start.index_point_1 = row_index
+                direction_start.index_point_2 = col_index
 
                 for alloc_round in range((len(pairing_matrix) / 2) - 1):
                     for row_index_comp, row_comp in enumerate(pairing_matrix):
@@ -104,15 +109,14 @@ def allocator(pairing_matrix):
                             if col_index_comp > row_index_comp > row_index:
                                 direction_stop = DirectionClass()
                                 direction_stop.direction = row_comp[col_index_comp]
-                                direction_stop.index_row = row_index_comp
-                                direction_stop.index_col = col_index_comp
+                                direction_stop.index_point_1 = row_index_comp
+                                direction_stop.index_point_2 = col_index_comp
                                 direction_array.append(direction_stop)
 
                                 collection.append(direction_array)
     for coll in collection:
         if parallelism_check(coll, 0.1) and len(coll) is len(pairing_matrix)/2:
             return_array.append(coll)
-    print(return_array)
     return return_array
 
 

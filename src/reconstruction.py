@@ -29,6 +29,8 @@ if path.isfile(output_path + "results.txt"):
     remove(output_path + "results.txt")
 
 reco_accuracy = []
+found_point_array = []
+found_track_array = []
 
 chdir(input_path)
 for folder in glob("*/"):
@@ -87,12 +89,20 @@ for folder in glob("*/"):
 
     '''Allocate respective points'''
     # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
-    point_allocate.allocate_tracks_to_points(found_points)
+    track_class = point_allocate.allocate_tracks_to_points(found_points)
+    print(track_class)
     total_event_reconstruction.reco_result_writer(output_path, found_points)
+    found_point_array.append(len(found_points))
+    print("Found points: " + str(len(found_points)))
+    try:
+        found_track_array.append(len(track_class[0]))
+    except:
+        pass
+    print("Found tracks: " + str(len(track_class)))
 
     '''Draw all kinds of images'''
-    # reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
-    #                                  number_contour_level, found_points)
+    reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
+                                     number_contour_level, found_points)
     # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
     #                                  muon_points, new_output_path, number_contour_level, found_points)
     # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window,
@@ -102,7 +112,8 @@ for folder in glob("*/"):
 
     # reco_accuracy.append(reconstructionAlg.reco_comparer(MC_positions, reco_positions))
 
-
+print(found_point_array)
+print(found_track_array)
 # reconstructionAlg.reco_resulter(reco_accuracy, output_path)
 statusAlert.processStatus("Process finished")
 

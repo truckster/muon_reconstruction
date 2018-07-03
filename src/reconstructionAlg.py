@@ -184,6 +184,7 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points,
 
     phi_position_draw = pmt_position_class.phi_position
     theta_position2_draw = pmt_position_class.theta_position2
+    # theta_position2_draw = pmt_position_class.theta_shifted
 
     # threshold = max([max(snippet_array)/2, 200])
     # print(len(snippet_array))

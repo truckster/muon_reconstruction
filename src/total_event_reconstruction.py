@@ -24,7 +24,7 @@ class RecoPointClass:
         self.y_coordinate_rad = 0
         self.contour_data = 0
         self.orientation_index = 0
-        self.track = 0
+        self.track = None
 
 
 def standalone_contour_lines(contour_data_total, orientation):
@@ -108,6 +108,7 @@ def reco_result_writer(output_path, result_array):
         result_file.write("Frame: " + str(patch.frame) + '\n')
         result_file.write("Phi: " + str(patch.x_coordinate_deg) + '\n')
         result_file.write("Theta: " + str(patch.y_coordinate_deg) + '\n')
+        result_file.write("Track: " + str(patch.track)+ '\n')
         result_file.write("--------------------------------" + '\n')
 
     result_file.write("End of event" + '\n' + '\n')

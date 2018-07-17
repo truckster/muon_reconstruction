@@ -1,7 +1,115 @@
-import reconstructionAlg, statusAlert
+import reconstructionAlg, statusAlert, total_event_reconstruction
 import numpy as np
 import matplotlib.path as mpath
 import math
+
+
+def entry_exit_detector(contour_data):
+    real_top_patches = []
+    for orientation_index, data in enumerate(contour_data):
+        for frame, frame_data in enumerate(data):
+            statusAlert.processStatus("Searching entry and exit points: ")
+            found_points = standalone_contour_lines(frame_data, orientation_index)
+            print(len(found_points))
+            real_top_patches.append(toplevel_check(found_points, frame_data, orientation_index))
+            # top_levels = diff_intersec_finder(data, orientation_index)
+            # real_top_patches.append(toplevel_check(top_levels, data[0], orientation_index))
+    print(len(real_top_patches))
+    return real_top_patches
+
+
+def diff_intersec_finder(contour_data_diff, orientation):
+    """Function to detect local intersection patches
+
+     - takes differential and difference contour data of event in an array with the three orientations
+     - creates result class and adds the local max patch and the respective orientation
+     - result class is written to list and passed"""
+    local_max_patches = []
+    lowest_level = 0
+    highest_level = -1
+    for frame in range(len(contour_data_diff)-3):
+        print("---------")
+        print(frame)
+        for patch_index_high in range(len(contour_data_diff[frame][highest_level])):
+            current_patch_high = contour_data_diff[frame][highest_level][patch_index_high]
+            print(str(current_patch_high.center[0]/math.pi*180.0))
+            print(str(current_patch_high.center[1]/math.pi*180.0))
+            for_shaddowing = 2
+            for patch_index_low in range(len(contour_data_diff[frame][lowest_level])):
+                current_patch_low = contour_data_diff[frame][lowest_level][patch_index_low]
+                for step in range(for_shaddowing):
+                    for patch_index_low_step in range(len(contour_data_diff[frame+step][lowest_level])):
+                        stepped_patch_low = contour_data_diff[frame + step][lowest_level][patch_index_low_step]
+                        if mpath.Path(stepped_patch_low.contour_coordinates).contains_point(current_patch_high.center) and\
+                            current_patch_high.height - stepped_patch_low.height > 400 and \
+                            not mpath.Path(current_patch_low.contour_coordinates).contains_point(current_patch_high.center):
+                            # print("LALALALALALAALALA")
+                            # print("Frame: " + str(frame))
+                            # print("Center: " + str(current_patch_high.center))
+                            # print("Size: " + str(current_patch_high.extent))
+                            a=1
+
+
+def standalone_contour_lines(contour_data, orientation):
+    """Function to detect local maximum patches
+
+    - takes contour data of entire event in an anrray with the three orientations
+    - creates result class and adds the local max patch and the respective orientation
+    - result class is written to list and passed"""
+    local_max_patches = []
+    data_1 = contour_data
+    data_2 = contour_data
+    for level_observed in data_1:
+        for patch in level_observed:
+            local_max_patch = True
+            for level_others in data_2:
+                for patch2 in level_others:
+                    if patch2 is not patch:
+                        if mpath.Path(patch.contour_coordinates).contains_point(patch2.contour_coordinates[0]):
+                            # print(str(patch.level) + " contains " + str(patch2.level))
+                            local_max_patch = False
+
+            if local_max_patch:
+                patch_class = total_event_reconstruction.RecoPointClass()
+                patch_class.contour_data = patch
+                patch_class.orientation_index = orientation
+                local_max_patches.append(patch_class)
+    return local_max_patches
+
+
+def toplevel_check(top_level_patches, contour_data_total, orientation):
+    """Function to iterate through previously detected local maximum patches and passes them to check_function"""
+    real_patches = []
+    for patch_index, patch in enumerate(top_level_patches):
+        if is_real_toplevel_patch(patch.contour_data, contour_data_total):
+            real_patches.append(patch)
+    return real_patches
+
+
+def is_real_toplevel_patch(patch, contour_data):
+    """checks if patches are interesting for entry-/exit-point search"""
+    patch_is_real_top = True
+
+    """"check if patch excees given level threshold"""
+    if patch.level < 3:
+        patch_is_real_top = False
+    """check if found patch has a neighbour patch at same level which is contained by the same contour level below.
+    If so -> discard"""
+    for patch_level_below in contour_data[patch.level-1]:
+        if mpath.Path(patch_level_below.contour_coordinates).contains_point(patch.contour_coordinates[0]):
+            for neighbour_patch in contour_data[patch.level]:
+                if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
+                    if neighbour_patch is not patch:
+                        patch_is_real_top = False
+    """Same as above, but should find patches which are surrounded by a contour of same level
+    Actually makes no sense to me. Maybe there was a case when this was necessary"""
+    for patch_level_same in contour_data[patch.level]:
+        if mpath.Path(patch_level_same.contour_coordinates).contains_point(patch.contour_coordinates[0]):
+            for neighbour_patch in contour_data[patch.level]:
+                if mpath.Path(patch_level_same.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
+                    if neighbour_patch is not patch:
+                        patch_is_real_top = False
+    return patch_is_real_top
 
 
 def intersec_crosscheck(diff_contours_array, reco_points):
@@ -30,19 +138,19 @@ def intersec_crosscheck(diff_contours_array, reco_points):
                                 maximum = patch.height
                                 max_frame = frame
 
-            if max_frame - min_frame < 3 and minimum < 100 and maximum - minimum > 150:
+            if max_frame - min_frame < 2 and minimum < 100 and maximum - minimum > 200:
                 point.frame = max_frame
                 points_of_orientation.append(point)
         better_reco_points.append(points_of_orientation)
     return better_reco_points
 
 
-def point_merger(reco_points):
+def point_merger(reco_points, merge_radius):
     for point1 in reco_points:
         for point2 in reco_points:
             frame_diff = abs(point1.frame - point2.frame)
-            distance = math.sqrt(pow(point1.x_coordinate_rad-point2.x_coordinate_rad, 2)
-                                 + pow(point1.y_coordinate_rad-point2.y_coordinate_rad, 2))
+            distance = math.sqrt(pow(point1.x_coordinate_deg-point2.x_coordinate_deg, 2)
+                                 + pow(point1.y_coordinate_deg-point2.y_coordinate_deg, 2))
 
-            if point1 is not point2 and frame_diff < 1 and distance < 0.9:
+            if point1 is not point2 and frame_diff < 2 and distance < merge_radius:
                 reco_points.remove(point2)

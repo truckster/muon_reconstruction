@@ -5,7 +5,6 @@ import math
 
 
 def entry_exit_detector(contour_data):
-
     real_top_patches = []
     for orientation_index, data in enumerate(contour_data):
         statusAlert.processStatus("Searching entry and exit points: ")

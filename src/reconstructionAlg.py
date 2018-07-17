@@ -184,6 +184,7 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points,
 
     phi_position_draw = pmt_position_class.phi_position
     theta_position2_draw = pmt_position_class.theta_position2
+    # phi_position_draw = pmt_position_class.phi_shifted
     # theta_position2_draw = pmt_position_class.theta_shifted
 
     # threshold = max([max(snippet_array)/2, 200])
@@ -352,41 +353,6 @@ def reco_result_writer(output_path, result_array):
     result_file.close()
 
 
-def reco_comparer(truth_points, reco_points):
-    # if len(truth_points) is not len(reco_points):
-
-    min_differences = []
-    for truth_point in truth_points:
-        differences = []
-        for reco_point in reco_points:
-            differences.append(math.sqrt(pow(truth_point[0]-reco_point.coordinates[0], 2)
-                                         + pow(truth_point[1]-reco_point.coordinates[1], 2)))
-            differences.append(math.sqrt(pow(truth_point[0] - reco_point.coordinates[0] - 360, 2)
-                                         + pow(truth_point[1] - reco_point.coordinates[1], 2)))
-            differences.append(math.sqrt(pow(truth_point[0] - reco_point.coordinates[0] + 360, 2)
-                                         + pow(truth_point[1] - reco_point.coordinates[1], 2)))
-        min_differences.append(min(differences))
-    return min_differences
-
-
-def reco_resulter(difference_array, outdir):
-    result_array = []
-    for event in difference_array:
-        for point_diff in event:
-            result_array.append(point_diff)
-    n, bins, patches = plt.hist(result_array, bins=20, range=(0, 30))
-
-    plt.rc('text', usetex=True)
-    plt.rc('font', family='serif')
-
-    plt.xlabel(r'$\Delta\phi$ ($^\circ$)')
-    plt.ylabel('Detected points')
-    plt.grid(True)
-
-    plt.savefig(outdir + "reco_accuracy.pdf", bbox_inches='tight')
-    plt.savefig(outdir + "reco_accuracy.png", bbox_inches='tight')
-
-
 def coordinate_calculation(reco_points):
     return_points = []
     for orientation_index, orientation in enumerate(reco_points):
@@ -406,14 +372,27 @@ def orientation_resolver(reco_points):
     return_points = []
     for orientation_index, orientation in enumerate(reco_points):
         for point_index, point in enumerate(orientation):
-            if orientation_index is 1:
+            if orientation_index is 2:
                 if point.x_coordinate_deg > 0:
                     point.x_coordinate_deg -= 180
                     point.x_coordinate_rad -= math.pi
                 else:
                     point.x_coordinate_deg += 180
                     point.x_coordinate_rad += math.pi
-            elif orientation_index is 2:
+            elif orientation_index is 3:
+                if point.y_coordinate_deg > 0:
+                    point.y_coordinate_deg -= 90
+                    point.y_coordinate_rad -= math.pi/2
+                else:
+                    point.y_coordinate_deg += 90
+                    point.y_coordinate_rad += math.pi/2
+            elif orientation_index is 1:
+                if point.x_coordinate_deg > 0:
+                    point.x_coordinate_deg -= 180
+                    point.x_coordinate_rad -= math.pi
+                else:
+                    point.x_coordinate_deg += 180
+                    point.x_coordinate_rad += math.pi
                 if point.y_coordinate_deg > 0:
                     point.y_coordinate_deg -= 90
                     point.y_coordinate_rad -= math.pi/2

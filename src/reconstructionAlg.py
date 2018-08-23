@@ -30,7 +30,8 @@ def entry_exit_detector(pmt_position_class, snippet_class, muon_points, out_path
     return reconstructed_points1
 
 
-def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, number_contour_level, reco_points=None):
+def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, number_contour_level,
+                   reco_points=None):
     statusAlert.processStatus("Iterate snippets and draw")
 
     '''photon data pre-processed and ordered into time snippets'''
@@ -43,9 +44,12 @@ def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, num
 
             '''Draw the detector picture for the certain time snippet'''
             draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
-                                 out_path, "absolute")
+                                 out_path, mode="absolute")
             draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
-                                      muon_points, snippet, out_path, number_contour_level, "absolute")
+                                      muon_points, snippet, out_path, number_contour_level, mode="absolute")
+            if len(snippet_array) is 1:
+                draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
+                                          muon_points, snippet, out_path, number_contour_level, mode="total")
 
     else:
         for snippet in range(len(snippet_array)):
@@ -54,12 +58,15 @@ def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, num
             '''Draw the detector picture for the certain time snippet'''
             draw_snippet_picture(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
                                  out_path, reco_points, "absolute")
-            draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
-                                      muon_points, snippet, out_path, number_contour_level, reco_points, "absolute")
+            draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet], muon_points, snippet,
+                                      out_path, number_contour_level, reco_points, mode="absolute")
+            if len(snippet_array) is 1:
+                draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
+                                          muon_points, snippet, out_path, number_contour_level, mode="total")
 
 
 def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, out_path,
-                              number_contour_level = 16, reco_points=None):
+                              number_contour_level, reco_points=None):
     statusAlert.processStatus("Iterate snippets and draw")
 
     '''photon data pre-processed and ordered into time snippets'''
@@ -86,10 +93,10 @@ def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, ou
                 statusAlert.processStatus("processing snippet: " + str(snippet))
 
                 '''Draw the detector picture for the certain time snippet'''
-                draw_snippet_picture(pmt_position_class, snippet_diff, muon_points,
-                                     snippet, out_path, reco_points, "differential")
-                draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points,
-                                          snippet, out_path, number_contour_level, reco_points, "differential")
+                draw_snippet_picture(pmt_position_class, snippet_diff, muon_points, snippet,
+                                     out_path, reco_points, "differential")
+                draw_snippet_contour_plot(pmt_position_class, snippet_diff, muon_points, snippet,
+                                          out_path, number_contour_level, reco_points, "differential")
 
 
 def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet, out_path, reco_points=None, mode=None):
@@ -147,6 +154,13 @@ def draw_snippet_picture(pmt_position_class, snippet_array, muon_points, snippet
 
         plt.close()
 
+    # elif mode is "total":
+    #     cb.set_label("Number of photons")
+    #
+    #     plt.savefig(out_path + str(file_number) + "_" + str(snippet) + ".png", bbox_inches='tight')
+    #
+    #     plt.close()
+
     else:
         print("Nothing to print")
 
@@ -172,8 +186,8 @@ def contour_data_reader(pmt_position_class, snippet_array, number_contour_level)
     return contour_data
 
 
-def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points,
-                              snippet, out_path, number_contour_level, reco_points=None, mode=None):
+def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, snippet, out_path, number_contour_level,
+                              reco_points=None, mode=None):
     statusAlert.processStatus("Creating graphics")
     fig = plt.figure(num=None, figsize=(20, 10))
 
@@ -233,6 +247,11 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points,
         plt.savefig(out_path + "differential hits contour/" + str(snippet) + ".png", bbox_inches='tight')
 
         plt.close()
+
+    # elif mode is "total":
+    #     plt.savefig(out_path + str(file_number) + "_" + str(snippet) + "_Contour.png", bbox_inches='tight')
+    #
+    #     plt.close()
 
     else:
         print("Nothing to print")

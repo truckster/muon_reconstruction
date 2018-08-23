@@ -14,7 +14,7 @@ class DirectionReco:
         self.direction = []
 
 
-def allocate_points(contour_diffs, intersec_points, intersec_times):
+def allocate_points(contour_diffs, intersec_points):
     for frame, contour in enumerate(contour_diffs):
         top_level = contour[-1]
         low_level = contour[0]

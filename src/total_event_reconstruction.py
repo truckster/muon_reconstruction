@@ -67,24 +67,26 @@ def is_real_toplevel_patch(patch, contour_data):
     patch_is_real_top = True
 
     """"check if patch excees given level threshold"""
-    if patch.level < 2:
-        patch_is_real_top = False
-    """check if found patch has a neighbour patch at same level which is contained by the same contour level below.
-    If so -> discard"""
-    for patch_level_below in contour_data[patch.level-1]:
-        if mpath.Path(patch_level_below.contour_coordinates).contains_point(patch.contour_coordinates[0]):
-            for neighbour_patch in contour_data[patch.level]:
-                if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
-                    if neighbour_patch is not patch:
-                        patch_is_real_top = False
-    """Same as above, but should find patches which are surrounded by a contour of same level
-    Actually makes no sense to me. Maybe there was a case when this was necessary"""
-    for patch_level_same in contour_data[patch.level]:
-        if mpath.Path(patch_level_same.contour_coordinates).contains_point(patch.contour_coordinates[0]):
-            for neighbour_patch in contour_data[patch.level]:
-                if mpath.Path(patch_level_same.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
-                    if neighbour_patch is not patch:
-                        patch_is_real_top = False
+    # if patch.level < 2:
+    #     patch_is_real_top = False
+
+    # """check if found patch has a neighbour patch at same level which is contained by the same contour level below.
+    # If so -> discard"""
+    # for patch_level_below in contour_data[patch.level-2]:
+    #     if mpath.Path(patch_level_below.contour_coordinates).contains_point(patch.contour_coordinates[0]):
+    #         for neighbour_patch in contour_data[patch.level]:
+    #             if mpath.Path(patch_level_below.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
+    #                 if neighbour_patch is not patch:
+    #                     patch_is_real_top = False
+
+    # """Same as above, but should find patches which are surrounded by a contour of same level
+    # Actually makes no sense to me. Maybe there was a case when this was necessary"""
+    # for patch_level_same in contour_data[patch.level]:
+    #     if mpath.Path(patch_level_same.contour_coordinates).contains_point(patch.contour_coordinates[0]):
+    #         for neighbour_patch in contour_data[patch.level]:
+    #             if mpath.Path(patch_level_same.contour_coordinates).contains_point(neighbour_patch.contour_coordinates[0]):
+    #                 if neighbour_patch is not patch:
+    #                     patch_is_real_top = False
 
     """Check for non-closed contour paths"""
     if not compare_points(patch.contour_coordinates[0], patch.contour_coordinates[-1]):

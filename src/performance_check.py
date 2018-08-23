@@ -63,3 +63,17 @@ def found_intersects(intersec_array, outdir):
     plt.close()
 
 
+def found_tracks(track_array, outdir):
+    n, bins, patches = plt.hist(track_array, bins=5, range=(0, 5))
+
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
+
+    plt.xlabel("Found track solutions")
+    plt.ylabel("No.")
+    plt.grid(True)
+
+    plt.savefig(outdir + "tracks_found.pdf", bbox_inches='tight')
+    plt.savefig(outdir + "tracks_found.png", bbox_inches='tight')
+
+    plt.close()

@@ -10,16 +10,9 @@ import numpy as np
 '''General script to use sub-scripts for muon reconstruction.'''
 statusAlert.processStatus("Process started")
 
-# input_path = "/home/gpu/Simulation/processed_sim/lala/"
-# input_path = "/home/gpu/Simulation/processed_sim/Vortrag/"
-input_path = "/home/gpu/Simulation/processed_sim/lala2/"
+input_path = "/media/gpu/Data1/Simulation/processed_sim/lala/"
 
 output_path = "/home/gpu/Analysis/muReconstruction/Output/dev/"
-# output_path = "/home/gpu/Analysis/muReconstruction/Output/Vortrag/"
-# output_path = "/home/gpu/Analysis/muReconstruction/Output/LPMT/"
-
-# input_path = "/home/gpu/Simulation/presentation/y/"
-# output_path = "/home/gpu/Analysis/muReconstruction/Output/presentation/y/"
 
 '''Overwrite fit results file'''
 if path.isfile(output_path + "results.txt"):
@@ -27,6 +20,7 @@ if path.isfile(output_path + "results.txt"):
 
 reco_accuracy = []
 found_point_array = []
+found_point_array2 = []
 found_track_array = []
 det_points = 0
 
@@ -35,6 +29,7 @@ for folder in glob("*/"):
     new_output_path = recoPreparation.create_output_path(output_path, folder, "/totalEventHist/",  input_path)
     new_output_path_fit = recoPreparation.create_output_path(output_path, folder, "/fits/",  input_path)
     total_path = recoPreparation.create_output_path(output_path, folder, "/total_event/", input_path)
+    ov_output_path = output_path + "ov/"
 
     file_number = folder.split("-")[0]
 
@@ -45,7 +40,7 @@ for folder in glob("*/"):
     PmtPositions = pickle.load(open("PMT_positions.pkl", 'rb'))
 
     '''collect entry and exit points of all muons in event'''
-    intersec_radius = 19600
+    intersec_radius = 17700
     time_resolution = 1*10**-9
     muon_points = pickle.load(open("muon_truth.pkl", 'rb'))
 
@@ -82,13 +77,13 @@ for folder in glob("*/"):
     '''Reconstruction by looking at entire event'''
     found_points = total_event_reconstruction.entry_exit_detector(total_event)
     '''Reconstruction by looking at differences between two frames'''
-    # found_points_2 = diff_event_analysis.entry_exit_detector(diff_event)
+    # found_points = diff_event_analysis.entry_exit_detector(diff_event)
     """Cross-check results with diffs"""
     # found_points.extend(found_points_2)
     found_points = diff_event_analysis.intersec_crosscheck(diff_event, found_points)
     found_points = reconstructionAlg.coordinate_calculation(found_points)
     found_points = reconstructionAlg.orientation_resolver(found_points)
-    diff_event_analysis.point_merger(found_points, 150)
+    diff_event_analysis.point_merger(found_points, 5)
 
     print("Found points: " + str(len(found_points)))
 
@@ -99,20 +94,18 @@ for folder in glob("*/"):
     intersec_time_finder.find_times(contour_array_total, found_points)
 
     '''Allocate respective points'''
-    # point_allocate.allocate_points(contour_array_diff, found_points, found_frames)
-    track_class = point_allocate.allocate_tracks_to_points(found_points)
+    # point_allocate.allocate_points(contour_array_diff, found_points)
+    # track_class = point_allocate.allocate_tracks_to_points(found_points)
     total_event_reconstruction.reco_result_writer(output_path, found_points)
     found_point_array.append(len(found_points))
-    try:
-        found_track_array.append(len(track_class[0]))
-    except:
-        pass
+    found_point_array2.append([file_number, len(found_points)])
+
 
     '''Draw all kinds of images'''
-    reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
-                                     number_contour_level, found_points)
-    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window,
-    #                                  muon_points, new_output_path, number_contour_level, found_points)
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_of_entire_event, muon_points, total_path,
+    #                                  number_contour_level, found_points)
+    # reconstructionAlg.snippet_drawer(PmtPositions, photons_in_time_window, muon_points, new_output_path,
+    #                                  number_contour_level, found_points)
     # reconstructionAlg.snippet_drawer_difference(PmtPositions, photons_in_time_window,
     #                                             muon_points, new_output_path, number_contour_level, found_points)
 
@@ -120,14 +113,18 @@ for folder in glob("*/"):
 
     if len(found_points) is 4:
         reco_accuracy.append(performance_check.reco_comparer(MC_positions, found_points))
+        try:
+            found_track_array.append(len(track_class))
+        except:
+            pass
 
 
-
-print(found_point_array)
-print(found_track_array)
+print(found_point_array2)
+# print(found_track_array)
 performance_check.reco_resulter(reco_accuracy, output_path)
 performance_check.found_intersects(found_point_array, output_path)
-print("Long events: " + str(len(reco_accuracy)))
-print("Found points: " + str(det_points))
+# performance_check.found_tracks(found_track_array, output_path)
+# print("Long events: " + str(len(reco_accuracy)))
+# print("Found points: " + str(det_points))
 statusAlert.processStatus("Process finished")
 

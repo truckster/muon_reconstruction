@@ -6,48 +6,15 @@ import math
 
 def entry_exit_detector(contour_data):
     real_top_patches = []
+    statusAlert.processStatus("Searching entry and exit points from frames: ")
     for orientation_index, data in enumerate(contour_data):
         for frame, frame_data in enumerate(data):
-            statusAlert.processStatus("Searching entry and exit points: ")
+            statusAlert.processStatus("Frame: " + str(frame))
             found_points = standalone_contour_lines(frame_data, orientation_index)
-            print(len(found_points))
             real_top_patches.append(toplevel_check(found_points, frame_data, orientation_index))
             # top_levels = diff_intersec_finder(data, orientation_index)
             # real_top_patches.append(toplevel_check(top_levels, data[0], orientation_index))
-    print(len(real_top_patches))
     return real_top_patches
-
-
-def diff_intersec_finder(contour_data_diff, orientation):
-    """Function to detect local intersection patches
-
-     - takes differential and difference contour data of event in an array with the three orientations
-     - creates result class and adds the local max patch and the respective orientation
-     - result class is written to list and passed"""
-    local_max_patches = []
-    lowest_level = 0
-    highest_level = -1
-    for frame in range(len(contour_data_diff)-3):
-        print("---------")
-        print(frame)
-        for patch_index_high in range(len(contour_data_diff[frame][highest_level])):
-            current_patch_high = contour_data_diff[frame][highest_level][patch_index_high]
-            print(str(current_patch_high.center[0]/math.pi*180.0))
-            print(str(current_patch_high.center[1]/math.pi*180.0))
-            for_shaddowing = 2
-            for patch_index_low in range(len(contour_data_diff[frame][lowest_level])):
-                current_patch_low = contour_data_diff[frame][lowest_level][patch_index_low]
-                for step in range(for_shaddowing):
-                    for patch_index_low_step in range(len(contour_data_diff[frame+step][lowest_level])):
-                        stepped_patch_low = contour_data_diff[frame + step][lowest_level][patch_index_low_step]
-                        if mpath.Path(stepped_patch_low.contour_coordinates).contains_point(current_patch_high.center) and\
-                            current_patch_high.height - stepped_patch_low.height > 400 and \
-                            not mpath.Path(current_patch_low.contour_coordinates).contains_point(current_patch_high.center):
-                            # print("LALALALALALAALALA")
-                            # print("Frame: " + str(frame))
-                            # print("Center: " + str(current_patch_high.center))
-                            # print("Size: " + str(current_patch_high.extent))
-                            a=1
 
 
 def standalone_contour_lines(contour_data, orientation):
@@ -59,10 +26,10 @@ def standalone_contour_lines(contour_data, orientation):
     local_max_patches = []
     data_1 = contour_data
     data_2 = contour_data
-    for level_observed in data_1:
+    for level_observed in data_1[5:]:
         for patch in level_observed:
             local_max_patch = True
-            for level_others in data_2:
+            for level_others in data_2[5:]:
                 for patch2 in level_others:
                     if patch2 is not patch:
                         if mpath.Path(patch.contour_coordinates).contains_point(patch2.contour_coordinates[0]):

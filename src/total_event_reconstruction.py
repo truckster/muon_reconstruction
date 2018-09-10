@@ -21,6 +21,10 @@ class RecoPointClass:
         self.y_coordinate_deg = 0
         self.x_coordinate_rad = 0
         self.y_coordinate_rad = 0
+        self.real_x = 0
+        self.real_y = 0
+        self.real_z = 0
+        self.D3_vector = 0
         self.contour_data = 0
         self.orientation_index = 0
         self.track = None

@@ -61,22 +61,62 @@ def hitPMTinTimeSnippetHist2(source, wtime, snippet_limit):
 class MuonIntersecPoint:
     def __init__(self):
         self.event = 0
-
         self.enters = False
         self.leaves = False
-
         self.x = 0
         self.y = 0
         self.z = 0
-
         self.phi = 0
         self.theta = 0
         self.theta2 = 0
-
         self.phi_hammer_aitoff = 0
         self.theta_hammer_aitoff = 0
-
         self.intersec_time = 0
+
+
+class MuonTrackTruth:
+    def __init__(self):
+        self.track_index = 0
+        self.entry_point = 0
+        self.exit_point = 0
+        self.entry_time = 0
+        self.exit_time = 0
+        self.distance_track_to_center = 0
+
+
+def track_mc_truth_writer(muon_data):
+    muon_event_array = []
+    for event in muon_data:
+        muon_track = MuonTrackTruth()
+        muon_track.track_index = event[0].event
+        entry_vec3 = PointVecDist.D3Vector()
+        exit_vec3 = PointVecDist.D3Vector()
+        for point in event:
+            if point.enters:
+                entry_vec3.x = point.x
+                entry_vec3.y = point.y
+                entry_vec3.z = point.z
+                # print("X: " + str(point.x))
+                # print("Y: " + str(point.y))
+                # print("Z: " + str(point.z))
+                muon_track.entry_time = point.intersec_time
+            else:
+                exit_vec3.x = point.x
+                exit_vec3.y = point.y
+                exit_vec3.z = point.z
+                # print("X: " + str(point.x))
+                # print("Y: " + str(point.y))
+                # print("Z: " + str(point.z))
+                muon_track.exit_time = point.intersec_time
+
+        muon_track.entry_point = entry_vec3
+        muon_track.exit_point = exit_vec3
+
+        muon_track.distance_track_to_center = PointVecDist.calc_track_dist_to_center(muon_track.entry_point,
+                                                                                     muon_track.exit_point)
+
+        muon_event_array.append(muon_track)
+    return muon_event_array
 
 
 def distance_to_center(x, y, z):
@@ -91,90 +131,6 @@ def is_muon_in_detector(dist_to_center, radius):
         muon_in_det = False
 
     return muon_in_det
-
-
-def calc_muon_detector_intersec_points(source, radius, time_steps):
-    """Calculates and gives back the entry and exit points of the muons belonging to the event."""
-    statusAlert.processStatus("Calculate entry and exit point of muons in this event from monte carlo truth")
-    muon_data = TreeReadFunc.read_muon_data(source)
-    returnarray = []
-
-    muon_mass = 105.6583745
-    c = 299792548000
-
-    for index, muon_event in enumerate(muon_data):
-        muon_in = MuonIntersecPoint()
-        muon_out = MuonIntersecPoint()
-
-        muon_in.event = index
-        muon_out.event = index
-
-        time_current = 0
-
-        total_momentum = math.sqrt(pow(muon_event.x_momentum_init, 2)
-                                   + pow(muon_event.y_momentum_init, 2)
-                                   + pow(muon_event.z_momentum_init, 2))
-
-        x_velocity = muon_event.x_momentum_init / math.sqrt(pow(muon_mass, 2) + total_momentum**2) * c
-        y_velocity = muon_event.y_momentum_init / math.sqrt(pow(muon_mass, 2) + total_momentum**2) * c
-        z_velocity = muon_event.z_momentum_init / math.sqrt(pow(muon_mass, 2) + total_momentum**2) * c
-
-        x_position_current = muon_event.x_position_init
-        y_position_current = muon_event.y_position_init
-        z_position_current = muon_event.z_position_init
-
-        distance_to_det_center = distance_to_center(x_position_current, y_position_current, z_position_current)
-
-        while z_position_current > -23000:
-            muon_in_detector = is_muon_in_detector(distance_to_det_center, radius)
-            x_position_current = x_position_current + time_steps * x_velocity
-            y_position_current = y_position_current + time_steps * y_velocity
-            z_position_current = z_position_current + time_steps * z_velocity
-
-            time_current += time_steps
-            distance_to_det_center = distance_to_center(x_position_current, y_position_current, z_position_current)
-            muon_in_detector_second = is_muon_in_detector(distance_to_det_center, radius)
-
-            if muon_in_detector is False and muon_in_detector_second is True:
-                muon_in.enters = True
-                muon_in.x = x_position_current
-                muon_in.y = y_position_current
-                muon_in.z = z_position_current
-
-                muon_in.phi = math.atan2(y_position_current, x_position_current)
-                muon_in.theta = math.acos(-z_position_current/radius)
-                muon_in.theta2 = math.acos(-z_position_current/radius) - (math.pi/2)
-
-                muon_in.phi_hammer_aitoff = (math.sqrt(8) * math.cos(muon_out.theta) * math.sin(muon_out.phi / 2)) / \
-                                             (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
-
-                muon_in.theta_hammer_aitoff = (math.sqrt(2) * math.sin(muon_out.theta)) / \
-                                               (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
-
-                muon_in.intersec_time = time_current
-
-                returnarray.append(muon_in)
-
-            if muon_in_detector is True and muon_in_detector_second is False and is_muon_stopping(muon_event) is False:
-                muon_out.leaves = True
-                muon_out.x = x_position_current
-                muon_out.y = y_position_current
-                muon_out.z = z_position_current
-
-                muon_out.phi = math.atan2(y_position_current, x_position_current)
-                muon_out.theta = math.acos(-z_position_current/radius)
-                muon_out.theta2 = math.acos(-z_position_current/radius) - (math.pi/2)
-
-                muon_out.phi_hammer_aitoff = (math.sqrt(8) * math.cos(muon_out.theta) * math.sin(muon_out.phi / 2)) / \
-                          (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
-
-                muon_out.theta_hammer_aitoff = (math.sqrt(2) * math.sin(muon_out.theta)) / \
-                            (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
-
-                muon_out.intersec_time = time_current
-
-                returnarray.append(muon_out)
-    return returnarray
 
 
 def is_muon_stopping(muon_event):
@@ -329,18 +285,19 @@ def MC_truth_writer(muon_points, output_path, file, time_cut):
     times = []
     positions = []
     for event in muon_points:
-        result_file += ("Event: " + str(event.event) + '\n')
-        if event.enters is True:
-            result_file += ("Entry point: " + '\n')
-        if event.leaves is True:
-            result_file += ("Exit point: " + '\n')
-        result_file += ("Phi: " + str(event.phi/math.pi*180.0) + '\n')
-        result_file += ("Theta: " + str(event.theta2/math.pi*180.0) + '\n')
-        # result_file += ("Z: " + str(event.z) + '\n')
-        result_file += ("Time: " + str(event.intersec_time) + '\n')
-        result_file += ("------------------------------------------" + '\n')
-        times.append(event.intersec_time)
-        positions.append([event.phi/math.pi*180.0, event.theta2/math.pi*180.0])
+        for point in event:
+            result_file += ("Event: " + str(point.event) + '\n')
+            if point.enters is True:
+                result_file += ("Entry point: " + '\n')
+            if point.leaves is True:
+                result_file += ("Exit point: " + '\n')
+            result_file += ("Phi: " + str(point.phi/math.pi*180.0) + '\n')
+            result_file += ("Theta: " + str(point.theta2/math.pi*180.0) + '\n')
+            # result_file += ("Z: " + str(event.z) + '\n')
+            result_file += ("Time: " + str(point.intersec_time) + '\n')
+            result_file += ("------------------------------------------" + '\n')
+            times.append(point.intersec_time)
+            positions.append([point.phi/math.pi*180.0, point.theta2/math.pi*180.0])
 
     first_intersec_time = min(times)
     frames = []
@@ -352,4 +309,6 @@ def MC_truth_writer(muon_points, output_path, file, time_cut):
     r_file.write(result_file)
     r_file.close()
 
-    return positions
+    mc_muon_track_data = track_mc_truth_writer(muon_points)
+
+    return positions, mc_muon_track_data

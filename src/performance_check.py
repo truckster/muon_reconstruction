@@ -1,4 +1,4 @@
-import statusAlert, recoPreparation, color_schemes, contour_analyze, reco_from_contour
+import statusAlert, recoPreparation, color_schemes, contour_analyze, reco_from_contour, PointVecDist
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -77,3 +77,44 @@ def found_tracks(track_array, outdir):
     plt.savefig(outdir + "tracks_found.png", bbox_inches='tight')
 
     plt.close()
+
+
+def track_dist_hist(diff_array, outdir):
+    n, bins, patches = plt.hist(diff_array, bins=30, range=(-1000, 1000))
+
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
+
+    plt.xlabel("DistM MC - Reco")
+    plt.ylabel("No.")
+    plt.grid(True)
+
+    plt.savefig(outdir + "track_reco.pdf", bbox_inches='tight')
+    plt.savefig(outdir + "track_reco.png", bbox_inches='tight')
+
+    plt.close()
+
+
+def reco_accuracy(reco_data, mc_data, accuracy_array):
+    for rec_muon_track in reco_data:
+        diff = np.inf
+        for mc_muon_track in mc_data:
+            if abs(mc_muon_track.distance_track_to_center - rec_muon_track.distance_track_to_center) < abs(diff):
+                diff = mc_muon_track.distance_track_to_center - rec_muon_track.distance_track_to_center
+                # print("Tru: " + str(mc_muon_track.distance_track_to_center))
+                # print("Rec: " + str(rec_muon_track.distance_track_to_center))
+                # print(diff)
+            else:
+                pass
+        accuracy_array.append(diff)
+        # accuracy_array.append(mc_muon_track.distance_track_to_center)
+
+
+
+
+
+
+
+
+
+

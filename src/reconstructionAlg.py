@@ -1,4 +1,4 @@
-import statusAlert, recoPreparation, color_schemes, contour_analyze, reco_from_contour
+import statusAlert, recoPreparation, color_schemes, contour_analyze, reco_from_contour, PointVecDist
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -62,7 +62,7 @@ def snippet_drawer(pmt_position_class, snippet_class, muon_points, out_path, num
                                       out_path, number_contour_level, reco_points, mode="absolute")
             if len(snippet_array) is 1:
                 draw_snippet_contour_plot(pmt_position_class, snippet_class.time_snippets[snippet],
-                                          muon_points, snippet, out_path, number_contour_level, mode="total")
+                                          muon_points, snippet, out_path, number_contour_level, reco_points, mode="total")
 
 
 def snippet_drawer_difference(pmt_position_class, snippet_class, muon_points, out_path,
@@ -249,7 +249,7 @@ def draw_snippet_contour_plot(pmt_position_class, snippet_array, muon_points, sn
         plt.close()
 
     # elif mode is "total":
-    #     plt.savefig(out_path + str(file_number) + "_" + str(snippet) + "_Contour.png", bbox_inches='tight')
+    #     plt.savefig("/media/gpu/Data1/Analysis/Output/muReconstruction/run2/lala/" + str(file) + "_" + str(snippet) + "_Contour.png", bbox_inches='tight')
     #
     #     plt.close()
 
@@ -266,12 +266,13 @@ def draw_muon_points(muon_points, subplott):
     theta_muon_sec = []
 
     for muon_event in muon_points:
-        if muon_event.event is 0:
-            phi_muon_first.append(muon_event.phi)
-            theta_muon_first.append(muon_event.theta2)
-        if muon_event.event is 1:
-            phi_muon_sec.append(muon_event.phi)
-            theta_muon_sec.append(muon_event.theta2)
+        for point in muon_event:
+            if point.event is 0:
+                phi_muon_first.append(point.phi)
+                theta_muon_first.append(point.theta2)
+            if point.event is 1:
+                phi_muon_sec.append(point.phi)
+                theta_muon_sec.append(point.theta2)
 
     scatter_muon_entry = subplott.scatter(phi_muon_first, theta_muon_first,
                                      facecolors='none', edgecolors='white', marker='v', s=120)
@@ -382,6 +383,7 @@ def coordinate_calculation(reco_points):
             point.y_coordinate_rad = contours.center[1]
             point.x_coordinate_deg = contours.center[0]/math.pi * 180.0
             point.y_coordinate_deg = contours.center[1]/math.pi * 180.0
+
             orientation_array.append(point)
         return_points.append(orientation_array)
     return return_points
@@ -393,8 +395,8 @@ def orientation_resolver(reco_points):
         for point_index, point in enumerate(orientation):
             if orientation_index is 2:
                 if point.x_coordinate_deg > 0:
-                    point.x_coordinate_deg -= 180
-                    point.x_coordinate_rad -= math.pi
+                   point.x_coordinate_deg -= 180
+                   point.x_coordinate_rad -= math.pi
                 else:
                     point.x_coordinate_deg += 180
                     point.x_coordinate_rad += math.pi
@@ -423,3 +425,18 @@ def orientation_resolver(reco_points):
             return_points.append(point)
 
     return return_points
+
+
+def calc_kartesian_coordinates(found_points, intersec_radius):
+    for point in found_points:
+        vec = PointVecDist.D3Vector()
+        point.real_x = intersec_radius * math.cos(point.y_coordinate_rad)*math.cos(point.x_coordinate_rad)
+        point.real_y = intersec_radius * math.cos(point.y_coordinate_rad)*math.sin(point.x_coordinate_rad)
+        point.real_z = intersec_radius * math.sin(point.y_coordinate_rad)
+
+        vec.x = point.real_x
+        vec.y = point.real_y
+        vec.z = point.real_z
+
+        point.D3_vector = vec
+

@@ -1,4 +1,4 @@
-import statusAlert, recoPreparation, color_schemes
+import statusAlert, src.recoPreparation, color_schemes
 from os import mkdir, path
 import math
 import numpy as np

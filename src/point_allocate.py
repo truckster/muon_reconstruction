@@ -5,14 +5,7 @@ import numpy as np
 import matplotlib.path as mpath
 import math
 import PointVecDist
-
-
-class TrackClass:
-    def __init__(self):
-        self.index = 0
-        self.entry_point = 0
-        self.exit_point = 0
-        self.distance_track_to_center = 0
+import data
 
 
 def allocate_tracks_to_points(reco_points):
@@ -26,7 +19,7 @@ def result_class_writer(reco_points, pairing_vector):
     return_array = []
     # print(reco_points)
     for pair_index, pair in enumerate(pairing_vector):
-        TrackC = TrackClass()
+        TrackC = data.TrackClass()
         reco_points[pair.index_point_1].track = pair_index
         reco_points[pair.index_point_2].track = pair_index
         TrackC.index = pair_index

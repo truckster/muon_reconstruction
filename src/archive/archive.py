@@ -530,7 +530,7 @@ def muonEntryAndExitPoints(source):
 
 
 
-import statusAlert, recoPreparation, color_schemes
+import statusAlert, src.recoPreparation, color_schemes
 from os import mkdir
 import math
 import numpy as np

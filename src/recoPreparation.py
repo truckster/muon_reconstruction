@@ -3,6 +3,7 @@ import time, math, random, os
 import ROOT as root
 import numpy as np
 import matplotlib.pyplot as plt
+import data
 '''Scripts to prepare simulated data for muon reconstruction'''
 
 
@@ -74,20 +75,10 @@ class MuonIntersecPoint:
         self.intersec_time = 0
 
 
-class MuonTrackTruth:
-    def __init__(self):
-        self.track_index = 0
-        self.entry_point = 0
-        self.exit_point = 0
-        self.entry_time = 0
-        self.exit_time = 0
-        self.distance_track_to_center = 0
-
-
 def track_mc_truth_writer(muon_data):
     muon_event_array = []
     for event in muon_data:
-        muon_track = MuonTrackTruth()
+        muon_track = data.MuonTrackTruth()
         muon_track.track_index = event[0].event
         entry_vec3 = PointVecDist.D3Vector()
         exit_vec3 = PointVecDist.D3Vector()

@@ -28,8 +28,6 @@ def reco_resulter(difference_array, outdir):
 
 
 def reco_comparer(truth_points, reco_points):
-    # if len(truth_points) is not len(reco_points):
-
     min_differences = []
     for truth_point in truth_points:
         differences = []
@@ -57,6 +55,9 @@ def found_intersects(intersec_array, outdir):
     plt.ylabel("In event")
     plt.grid(True)
 
+    eff = n[4]/n.sum()
+    plt.figtext(0.8, 0.7, "Eff: %.2f" % eff)
+
     plt.savefig(outdir + "intersec_found.pdf", bbox_inches='tight')
     plt.savefig(outdir + "intersec_found.png", bbox_inches='tight')
 
@@ -80,7 +81,7 @@ def found_tracks(track_array, outdir):
 
 
 def track_dist_hist(diff_array, outdir):
-    n, bins, patches = plt.hist(diff_array, bins=30, range=(-1000, 1000))
+    n, bins, patches = plt.hist(diff_array, bins=100, range=(-1000, 1000))
 
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
@@ -89,6 +90,13 @@ def track_dist_hist(diff_array, outdir):
     plt.ylabel("No.")
     plt.grid(True)
 
+    sum = 0
+    for dist, entries in enumerate(n):
+        sum += dist*entries
+
+    rms = sum/len(n)
+
+    plt.figtext(0.8, 0.7, "RMS: " + str(rms))
     plt.savefig(outdir + "track_reco.pdf", bbox_inches='tight')
     plt.savefig(outdir + "track_reco.png", bbox_inches='tight')
 
@@ -98,19 +106,52 @@ def track_dist_hist(diff_array, outdir):
 def reco_accuracy(reco_data, mc_data, accuracy_array):
     for rec_muon_track in reco_data:
         diff = np.inf
+
+        correction = calc_geometric_correction(rec_muon_track.entry_point, rec_muon_track.exit_point)
+        print "Correction: "
+        print correction
+        correction = 0
         for mc_muon_track in mc_data:
-            if abs(mc_muon_track.distance_track_to_center - rec_muon_track.distance_track_to_center) < abs(diff):
-                diff = mc_muon_track.distance_track_to_center - rec_muon_track.distance_track_to_center
-                # print("Tru: " + str(mc_muon_track.distance_track_to_center))
-                # print("Rec: " + str(rec_muon_track.distance_track_to_center))
-                # print(diff)
+            distance = abs(mc_muon_track.distance_track_to_center) - abs(rec_muon_track.distance_track_to_center - 2*correction)
+            if abs(distance) < abs(diff):
+                diff = distance
+                # print "Rec:"
+                # print rec_muon_track.distance_track_to_center
+                # print "Truth: "
+                # print mc_muon_track.distance_track_to_center
             else:
                 pass
         accuracy_array.append(diff)
+        print "True diff: "
+        print diff
         # accuracy_array.append(mc_muon_track.distance_track_to_center)
 
 
+def calc_geometric_correction(entry_point, exit_point):
+    d3entry = PointVecDist.D3Vector()
+    d3entry.x = entry_point.real_x
+    d3entry.y = entry_point.real_y
+    d3entry.z = entry_point.real_z
 
+    d3exit = PointVecDist.D3Vector()
+    d3exit.x = exit_point.real_x
+    d3exit.y = exit_point.real_y
+    d3exit.z = exit_point.real_z
+
+    k = math.sqrt(pow(17700, 2) / (pow(d3entry.x, 2) + pow(d3entry.y, 2) + pow(d3entry.z, 2)))
+    new_point = PointVecDist.D3Vector()
+    new_point.x = d3entry.x * k
+    new_point.y = d3entry.y * k
+    new_point.z = d3entry.z * k
+
+    k = math.sqrt(pow(17700, 2) / (pow(d3exit.x, 2) + pow(d3exit.y, 2) + pow(d3exit.z, 2)))
+    new_point = PointVecDist.D3Vector()
+    new_point.x = d3exit.x * k
+    new_point.y = d3exit.y * k
+    new_point.z = d3exit.z * k
+
+    correction = PointVecDist.calc_distance_line_point(d3entry, d3exit, new_point)
+    return correction
 
 
 

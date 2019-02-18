@@ -2,32 +2,19 @@ import reconstructionAlg, statusAlert
 import numpy as np
 import matplotlib.path as mpath
 import math
+import data
 
 
 def entry_exit_detector(contour_data):
     real_top_patches = []
     for orientation_index, data in enumerate(contour_data):
         statusAlert.processStatus("Searching entry and exit points: ")
+
         top_levels = standalone_contour_lines(data[0], orientation_index)
-        real_top_patches.append(toplevel_check(top_levels, data[0], orientation_index))
+        top_levels = toplevel_check(top_levels, data[0], orientation_index)
+        real_top_patches.append(top_levels)
 
     return real_top_patches
-
-
-class RecoPointClass:
-    def __init__(self):
-        self.frame = 0
-        self.x_coordinate_deg = 0
-        self.y_coordinate_deg = 0
-        self.x_coordinate_rad = 0
-        self.y_coordinate_rad = 0
-        self.real_x = 0
-        self.real_y = 0
-        self.real_z = 0
-        self.D3_vector = 0
-        self.contour_data = 0
-        self.orientation_index = 0
-        self.track = None
 
 
 def standalone_contour_lines(contour_data_total, orientation):
@@ -50,7 +37,7 @@ def standalone_contour_lines(contour_data_total, orientation):
                             local_max_patch = False
 
             if local_max_patch:
-                patch_class = RecoPointClass()
+                patch_class = data.RecoPointClass()
                 patch_class.contour_data = patch
                 patch_class.orientation_index = orientation
                 local_max_patches.append(patch_class)
@@ -70,7 +57,7 @@ def is_real_toplevel_patch(patch, contour_data):
     """checks if patches are interesting for entry-/exit-point search"""
     patch_is_real_top = True
 
-    """"check if patch excees given level threshold"""
+    """"check if patch exceeds given level threshold"""
     # if patch.level < 2:
     #     patch_is_real_top = False
 

@@ -2,6 +2,7 @@ import reconstructionAlg, statusAlert, total_event_reconstruction
 import numpy as np
 import matplotlib.path as mpath
 import math
+import data
 
 
 def entry_exit_detector(contour_data):
@@ -37,7 +38,7 @@ def standalone_contour_lines(contour_data, orientation):
                             local_max_patch = False
 
             if local_max_patch:
-                patch_class = total_event_reconstruction.RecoPointClass()
+                patch_class = data.RecoPointClass()
                 patch_class.contour_data = patch
                 patch_class.orientation_index = orientation
                 local_max_patches.append(patch_class)
@@ -105,7 +106,7 @@ def intersec_crosscheck(diff_contours_array, reco_points):
                                 maximum = patch.height
                                 max_frame = frame
 
-            if max_frame - min_frame < 2 and minimum < 100 and maximum - minimum > 200:
+            if max_frame - min_frame < 2 and minimum < 0 and maximum - minimum > 100:
                 point.frame = max_frame
                 points_of_orientation.append(point)
         better_reco_points.append(points_of_orientation)

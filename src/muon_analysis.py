@@ -42,7 +42,7 @@ def is_muon_in_detector(dist_to_center, radius):
 
 def calc_muon_detector_intersec_points(data, radius, time_steps):
     """Calculates and gives back the entry and exit points of the muons belonging to the event."""
-    statusAlert.processStatus("Calculate entry and exit point of muons in this event from monte carlo truth")
+    # statusAlert.processStatus("Calculate entry and exit point of muons in this event from monte carlo truth")
     returnarray = []
     muon_mass = 105.6583745
     c = 299792548000
@@ -52,7 +52,8 @@ def calc_muon_detector_intersec_points(data, radius, time_steps):
         muon_in = MuonIntersecPoint()
         muon_out = MuonIntersecPoint()
         """Track-Sphere intersection points"""
-        point_array = PointVecDist.calc_line_sphere_intersect_points(muon_event, radius)
+        point_array, sol = PointVecDist.calc_line_sphere_intersect_points(muon_event, radius)
+
         if len(point_array) == 2:
             muon_in.event = index
             muon_out.event = index
@@ -141,6 +142,94 @@ def calc_muon_detector_intersec_points(data, radius, time_steps):
     return returnarray
 
 
+def calc_muon_detector_intersec_points2(data, radius, time_steps):
+    returnarray = []
+    muon_mass = 105.6583745
+    c = 299792548000
+    c2 = 299.792548
+
+    time_array=[]
+    for index, muon_event in enumerate(data):
+        point_array2 = PointVecDist.calc_line_sphere_intersect_points(muon_event, 19500)
+
+        point_init = PointVecDist.D3Vector()
+        point_init.x = muon_event.x_position_init
+        point_init.y = muon_event.y_position_init
+        point_init.z = muon_event.z_position_init
+        for point in point_array2:
+            time_array.append(PointVecDist.d3_distance(point_init, point)/c2)
+
+    time_correction_factor = 16.0 - min(time_array)
+    # time_correction_factor = 0
+
+    for index, muon_event in enumerate(data):
+        muon_event_array = []
+        muon_in = MuonIntersecPoint()
+        muon_out = MuonIntersecPoint()
+        """Track-Sphere intersection points"""
+        point_array = PointVecDist.calc_line_sphere_intersect_points(muon_event, radius)
+
+        point_init = PointVecDist.D3Vector()
+        point_init.x = muon_event.x_position_init
+        point_init.y = muon_event.y_position_init
+        point_init.z = muon_event.z_position_init
+        d_scint_init_1 = PointVecDist.d3_distance(point_init, point_array[0])
+        d_scint_init_2 = PointVecDist.d3_distance(point_init, point_array[1])
+
+        muon_in.event = index
+        muon_out.event = index
+
+        muon_in.enters = True
+        muon_out.leaves = True
+
+        if point_array[0].z > point_array[1].z:
+            muon_in.x = point_array[0].x
+            muon_in.y = point_array[0].y
+            muon_in.z = point_array[0].z
+            muon_in.intersec_time = d_scint_init_1 / c2 + time_correction_factor
+            muon_out.x = point_array[1].x
+            muon_out.y = point_array[1].y
+            muon_out.z = point_array[1].z
+            muon_out.intersec_time = d_scint_init_2 / c2 + time_correction_factor
+
+        else:
+            muon_in.x = point_array[1].x
+            muon_in.y = point_array[1].y
+            muon_in.z = point_array[1].z
+            muon_in.intersec_time = d_scint_init_2 / c2 + time_correction_factor
+            muon_out.x = point_array[0].x
+            muon_out.y = point_array[0].y
+            muon_out.z = point_array[0].z
+            muon_out.intersec_time = d_scint_init_1 / c2 + time_correction_factor
+
+        muon_in.phi = math.atan2(muon_in.y, muon_in.x)
+        muon_in.theta = math.acos(-muon_in.z / radius)
+        muon_in.theta2 = math.acos(-muon_in.z / radius) - (math.pi / 2)
+
+        muon_in.phi_hammer_aitoff = (math.sqrt(8) * math.cos(muon_in.theta) * math.sin(muon_in.phi / 2)) / \
+                                    (math.sqrt(1 + math.cos(muon_in.theta) * math.cos(muon_in.phi / 2)))
+
+        muon_in.theta_hammer_aitoff = (math.sqrt(2) * math.sin(muon_in.theta)) / \
+                                      (math.sqrt(1 + math.cos(muon_in.theta) * math.cos(muon_in.phi / 2)))
+
+        muon_event_array.append(muon_in)
+
+        muon_out.phi = math.atan2(muon_out.y, muon_out.x)
+        muon_out.theta = math.acos(-muon_out.z / radius)
+        muon_out.theta2 = math.asin(muon_out.z / radius)
+
+        muon_out.phi_hammer_aitoff = (math.sqrt(8) * math.cos(muon_out.theta) * math.sin(muon_out.phi / 2)) / \
+                                     (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
+
+        muon_out.theta_hammer_aitoff = (math.sqrt(2) * math.sin(muon_out.theta)) / \
+                                       (math.sqrt(1 + math.cos(muon_out.theta) * math.cos(muon_out.phi / 2)))
+
+        muon_event_array.append(muon_out)
+        returnarray.append(muon_event_array)
+
+    return returnarray
+
+
 def is_muon_stopping(muon_event):
     x_position_current = muon_event.x_position_final
     y_position_current = muon_event.y_position_final
@@ -153,9 +242,10 @@ def is_muon_stopping(muon_event):
 
 
 def muon_is_showering_truth(muon_truth):
-    if muon_truth[0].iso_num > 0:
-        print "Shower power"
+    if muon_truth.iso_num > 0:
+        # print "Shower power"
         return True
     else:
-        print "Good boy"
+        # print "Good boy"
         return False
+

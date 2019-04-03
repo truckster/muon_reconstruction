@@ -8,9 +8,9 @@ import PointVecDist
 import data
 
 
-def allocate_tracks_to_points(reco_points):
+def allocate_tracks_to_points(reco_points, performance_class):
     pairing_matrix = create_direction_matrix(reco_points)
-    pairing_vector = allocator(pairing_matrix)
+    pairing_vector = allocator(pairing_matrix, performance_class)
     track_array = result_class_writer(reco_points, pairing_vector)
     return track_array
 
@@ -60,7 +60,7 @@ class DirectionClass:
         self.index_point_2 = 0
 
 
-def allocator(pairing_matrix):
+def allocator(pairing_matrix, performance_class):
     return_array = []
     collection = []
     for row_index, row in enumerate(pairing_matrix):
@@ -90,7 +90,7 @@ def allocator(pairing_matrix):
         if get_parallelity(coll) < parallelism_factor:
             parallelism_factor = get_parallelity(coll)
             parallel_pair = coll
-
+    performance_class.parallelity_list.append(parallelism_factor)
     return parallel_pair
 
 

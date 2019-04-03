@@ -98,11 +98,17 @@ def orientation_resolver(reco_points):
     return return_points
 
 
-def process_events(reco_points, merge_radius, intersec_radius):
+def process_events(reco_points, merge_radius, intersec_radius, performance_class, pmt_positions):
     coordinate_calculation(reco_points)
     pure_points = orientation_resolver(reco_points)
     diff_event_analysis.point_merger(pure_points, merge_radius)
+
+    performance_class.unmerged.append(len(pure_points))
+    pure_points = diff_event_analysis.pole_merger(pure_points)
+    performance_class.merged.append(len(pure_points))
+
     calc_kartesian_coordinates(pure_points, intersec_radius)
+    find_closest_pmt(pure_points, pmt_positions)
 
     return pure_points
 
@@ -119,4 +125,19 @@ def calc_kartesian_coordinates(found_points, intersec_radius):
         vec.z = point.real_z
 
         point.D3_vector = vec
+
+
+def find_closest_pmt(found_points, pmt_positions):
+    for point in found_points:
+        distance = np.inf
+        pmt = 0
+        for pmt_id in range(len(pmt_positions.id)):
+            distance_tmp = math.sqrt(pow(point.real_x-pmt_positions.x_position[pmt_id], 2)
+                                     +pow(point.real_y-pmt_positions.y_position[pmt_id], 2)
+                                     +pow(point.real_y-pmt_positions.y_position[pmt_id], 2))
+            if distance_tmp < distance:
+                distance = distance_tmp
+                pmt = pmt_id
+
+        point.closest_pmt = pmt
 

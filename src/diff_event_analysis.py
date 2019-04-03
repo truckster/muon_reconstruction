@@ -115,10 +115,75 @@ def intersec_crosscheck(diff_contours_array, reco_points):
 
 def point_merger(reco_points, merge_radius):
     for point1 in reco_points:
+        x_deg_mean = point1.x_coordinate_deg
+        y_deg_mean = point1.y_coordinate_deg
+        x_rad_mean = point1.x_coordinate_rad
+        y_rad_mean = point1.y_coordinate_rad
+        frame_mean = point1.frame
+        merged_points = 1
         for point2 in reco_points:
             frame_diff = abs(point1.frame - point2.frame)
             distance = math.sqrt(pow(point1.x_coordinate_deg-point2.x_coordinate_deg, 2)
                                  + pow(point1.y_coordinate_deg-point2.y_coordinate_deg, 2))
 
             if point1 is not point2 and frame_diff < 2 and distance < merge_radius:
+                x_deg_mean += point2.x_coordinate_deg
+                y_deg_mean += point2.y_coordinate_deg
+                x_rad_mean += point2.x_coordinate_rad
+                y_rad_mean += point2.y_coordinate_rad
+                frame_mean += point2.frame
+                merged_points += 1
                 reco_points.remove(point2)
+        point1.x_coordinate_deg = x_deg_mean/merged_points
+        point1.y_coordinate_deg = y_deg_mean/merged_points
+        point1.x_coordinate_rad = x_rad_mean/merged_points
+        point1.y_coordinate_rad = y_rad_mean/merged_points
+        point1.frame = frame_mean/merged_points
+
+
+def pole_merger(reco_points):
+    """Reconstruction at poles is difficult. Too many points are recognized, I guess due to PMT arrangement. Here all
+    reco points close to pole are merged. If problems occur, the timing can be considered as well (compare to point
+     merger)"""
+    pole_x_pos = []
+    pole_y_pos = []
+    pole_x_neg = []
+    pole_y_neg = []
+
+    new_list = []
+    point_tmp_pos = 0
+    point_tmp_neg = 0
+    pole_point_pos = False
+    pole_point_neg = False
+    for point_index, point in enumerate(reco_points):
+        if point.y_coordinate_deg > 80.0:
+            pole_point_pos = True
+            pole_x_pos.append(point.x_coordinate_deg)
+            pole_y_pos.append(point.y_coordinate_deg)
+            point_tmp_pos = point
+
+        elif point.y_coordinate_deg < -80.0:
+            pole_point_neg = True
+            pole_x_neg.append(point.x_coordinate_deg)
+            pole_y_neg.append(point.y_coordinate_deg)
+            point_tmp_neg = point
+        else:
+            new_list.append(point)
+
+    if pole_point_pos:
+        point_tmp_pos.x_coordinate_deg = (sum(pole_x_pos) / float(len(pole_x_pos)))
+        point_tmp_pos.y_coordinate_deg = (sum(pole_y_pos) / float(len(pole_y_pos)))
+        point_tmp_pos.x_coordinate_rad = point_tmp_pos.x_coordinate_deg / 180.0 * math.pi
+        point_tmp_pos.y_coordinate_rad = point_tmp_pos.y_coordinate_deg / 180.0 * math.pi
+        new_list.append(point_tmp_pos)
+
+    elif pole_point_neg:
+        point_tmp_neg.x_coordinate_deg = (sum(pole_x_neg)/float(len(pole_x_neg)))
+        point_tmp_neg.y_coordinate_deg = (sum(pole_y_neg)/float(len(pole_y_neg)))
+        point_tmp_neg.x_coordinate_rad = point_tmp_neg.x_coordinate_deg/180.0 * math.pi
+        point_tmp_neg.y_coordinate_rad = point_tmp_neg.y_coordinate_deg/180.0 * math.pi
+        new_list.append(point_tmp_neg)
+
+    return new_list
+
+

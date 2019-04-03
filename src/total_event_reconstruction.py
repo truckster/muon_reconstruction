@@ -8,7 +8,7 @@ import data
 def entry_exit_detector(contour_data):
     real_top_patches = []
     for orientation_index, data in enumerate(contour_data):
-        statusAlert.processStatus("Searching entry and exit points: ")
+        # statusAlert.processStatus("Searching entry and exit points: ")
 
         top_levels = standalone_contour_lines(data[0], orientation_index)
         top_levels = toplevel_check(top_levels, data[0], orientation_index)

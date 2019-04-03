@@ -6,6 +6,7 @@ class MuonTrackTruth:
         self.entry_time = 0
         self.exit_time = 0
         self.distance_track_to_center = 0
+        self.is_showering = False
 
 
 class RecoPointClass:
@@ -22,6 +23,7 @@ class RecoPointClass:
         self.contour_data = 0
         self.orientation_index = 0
         self.track = None
+        self.closest_pmt = 0
 
 
 class TrackClass:
@@ -35,9 +37,21 @@ class TrackClass:
 class RecoPerformanceCheckTotal:
     def __init__(self):
         self.point_reco_accuracy_list = []
-        self.track_reco_accuracy_list = []
+        self.track_reco_accuracy_list_D = []
+        self.track_reco_accuracy_list_phi = []
         self.tracks_per_event_list = []
         self.found_point_list = []
+        self.found_points_for_good_reco = []
+        self.unmerged = []
+        self.merged = []
+        self.track_reco_accuracy_list_uncorr = []
+        self.mc_track_distance_list = []
+        self.distance_correction = []
+        self.reconstructed_track_distance_list = []
+        self.number_of_points_showering = []
+        self.number_of_points_not_showering = []
+        self.time_difference_list = []
+        self.parallelity_list = []
 
 
 class MuonEventData:
